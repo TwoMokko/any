@@ -1,0 +1,43 @@
+@use "sass:map";
+
+$size2XS    : 360;
+$sizeXS     : 420;
+$sizeS      : 480;
+$sizeM      : 560;
+$sizeL      : 680;
+$sizeX      : 760;
+$sizeXL     : 860;
+$size2XL    : 980;
+$size3XL    : 1080;
+$size4XL    : 1200;
+$size5XL    : 1280;
+$size6XL    : 1920;
+
+@function GetParam($params, $name, $default: null) {
+    @if ($params != null) {
+        $temp: map.get($params, $name);
+        @if ($temp != null) { @return $temp; }
+    }
+
+    @return $default;
+}
+
+@mixin MixScreen($min: null, $max: null, $screen: false, $print: false) {
+    @if ($min != null or $max != null or $screen or $print) {
+
+        $media: '';
+        $fill: false;
+
+        @if ($screen) { $media: 'screen'; $fill: true; }
+        @if ($print) { @if ($fill) { $media: $media + ' AND '; } $media: $media + 'print'; $fill: true; }
+        @if ($min) { @if ($fill) { $media: $media + ' AND '; } $media: $media + '(min-width: ' + ($min + 1) + 'px)'; $fill: true; }
+        @if ($max) { @if ($fill) { $media: $media + ' AND '; } $media: $media + '(max-width: ' + $max + 'px)'; }
+
+        @media #{$media} {
+            @content;
+        }
+
+    } @else {
+        @content;
+    }
+}

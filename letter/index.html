@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>e-mail рассылка</title>
+<!--    <link rel="stylesheet" href="style.css" type="text/css"/>-->
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap" rel="stylesheet">
+
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+
+        @media (max-width: 680px) {
+            body {
+                margin: 0;
+                font-size: 16px;
+                font-family: "Manrope", sans-serif;
+            }
+            body a {
+                text-decoration: none;
+                color: white;
+            }
+            body .head-wrap {
+                height: 100vh;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                color: white;
+                background: radial-gradient(circle, rgb(132, 200, 194) 0%, rgb(138, 171, 209) 100%);
+            }
+            body .head-wrap .head {
+                text-transform: uppercase;
+                font-weight: 700;
+                font-size: 3.6rem;
+                margin-bottom: 36px;
+            }
+            body .head-wrap .head-btn-wrap > a {
+                display: inline-block;
+                cursor: pointer;
+                text-transform: uppercase;
+                color: white;
+                border: none;
+                padding: 22px 40px;
+                font-size: 0.8rem;
+                font-weight: bold;
+                background-color: #4f99a5;
+                border-radius: 9px;
+            }
+            body .master-wrap {
+                display: flex;
+                flex-direction: column;
+                gap: 40px;
+                justify-content: center;
+                align-items: center;
+                padding: 48px 20px;
+            }
+            body .master-wrap .master-image {
+                height: 360px;
+                width: 100%;
+                background-color: #4f99a5;
+                border-radius: 9px;
+                background-repeat: no-repeat;
+                background-size: cover;
+                background-position: center;
+            }
+            body .master-wrap .master-info {
+                padding: 20px 24px;
+                border-radius: 9px;
+                border: 1px solid #4f99a5;
+            }
+            body .master-wrap .master-info > div:first-child {
+                font-weight: 700;
+                font-size: 1.8rem;
+            }
+            body .date-wrap {
+                text-align: center;
+            }
+            body .date-wrap > div:nth-of-type(1) {
+                font-size: 1.8rem;
+                margin-bottom: 10px;
+                font-weight: 700;
+            }
+            body .date-wrap > div:nth-of-type(2) {
+                font-size: 1.2rem;
+                color: red;
+                margin-bottom: 25px;
+                font-weight: 700;
+            }
+            body .date-wrap > div:nth-of-type(3) {
+                font-size: 2.6rem;
+                margin-bottom: 25px;
+                font-weight: 400;
+            }
+            body .date-wrap > div:nth-of-type(4) {
+                padding: 0 10%;
+                font-size: 1.8rem;
+                font-weight: 700;
+            }
+            body .cards-wrap {
+                display: grid;
+                grid-template-columns: repeat(1, 1fr);
+                justify-items: center;
+                grid-row-gap: 40px;
+                justify-content: center;
+                padding: 75px 0;
+            }
+            body .cards-wrap .card {
+                height: max-content;
+                width: 70%;
+                border-radius: 25px;
+                padding: 30px 40px;
+                color: white;
+            }
+            body .cards-wrap .card:nth-child(odd) {
+                background-color: #5789cd;
+            }
+            body .cards-wrap .card:nth-child(odd) .card-price > span:last-child {
+                color: rgb(39, 78, 19);
+            }
+            body .cards-wrap .card:nth-child(even) {
+                background-color: #0b144c;
+            }
+            body .cards-wrap .card > div:not(.card-list) {
+                text-align: center;
+            }
+            body .cards-wrap .card .card-head {
+                font-size: 1.8rem;
+            }
+            body .cards-wrap .card .card-additional {
+                margin: auto;
+                width: 80%;
+            }
+            body .cards-wrap .card .card-price {
+                font-size: 1.2rem;
+                font-weight: 500;
+                margin: 25px 0;
+            }
+            body .cards-wrap .card .card-price > span:first-child {
+                text-decoration: line-through;
+                color: red;
+                margin-right: 20px;
+            }
+            body .cards-wrap .card .card-list {
+                margin-bottom: 25px;
+            }
+            body .cards-wrap .card .card-btn > a {
+                display: inline-block;
+                cursor: pointer;
+                text-transform: uppercase;
+                color: white;
+                border: none;
+                padding: 22px 40px;
+                font-size: 0.8rem;
+                font-weight: bold;
+                background-color: #86b2e4;
+                border-radius: 9px;
+                box-shadow: 0 15px 45px #525252;
+            }
+            body .timer .timer__items {
+                display: flex;
+                justify-content: center;
+            }
+            body .timer .timer__items .timer__margin {
+                margin: 0 20px;
+            }
+        }
+        @media (min-width: 681px) {
+            body {
+                margin: 0;
+                font-size: 20px;
+                font-family: "Manrope", sans-serif;
+            }
+            body a {
+                text-decoration: none;
+                color: white;
+            }
+            body .head-wrap {
+                height: 100vh;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                color: white;
+                background: radial-gradient(circle, rgb(132, 200, 194) 0%, rgb(138, 171, 209) 100%);
+            }
+            body .head-wrap .head {
+                text-transform: uppercase;
+                font-weight: 700;
+                font-size: 3.6rem;
+                margin-bottom: 36px;
+            }
+            body .head-wrap .head-btn-wrap > a {
+                display: inline-block;
+                cursor: pointer;
+                text-transform: uppercase;
+                color: white;
+                border: none;
+                padding: 22px 40px;
+                font-size: 0.8rem;
+                font-weight: bold;
+                background-color: #4f99a5;
+                border-radius: 9px;
+            }
+            body .master-wrap {
+                display: flex;
+                gap: 100px;
+                justify-content: center;
+                align-items: center;
+                padding: 75px 40px;
+            }
+            body .master-wrap .master-image {
+                height: 680px;
+                width: 470px;
+                background-color: #4f99a5;
+                border-radius: 9px;
+                background-repeat: no-repeat;
+                background-size: cover;
+                background-position: center;
+            }
+            body .master-wrap .master-info {
+                padding: 30px 40px;
+                border-radius: 9px;
+                border: 1px solid #4f99a5;
+            }
+            body .master-wrap .master-info > div:first-child {
+                font-weight: 700;
+                font-size: 1.8rem;
+            }
+            body .date-wrap {
+                text-align: center;
+            }
+            body .date-wrap > div:nth-of-type(1) {
+                font-size: 1.8rem;
+                margin-bottom: 10px;
+                font-weight: 700;
+            }
+            body .date-wrap > div:nth-of-type(2) {
+                font-size: 1.2rem;
+                color: red;
+                margin-bottom: 25px;
+                font-weight: 700;
+            }
+            body .date-wrap > div:nth-of-type(3) {
+                font-size: 2.6rem;
+                margin-bottom: 25px;
+                font-weight: 400;
+            }
+            body .date-wrap > div:nth-of-type(4) {
+                padding: 0 30%;
+                font-size: 1.8rem;
+                font-weight: 700;
+            }
+            body .cards-wrap {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                justify-items: center;
+                grid-row-gap: 40px;
+                justify-content: center;
+                padding: 75px 0;
+            }
+            body .cards-wrap .card {
+                height: max-content;
+                width: 400px;
+                border-radius: 25px;
+                padding: 30px 40px;
+                color: white;
+            }
+            body .cards-wrap .card:nth-child(odd) {
+                background-color: #5789cd;
+            }
+            body .cards-wrap .card:nth-child(odd) .card-price > span:last-child {
+                color: rgb(39, 78, 19);
+            }
+            body .cards-wrap .card:nth-child(even) {
+                background-color: #0b144c;
+            }
+            body .cards-wrap .card > div:not(.card-list) {
+                text-align: center;
+            }
+            body .cards-wrap .card .card-head {
+                font-size: 1.8rem;
+            }
+            body .cards-wrap .card .card-additional {
+                margin: auto;
+                width: 80%;
+            }
+            body .cards-wrap .card .card-price {
+                font-size: 1.2rem;
+                font-weight: 500;
+                margin: 25px 0;
+            }
+            body .cards-wrap .card .card-price > span:first-child {
+                text-decoration: line-through;
+                color: red;
+                margin-right: 20px;
+            }
+            body .cards-wrap .card .card-list {
+                margin-bottom: 25px;
+            }
+            body .cards-wrap .card .card-btn > a {
+                display: inline-block;
+                cursor: pointer;
+                text-transform: uppercase;
+                color: white;
+                border: none;
+                padding: 22px 40px;
+                font-size: 0.8rem;
+                font-weight: bold;
+                background-color: #86b2e4;
+                border-radius: 9px;
+                box-shadow: 0 15px 45px #525252;
+            }
+            body .timer .timer__items {
+                display: flex;
+                justify-content: center;
+            }
+            body .timer .timer__items .timer__margin {
+                margin: 0 20px;
+            }
+        }
+
+        /*# sourceMappingURL=style.css.map */
+
+    </style>
+</head>
+<body>
+    <div class="wrap">
+        <div class="head-wrap">
+            <div class="head">Заголовок</div>
+            <div class="head-btn-wrap">
+                <a href="#course">Присоединиться к курсу</a>
+            </div>
+        </div>
+        <div id="course" class="master-wrap">
+            <div class="master-image">
+                <!--            <img src="https://masterpiecer-images.s3.yandex.net/166eecef6cb911eea2585696910b1137:upscaled">-->
+            </div>
+            <div class="master-info">
+                <div>Алексей Абдурашитов</div>
+                <div>
+                    <ul>
+                        <li>В прошлом подающий надежды футболист</li>
+                        <li>Любитель чая и книг</li>
+                        <li>Отжимается каждый день</li>
+                        <li>Ценитель бархатных кексов</li>
+                        <li>Победитель чемпионата по настольному футболу</li>
+                        <li>Хранитель еды в пакетах</li>
+                        <li>Зе бест сИр</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="date-wrap">
+            <div>Выбери свой формат участия:</div>
+            <div>До повышения цен осталось:</div>
+            <div class="timer">
+                <div class="timer__items">
+                    <div class="timer__item timer__days">00</div>
+                    <div class="timer__margin">дня</div>
+                    <div class="timer__item timer__hours">00</div>
+                    <div>:</div>
+                    <div class="timer__item timer__minutes">00</div>
+                    <div>:</div>
+                    <div class="timer__item timer__seconds">00</div>
+                </div>
+            </div>
+            <div>Если у вас есть промокод применить его можно на шаге после оформления заказа в специальном окошке</div>
+        </div>
+        <div class="cards-wrap">
+            <div class="card">
+                <div class="card-head">СТАНДАРТ</div>
+                <div class="card-price"><span>14999 Р</span><span>9999 Р</span></div>
+                <div class="card-list">
+                    <ul>
+                        <li>Доступ ко всем урокам – 26 модулей</li>
+                        <li>Доступ к курсу 4 месяца</li>
+                    </ul>
+                </div>
+                <div class="card-btn">
+                    <a href="https://fluidcourse.ru/">Купить за 9999 Р</a>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-head">VIP</div>
+                <div class="card-additional">Личное наставничество на протяжении 4 месяцев</div>
+                <div class="card-price"><span>59999 Р</span><span>39999 Р</span></div>
+                <div class="card-list">
+                    <ul>
+                        <li>Доступ ко всем урокам – 26 модулей</li>
+                        <li>Доступ к курсу 4 месяца</li>
+                        <li>Созвон 2 раз в месяц - 8 за курс</li>
+                        <li>Личный разбор аккаунта и моё личное наставничество и рекомендации что исправить что внедрить (я буду сама смотреть сторис, страничку и давать обратную связь)</li>
+                        <li>Если у вас есть проект/курс, хотите что-то продать, на личном наставничестве покажу все воронки прогревов с нативными продажами для клиентов</li>
+                        <li>Дополнительные Лайфхаки по монтажу и оформлению в ТГ</li>
+                    </ul>
+                </div>
+                <div class="card-btn">
+                    <a href="https://fluidcourse.ru/">Купить за 39999 Р</a>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-head">СТАНДАРТ</div>
+                <div class="card-price"><span>14999 Р</span><span>9999 Р</span></div>
+                <div class="card-list">
+                    <ul>
+                        <li>Доступ ко всем урокам – 26 модулей</li>
+                        <li>Доступ к курсу 4 месяца</li>
+                    </ul>
+                </div>
+                <div class="card-btn">
+                    <a href="https://fluidcourse.ru/">Купить за 9999 Р</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // конечная дата, например 1 июля 2021
+            const deadline = new Date(2024, 3, 4);
+            // id таймера
+            let timerId = null;
+            // склонение числительных
+            function declensionNum(num, words) {
+                return words[(num % 100 > 4 && num % 100 < 20) ? 2 : [2, 0, 1, 1, 1, 2][(num % 10 < 5) ? num % 10 : 5]];
+            }
+            // вычисляем разницу дат и устанавливаем оставшееся времени в качестве содержимого элементов
+            function countdownTimer() {
+                const diff = deadline - new Date();
+                if (diff <= 0) {
+                    clearInterval(timerId);
+                }
+                const days = diff > 0 ? Math.floor(diff / 1000 / 60 / 60 / 24) : 0;
+                const hours = diff > 0 ? Math.floor(diff / 1000 / 60 / 60) % 24 : 0;
+                const minutes = diff > 0 ? Math.floor(diff / 1000 / 60) % 60 : 0;
+                const seconds = diff > 0 ? Math.floor(diff / 1000) % 60 : 0;
+                $days.textContent = days < 10 ? '' + days : days;
+                $hours.textContent = hours < 10 ? '0' + hours : hours;
+                $minutes.textContent = minutes < 10 ? '0' + minutes : minutes;
+                $seconds.textContent = seconds < 10 ? '0' + seconds : seconds;
+                $days.dataset.title = declensionNum(days, ['день', 'дня', 'дней']);
+                $hours.dataset.title = declensionNum(hours, ['час', 'часа', 'часов']);
+                $minutes.dataset.title = declensionNum(minutes, ['минута', 'минуты', 'минут']);
+                $seconds.dataset.title = declensionNum(seconds, ['секунда', 'секунды', 'секунд']);
+            }
+            // получаем элементы, содержащие компоненты даты
+            const $days = document.querySelector('.timer__days');
+            const $hours = document.querySelector('.timer__hours');
+            const $minutes = document.querySelector('.timer__minutes');
+            const $seconds = document.querySelector('.timer__seconds');
+            // вызываем функцию countdownTimer
+            countdownTimer();
+            // вызываем функцию countdownTimer каждую секунду
+            timerId = setInterval(countdownTimer, 1000);
+        });
+    </script>
+</body>
+</html>

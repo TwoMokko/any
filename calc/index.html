@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Расчет мощности</title>
+<!--    <script src="js/test.js"></script>-->
+</head>
+<body>
+<div class="wrap_calc">
+    <div class="power_calculator">
+        <p class="title">
+            Калькулятор расчета мощности проточного электронагревателя
+        </p>
+        <div class="power_calculator_head">
+            <select>
+                <option value="9999">Выберите среду</option>
+                <option value="1.01">Воздух</option>
+                <option value="2.13">Аммиак</option>
+                <option value="0.52">Аргон</option>
+                <option value="1.94">Бензол</option>
+                <option value="2.08">Изобутан</option>
+                <option value="2.1">Бутан N</option>
+                <option value="0.86">Диоксид углерода</option>
+                <option value="1.04">Окись углерода</option>
+                <option value="0.48">Хлор</option>
+                <option value="2">Сырая нефть</option>
+                <option value="1.77">Этан</option>
+                <option value="1.55">Этилен</option>
+                <option value="2.3">Топливный газ</option>
+                <option value="5.2">Гелий</option>
+                <option value="14.4">Водород</option>
+                <option value="0.81">Соляная кислота</option>
+                <option value="2.24">Метан</option>
+                <option value="2.78">Природный газ</option>
+                <option value="1.04">Азот</option>
+                <option value="0.92">Кислород</option>
+                <option value="1.67">Пропан</option>
+                <option value="0.44">Диоксид серы</option>
+                <option value="4.2">Вода</option>
+                <option value="1.9">Пар</option>
+                <option value="1.9">Дизельное топливо</option>
+                <option value="2.09">Мазут</option>
+                <option value="2.39">Спирт этиловый (этанол)</option>
+                <option value="2.25">Этиленгликоль</option>
+                <option value="2">Керосин</option>
+                <option value="1.85">Моторное масло</option>
+            </select>
+            <label> <input type="number"> кДж/кг К</label>
+        </div>
+        <div class="power_calculator_body">
+            <div class="item">
+                <label> <input type="number" class="initial_temperature"> <span class="mobile">Начальная температура (°C) </span></label>
+            </div>
+            <div class="item">
+                <label> <input type="number" class="final_temperature">
+                    Конечная температура (°C) </label>
+            </div>
+            <div class="item">
+                <label> <input type="number" class="change_temperature">
+                    Изменение температуры (°C) </label>
+            </div>
+            <div class="item">
+                <label> <input type="number" class="expenditure">
+                    Расход (кг/ч) </label>
+            </div>
+        </div>
+        <div class="power_calculator_bottom">
+            <button class="power_calculator_btn btn">Вычислить</button>
+            <p>
+                Мощность нагревателя, кВт: "<span class="result">0</span>"
+            </p>
+        </div>
+    </div>
+    <div class="power_calculator_second">
+        <p class="title">
+            Калькулятор расчета мощности погружных/фланцевых нагревателей для подогрева жидкостей в резервуарах
+        </p>
+        <div class="power_calculator_head">
+            <select>
+                <option value="9999">Выберите среду</option>
+                <option value="1.01">Воздух</option>
+                <option value="2.13">Аммиак</option>
+                <option value="0.52">Аргон</option>
+                <option value="1.94">Бензол</option>
+                <option value="2.08">Изобутан</option>
+                <option value="2.1">Бутан N</option>
+                <option value="0.86">Диоксид углерода</option>
+                <option value="1.04">Окись углерода</option>
+                <option value="0.48">Хлор</option>
+                <option value="2">Сырая нефть</option>
+                <option value="1.77">Этан</option>
+                <option value="1.55">Этилен</option>
+                <option value="2.3">Топливный газ</option>
+                <option value="5.2">Гелий</option>
+                <option value="14.4">Водород</option>
+                <option value="0.81">Соляная кислота</option>
+                <option value="2.24">Метан</option>
+                <option value="2.78">Природный газ</option>
+                <option value="1.04">Азот</option>
+                <option value="0.92">Кислород</option>
+                <option value="1.67">Пропан</option>
+                <option value="0.44">Диоксид серы</option>
+                <option value="4.2">Вода</option>
+                <option value="1.9">Пар</option>
+                <option value="1.9">Дизельное топливо</option>
+                <option value="2.09">Мазут</option>
+                <option value="2.39">Спирт этиловый (этанол)</option>
+                <option value="2.25">Этиленгликоль</option>
+                <option value="2">Керосин</option>
+                <option value="1.85">Моторное масло</option>
+                <option value="1.83">Масло турбинное ТП-22С</option>
+                <option value="2.09">Бензин</option>
+                <option value="0.48">Хлор</option>
+                <option value="2.152">Ацетон</option>
+                <option value="2.18">Уксусная кислота</option>
+                <option value="2.784">Аллиловый спирт</option>
+                <option value="2.721">Амиловый спирт</option>
+                <option value="2.143">Анилин</option>
+                <option value="0.447">Бром</option>
+                <option value="2.357">Бутиловый спирт</option>
+                <option value="2.156">Масляная кислота</option>
+                <option value="2.348">Карболовая кислота (Фенол)</option>
+                <option value="1.004">Сероуглерод</option>
+                <option value="0.841">Тетрахлорид углерода</option>
+                <option value="3.265">Каустическая сода (50% раствор)</option>
+                <option value="2.093">Декан эфира</option>
+                <option value="2.265">Ди-этил</option>
+                <option value="2.105">Эфир</option>
+                <option value="1.959">Этилацетат</option>
+                <option value="2.847">Этиловый спирт</option>
+                <option value="0.9">Этилбромид</option>
+                <option value="1.540">Этилхлорид</option>
+                <option value="0.674">Йодистый этил</option>
+                <option value="2.323">Этиленгликоль</option>
+                <option value="0.724">Этилбромид</option>
+                <option value="1.230">Этиленхлорид</option>
+                <option value="2.202">Муравьиная кислота</option>
+                <option value="2.411">Глицерин</option>
+                <option value="2.227">Гептан</option>
+                <option value="2.512">Гексан</option>
+                <option value="1.842">Льняное масло</option>
+                <option value="1.959">Метилацетат</option>
+                <option value="2.516">Метиловый спирт</option>
+                <option value="1.758">Азотная кислота 100%</option>
+                <option value="1.465">Нитробензол</option>
+                <option value="2.135">Октан</option>
+                <option value="1.971">Оливковое масло</option>
+                <option value="2.336">Пентан</option>
+                <option value="1.758">Асфальт</option>
+                <option value="1.8">Смазки</option>
+                <option value="1.674">Нафталин</option>
+                <option value="2.972">Парафин (расплав)</option>
+                <option value="1.691">Толуол</option>
+                <option value="1.98">Пропионовая кислота</option>
+                <option value="2.386">Пропиловый спирт</option>
+                <option value="1.172">Соевое масло</option>
+                <option value="0.979">Сера (расплав)</option>
+                <option value="1.440">Серная кислота 100%</option>
+                <option value="2.679">Сало (жир)</option>
+            </select>
+            <label> <input type="number"> кДж/кг К </label>
+        </div>
+        <div class="power_calculator_body">
+            <div class="item">
+                <label> <input type="number" class="initial_temperature"> <span class="mobile">Начальная температура (°C) </span></label>
+            </div>
+            <div class="item">
+                <label> <input type="number" class="final_temperature">
+                    Конечная температура (°C) </label>
+            </div>
+            <div class="item">
+                <label> <input type="number" class="change_temperature">
+                    Изменение температуры (°C) </label>
+            </div>
+            <div class="item">
+                <label> <input type="number" class="volume">
+                    Объем жидкости (м<sup>3</sup>) </label>
+            </div>
+            <div class="item">
+                <label> <input type="number" class="density">
+                    Плотность (кг/м<sup>3</sup>) </label>
+            </div>
+            <div class="item">
+                <label> <input type="number" class="heating_time">
+                    Время нагрева (ч) </label>
+            </div>
+        </div>
+        <div class="power_calculator_bottom">
+            <button class="power_calculator_btn btn">Вычислить</button>
+            <p>
+                Мощность нагревателя, кВт: "<span class="result">0</span>"
+            </p>
+        </div>
+    </div>
+    <script src="test.js"></script>
+</div>
+</body>
+</html>
