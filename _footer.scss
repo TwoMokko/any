@@ -1,0 +1,110 @@
+@use "sass:map";
+@use 'variable' as *;
+
+.footer {
+    background-color: $colorMain3;
+    border-radius: 24px 24px 0 0 ;
+    color: $colorTextLight;
+    &-info {
+        display: flex;
+        justify-content: space-between;
+        padding: 3rem 0;
+        > div {
+
+        }
+        &-logo {
+            margin-bottom: 2rem;
+            cursor: pointer;
+        }
+        &-email {
+            &-subtext {
+                margin-top: 4px;
+                font-size: 0.8rem;
+            }
+        }
+        &-links {
+            font-size: 1.1rem;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            grid-row-gap: 0.5rem;
+            grid-column-gap: 6rem;
+            height: max-content;
+            margin: auto;
+            > a {
+                padding: 4px;
+                color: $colorTextLight;
+                cursor: pointer;
+                &:hover {
+                    color: $colorText1;
+                }
+            }
+        }
+        &-number {
+            font-size: 2rem;
+        }
+        &-contacts {
+            width: 60%;
+            margin: 1rem auto;
+            > a {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                color: $colorTextLight;
+                &:not(:last-child) {
+                    margin-bottom: 0.5rem;
+                }
+                > div:first-child {
+                    flex: none;
+                    width: 2rem;
+                    height: 2rem;
+                    border-radius: 50%;
+                    border: 1px solid $colorBtn2;
+                    background-size: 60%;
+                    background-repeat: no-repeat;
+                    background-position: center;
+                }
+                > div:last-child {
+                    opacity: 0.5;
+                }
+                &:hover {
+                    > div:last-child {
+                        opacity: 1;
+                    }
+                }
+                &:first-child > div:first-child {
+                    background-image: url("img/mail.png");
+                }
+                &:last-child > div:first-child {
+                    background-image: url("img/map-point.png");
+                }
+            }
+        }
+        &-social {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 60%;
+            margin: auto;
+            > a {
+                width: 2rem;
+                height: 2rem;
+                opacity: 0.5;
+                //border-radius: 8px;
+                //background-color: $colorGray;
+                > img {
+                    width: 100%;
+                    height: 100%;
+                }
+                &:hover {
+                    opacity: 1;
+                    //background-color: $colorBtn2;
+                }
+            }
+        }
+    }
+    &-bottom {
+        border-top: 2px solid $colorLight;
+        padding: 1rem 0;
+        font-size: 0.8rem;
+    }
+}

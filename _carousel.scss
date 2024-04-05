@@ -1,0 +1,67 @@
+@use "sass:map";
+@use 'variable' as *;
+
+.carousel-wrap {
+    margin-bottom: 2rem;
+    position: relative;
+    overflow: hidden;
+    .carousel-content {
+        display: flex;
+        justify-content: space-between;
+        gap: 20px;
+        width: max-content;
+        .card {
+            height: 200px;
+            border-radius: 12px;
+            cursor: pointer;
+            color: $colorTextDark;
+
+            display: flex;
+            flex-direction: column;
+            justify-content: end;
+            &-prod {
+                background-color: $colorCardBackground;
+                position: relative;
+                overflow: hidden;
+                transition: 0.5s;
+                > div {
+                    margin: auto 0 0;
+                    height: 90%;
+                    border: 1px solid transparent;
+                    border-radius: 12px;
+                    z-index: 1;
+                    > div {
+                        padding: 0.5rem 1rem;
+                        font-size: 1.2rem;
+                    }
+                }
+                width: 250px;
+                &:hover > div {
+                    border: 1px solid red;
+                }
+            }
+            &-photo {
+                background-color: $colorBackgroundOpacity;
+                width: 420px;
+                padding: 1rem;
+                transition: 0.5s;
+                position: relative;
+                overflow: hidden;
+                &:hover {
+                    background-color: transparent;
+                }
+                > div {
+                    > div:first-child {
+                        color: $colorTextLight;
+                        margin-bottom: 1rem;
+                    }
+                    > div:last-child {
+                        font-size: 0.8rem;
+                        color: $colorText1;
+                    }
+                }
+            }
+
+        }
+    }
+}

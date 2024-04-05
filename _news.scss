@@ -1,0 +1,104 @@
+@use 'function' as *;
+@use 'variable' as *;
+
+
+.main-news {
+    @mixin News($params: null) {
+        display: flex;
+        justify-content: space-between;
+        gap: GetParam($params, gap, 10rem);
+        flex-direction: GetParam($params, flex_dir, null);
+        align-items: GetParam($params, align_items, center);
+        padding: 8rem 0 4rem;
+    }
+    @include MixScreen(null, $size4XL) { @include News((align_items: revert, gap: 4rem, flex_dir: column)); }
+    @include MixScreen($size4XL) { @include News(()); }
+}
+
+.news {
+
+    &-about {
+        color: $colorTextLight;
+        > div:nth-child(1) {
+            font-size: 1.6rem;
+        }
+        > div:nth-child(2) {
+            font-size: 0.8rem;
+            margin: 32px 0 26px;
+        }
+        > div:nth-child(3) {
+            > a {
+                color: $colorTextLight;
+                border: 1px solid $colorBtn1;
+                padding: 0.7rem 1.5rem;
+                font-size: 1.3rem;
+                border-radius: 16px;
+                &:hover {
+                    color: $colorText1;
+                }
+            }
+        }
+    }
+    &-cards {
+        &-item {
+            display: flex;
+            gap: 1rem;
+            //width: 900px;
+            overflow: hidden;
+            border-radius: 12px;
+            background-color: $colorBackground;
+            cursor: pointer;
+            &:not(:last-child) {
+                margin-bottom: 1.5rem;
+            }
+            &:hover {
+                .news-info-btn {
+                    > div {
+                        color: $colorText1;
+                    }
+                }
+            }
+        }
+    }
+    &-img {
+        height: 200px;
+        width: 250px;
+        > img {
+            height: auto;
+            width: 250px;
+        }
+    }
+    &-info {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        padding: 1rem;
+        &-head {
+            > div:first-child {
+                color: $colorTextDark;
+                margin-bottom: 4px;
+                font-weight: 500;
+            }
+            > div:last-child {
+                color: $colorText2;
+                font-size: 0.6rem;
+                font-weight: 700;
+            }
+        }
+        &-text {
+            font-size: 0.8rem;
+            color: $colorTextDark;
+            overflow: hidden;
+            -webkit-line-clamp: 5;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+        }
+        &-btn {
+            > div {
+                color: $colorText2;
+                font-weight: 500;
+            }
+        }
+    }
+
+}

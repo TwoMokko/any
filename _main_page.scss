@@ -1,0 +1,252 @@
+@use 'function' as *;
+@use 'variable' as *;
+
+.main {
+    @mixin Main($params: null) {
+        &-banner {
+            position: relative;
+            &-background {
+                height: 320px;
+                > img {
+                    object-fit: cover;
+                    width: 100%;
+                    height: 100%;
+                }
+                //position: absolute;
+                //z-index: -1;
+            }
+            &-text {
+                &-wrap {
+                    position: absolute;
+                    top: 0;
+                    bottom: 0;
+                    //bottom: 0;
+                    background-color: $colorBackgroundOpacity;
+                }
+
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                height: 100%;
+                width: 55%;
+                margin: auto;
+                text-align: center;
+                color: $colorTextLight;
+                > div:last-child {
+                    position: absolute;
+                    bottom: 46px;
+                    font-size: 0.8rem;
+
+                }
+            }
+        }
+
+        &-info {
+            margin-bottom: 4rem;
+            > div {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                gap: 4rem;
+            }
+            > div:first-child {
+                padding: 2rem 0;
+                > div:first-child {
+                    font-size: GetParam($params, info_font_size, 8rem);
+                    text-align: GetParam($params, info_text_align, null);
+                    line-height: GetParam($params, info_line_height, null);
+                    font-weight: 700;
+                    text-wrap: GetParam($params, info_wrap, nowrap);
+                    color: $colorText1;
+                }
+                > div:last-child {
+                    font-size: 2.2rem;
+                    width: GetParam($params, info_width, 60%);
+                    > span {
+                        font-weight: bold;
+                        color: $colorText1;
+                    }
+                }
+            }
+            > div:last-child {
+                > div:first-child {
+                    width: 70%;
+                    > span {
+                        color: $colorText3;
+                        font-weight: bold;
+                    }
+                }
+                > div:last-child {
+                    font-size: 0.8rem;
+                }
+            }
+        }
+
+        &-completed-projects {
+            display: grid;
+            grid-template-columns: repeat(15, 1fr);
+            grid-template-rows: repeat(2, 1fr);
+            grid-column-gap: 12px;
+            grid-row-gap: 12px;
+            height: 360px;
+            margin: 24px;
+            > div {
+                overflow: hidden;
+                border-radius: 12px;
+                //background-image: url("img/test.jpg");
+                //background-size: cover;
+                //background-position: center;
+                background-repeat: no-repeat;
+                color: $colorTextLight;
+                cursor: pointer;
+                position: relative;
+                > div {
+                    background-color: $colorBackgroundOpacity;
+                    width: 100%;
+                    height: 100%;
+                    transition: 0.5s;
+                    > div {
+                        display: none;
+                        padding: 12px;
+                        &:first-child {
+                            font-size: 1.8rem;
+                        }
+                        &:last-child {
+                            text-align: end;
+                            font-size: 0.8rem;
+                        }
+                    }
+                    &:hover {
+                        background-color: transparent;
+                        > div {
+                            display: revert;
+                        }
+                    }
+                }
+            }
+            > div:nth-child(1) {
+                grid-column: 1 / 4;
+                grid-row: 1 / 3;
+            }
+            > div:nth-child(2) {
+                grid-column: 4 / 8;
+                grid-row: 1 / 2;
+            }
+            > div:nth-child(3) {
+                grid-column: 8 / 10;
+                grid-row: 1 / 2;
+            }
+            > div:nth-child(4) {
+                grid-column: 10 / 12;
+                grid-row: 1 / 3;
+            }
+            > div:nth-child(5) {
+                grid-column: 12 / 16;
+                grid-row: 1 / 3;
+            }
+            > div:nth-child(6) {
+                grid-row: 2 / 3;
+                grid-column: 4 / 7;
+            }
+            > div:nth-child(7) {
+                grid-row: 2 / 3;
+                grid-column: 7 / 10;
+            }
+        }
+
+        &-bg-img {
+            background-image: url("img/news-bg.png");
+            background-repeat: no-repeat;
+            background-size: cover;
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 120px;
+            bottom: 0;
+            z-index: -1;
+            &-wrap {
+                position: relative;
+            }
+        }
+
+        &-subscribe {
+            margin-top: 1.6rem;
+            margin-bottom: 1.8rem;
+            position: relative;
+            > div {
+                display: flex;
+                align-items: center;
+                gap: 2rem;
+                padding: 1.6rem;
+                border-radius: 24px;
+                color: $colorTextLight;
+                background: linear-gradient(90deg, rgba(56,2,2,1) 0%, rgba(255,0,0,1) 80%);
+                > div {
+                    &:nth-child(1) {
+                        text-align: center;
+                        width: 33%;
+                        > div:first-child { font-size: 2rem; }
+                        > div:last-child { font-size: 1.6rem; }
+                    }
+                    &:nth-child(2) {
+                        padding-top: 2.2rem;
+                        width: GetParam($params, sub_width, 33%);
+                    }
+                    &:nth-child(3) {
+                        display: GetParam($params, sub_display, null);
+                        width: 33%;
+                        background-image: url("img/subscribe.png");
+                        height: 259px;
+                        position: absolute;
+                        right: 64px;
+                        top: -24px;
+                        background-size: contain;
+                        background-repeat: no-repeat;
+                    }
+                }
+            }
+            &-info {
+                &-btn {
+                    margin-top: 2rem;
+                    display: flex;
+                    gap: 1rem;
+                    a {
+                        padding: 0.6rem 1.3rem;
+                        border: 1px solid $colorBtn1;
+                        border-radius: 16px;
+                        &:nth-of-type(1):hover {
+                            color: $colorText1;
+                        }
+                        &:nth-of-type(2) {
+                            font-size: 1.1rem;
+                            background-color: $colorBtn1;
+                            &:hover {
+                                background-color: transparent;
+                                border: 1px solid $colorLight;
+                            }
+                        }
+
+                    }
+                }
+            }
+        }
+
+        &-photo {
+            &-head {
+                padding-bottom: 1.6rem;
+                font-size: 1.6rem;
+            }
+            .carousel-wrap {
+                margin-left: 8%;
+                margin-right: 8%;
+            }
+
+        }
+    }
+
+
+    @include MixScreen(null, $size4XL) { @include Main((info_text_align: center, info_line_height: 5rem, info_wrap: wrap, info_font_size: 6rem, info_width: revert, sub_display: none, sub_width: 67%)); }
+    @include MixScreen($size4XL) { @include Main(()); }
+}
+

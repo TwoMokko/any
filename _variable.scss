@@ -1,0 +1,44 @@
+@use "sass:map";
+
+/* Colors */
+$colorMain1: #ff0000;
+$colorMain2: #086fb4;
+$colorMain3: #001f42;
+$colorLight: #ffffff;
+$colorDark: #000000;
+$colorGrayLight: lightgray;
+$colorGray: #595651;
+$colorGrayDark: dimgray;
+$colorBackgroundOpacity: #001f4280;
+
+$colorBtn1: $colorMain1;
+$colorBtn2: $colorMain2;
+$colorBtnLight: $colorLight;
+
+$colorTextDark: $colorDark;
+$colorTextLight: $colorLight;
+$colorText1: $colorMain1;
+$colorText2: $colorMain2;
+$colorText3: $colorMain3;
+
+$colorBackground: $colorLight;
+$colorCardBackground: $colorGrayLight;
+
+$colorLine: $colorDark;
+
+
+/* Sizes */
+$size3XS    : 240;
+$size2XS    : 360;
+$sizeXS     : 420;
+$sizeS      : 480;
+$sizeM      : 560;
+$sizeL      : 680;
+$sizeX      : 760;
+$sizeXL     : 860;
+$size2XL    : 960;
+$size3XL    : 1080;
+$size4XL    : 1280;
+$size5XL    : 1480;
+$size6XL    : 1660;
+$size7XL    : 1920;

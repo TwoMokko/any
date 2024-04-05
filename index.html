@@ -4,6 +4,11 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>MV&F NEW</title>
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&family=Maven+Pro:wght@400..900&family=Montserrat:ital,wght@0,100..900;1,100..900&family=PT+Sans:ital,wght@0,400;0,700;1,400;1,700&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap" rel="stylesheet">
+
         <link rel="stylesheet" href="style.css" type="text/css"/>
     </head>
     <body>
@@ -16,13 +21,13 @@
                     <div>=</div>
                     <div>Меню</div>
                 </div>
-                <div class="head-search">
-                    <input type="search" placeholder="Поиск по сайту">
-                    <div class="head-search-btn">O</div>
+                <div class="search-wrap search-head">
+                    <input class="search-input" type="search" placeholder="Поиск по сайту">
+                    <div class="search-btn"></div>
                 </div>
                 <div class="head-contacts">
-                    <div>+7 777 777-77-77</div>
-                    <div>mail@mail.ru</div>
+                    <div><a href="tel:+77777777777">+7 777 777-77-77</a></div>
+                    <div><a href="mailto:mail@mail.ru">mail@mail.ru</a></div>
                 </div>
                 <div class="head-offer">
                     <a href="#">Помощь по подбору оборудования</a>
@@ -30,11 +35,11 @@
             </div>
             <div class="head-line"></div>
             <div class="head-menu-wrap container">
-                <div>О компании</div>
-                <div>Продукция</div>
-                <div>Кейсы</div>
-                <div>Услуги</div>
-                <div>Контакты</div>
+                <a href="#">О компании</a>
+                <a href="#">Продукция</a>
+                <a href="#">Кейсы</a>
+                <a href="#">Услуги</a>
+                <a href="#">Контакты</a>
             </div>
         </header>
         <main>
@@ -44,7 +49,7 @@
                 </div>
                 <div class="main-banner-text-wrap">
                     <div class="main-banner-text">
-                        <div>Проработанные сосуды (синоним: цилиндры, баллоны) MV&F изготавливаются аргонодувой сваркой из стандартных деталей по отработанной технологии. Засчет этого они имеют намного более привлекательную стоимость и срок поставки в сравнении с импортными цилиндрами (например)</div>
+                        <div>Проработанные сосуды (синоним: цилиндры, баллоны) MV&F изготавливаются аргонодувой сваркой из стандартных деталей по отработанной технологии. Засчет этого они имеют намного более привлекательную стоимость и срок поставки в сравнении с импортными цилиндрами (например sample cylinder производства Swagelok, HOKE, Parker)</div>
                         <div>
                             <a href="#" class="button-transparent">Подробнее >></a>
                         </div>
@@ -58,7 +63,10 @@
                 </div>
                 <div>
                     <div>
-                        <span>Компания "Мониторинг Вентиль и Фитинг"</span> один из лидеров на рынке оборудования для работы с криогенными жидкостями, включая сжиженный природный газ; сжатыми газами, включая особо чистые газы, и вакуумом.
+                        <span>Компания "Мониторинг Вентиль и Фитинг"</span> один из лидеров на рынке оборудования для работы с криогенными
+                        жидкостями, включая сжиженный природный газ; сжатыми газами, включая особо чистые газы, и вакуумом.
+                        Компания MV&F изготавливает оборудование для работы с высоким  и сверхвысоким давлением; с криогенными,
+                        высокими и сверхвысокими температурами.
                     </div>
                     <div>
                         <a href="#" class="button-transparent">Подробнее >></a>
@@ -66,19 +74,265 @@
                 </div>
             </div>
             <div class="main-completed-projects">
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
+                <div>
+                    <img class="img-bg" src="https://mvif.ru/assets/images/company/IMG_2372.jpg">
+                    <div>
+                        <div>Реализованные проекты</div>
+                        <div><a href="#" class="button-transparent-card">Смотреть все >></a></div>
+                    </div>
+                </div>
+                <div>
+                    <img class="img-bg" src="https://mvif.ru/assets/images/company/IMG_2372.jpg">
+                    <div>
+                        <div>Реализованные проекты</div>
+                        <div><a href="#" class="button-transparent-card">Смотреть все >></a></div>
+                    </div>
+                </div>
+                <div>
+                    <img class="img-bg" src="https://mvif.ru/assets/images/company/IMG_2372.jpg">
+                    <div>
+                        <div>Реализованные проекты</div>
+                        <div><a href="#" class="button-transparent-card">Смотреть все >></a></div>
+                    </div>
+                </div>
+                <div>
+                    <img class="img-bg" src="https://mvif.ru/assets/images/company/IMG_2372.jpg">
+                    <div>
+                        <div>Реализованные проекты</div>
+                        <div><a href="#" class="button-transparent-card">Смотреть все >></a></div>
+                    </div>
+                </div>
+                <div>
+                    <img class="img-bg" src="https://mvif.ru/assets/images/company/IMG_2372.jpg">
+                    <div>
+                        <div>Реализованные проекты</div>
+                        <div><a href="#" class="button-transparent-card">Смотреть все >></a></div>
+                    </div>
+                </div>
+                <div>
+                    <img class="img-bg" src="https://mvif.ru/assets/images/company/IMG_2372.jpg">
+                    <div>
+                        <div>Реализованные проекты</div>
+                        <div><a href="#" class="button-transparent-card">Смотреть все >></a></div>
+                    </div>
+                </div>
+                <div>
+                    <img class="img-bg" src="https://mvif.ru/assets/images/company/IMG_2372.jpg">
+                    <div>
+                        <div>Реализованные проекты</div>
+                        <div><a href="#" class="button-transparent-card">Смотреть все >></a></div>
+                    </div>
+                </div>
             </div>
-            <div class="card-wrap"></div>
-            <div class="main-news"></div>
-            <div class="main-subscribe"></div>
-            <div class="carousel"></div>
+            <div class="main-bg-img-wrap">
+                <div class="carousel-wrap container">
+                    <div class="carousel-content">
+                        <a href="#" class="card-prod card">
+                            <div>
+                                <div>Манометры</div>
+                            </div>
+                            <img class="img-bg img-prod" src="https://mvif.ru//2023/ohladitel-M.png">
+                        </a>
+                        <a href="#" class="card-prod card">
+                            <div>
+                                <div>Манометры</div>
+                            </div>
+                            <img class="img-bg img-prod" src="https://mvif.ru//2023/ohladitel-M.png">
+                        </a>
+                        <a href="#" class="card-prod card">
+                            <div>
+                                <div>Ротамеры</div>
+                            </div>
+                            <img class="img-bg img-prod" src="https://mvif.ru//2023/ohladitel-M.png">
+                        </a>
+                        <a href="#" class="card-prod card">
+                            <div>
+                                <div>Манометры</div>
+                            </div>
+                            <img class="img-bg img-prod" src="https://mvif.ru//2023/ohladitel-M.png">
+                        </a>
+                        <a href="#" class="card-prod card">
+                            <div>
+                                <div>Манометры</div>
+                            </div>
+                            <img class="img-bg img-prod" src="https://mvif.ru//2023/ohladitel-M.png">
+                        </a>
+                        <a href="#" class="card-prod card">
+                            <div>
+                                <div>Манометры</div>
+                            </div>
+                            <img class="img-bg img-prod" src="https://mvif.ru//2023/ohladitel-M.png">
+                        </a>
+                    </div>
+                    <div class="control left slider-control"></div>
+                    <div class="control right slider-control"></div>
+                </div>
+                <div class="main-news container">
+                    <div class="news-about">
+                        <div>Последние новости</div>
+                        <div>
+                            Следите за нашими новостями: будьте в курсе проектируемого и отгружаемого оборудования
+                        </div>
+                        <div>
+                            <a href="#">Смотрите все новости >></a>
+                        </div>
+                    </div>
+                    <div class="news-cards">
+                        <a class="news-cards-item" href="#">
+                            <div class="news-img">
+                                <img src="https://mvif.ru/assets/templates/mvif-new/assets/img/other/mvif.jpg">
+                            </div>
+                            <div class="news-info">
+                                <div class="news-info-head">
+                                    <div>Собран очередной газовый щит</div>
+                                    <div>07/12/12</div>
+                                </div>
+                                <div class="news-info-text">Специалисты компании "Мониторинг Вентиль и Фитинг" собрали и отгрузили покупателю центробежную насосную установку ЦНУ 24-135. Установка предназначена для перекачивания жидкого кислорода в криогенных системах промышленного назначения.</div>
+                                <div class="news-info-btn">
+                                    <div>Подробнее >></div>
+                                </div>
+                            </div>
+                        </a>
+                        <a class="news-cards-item" href="#">
+                            <div class="news-img">
+                                <img src="https://mvif.ru/assets/templates/mvif-new/assets/img/other/mvif.jpg">
+                            </div>
+                            <div class="news-info">
+                                <div class="news-info-head">
+                                    <div>Собран очередной газовый щит</div>
+                                    <div>07/12/12</div>
+                                </div>
+                                <div class="news-info-text">Специалисты компании "Мониторинг Вентиль и Фитинг" собрали и отгрузили покупателю центробежную насосную установку ЦНУ 24-135. Установка предназначена для перекачивания жидкого кислорода в криогенных системах промышленного назначения.</div>
+                                <div class="news-info-btn">
+                                    <div>Подробнее >></div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                <div class="main-bg-img"></div>
+            </div>
+            <div class="main-subscribe">
+                <div class="container">
+                    <div>
+                        <div>Подпишитесь</div>
+                        <div>на нашу рассылку</div>
+                    </div>
+                    <div class="main-subscribe-info">
+                        <div>и будете в курсе последних новостей, вакансиях, проводимых мероприятиях и акций компании!</div>
+                        <div class="main-subscribe-info-btn">
+                            <a>Введите свою почту</a>
+                            <a>Подписаться</a>
+                        </div>
+                    </div>
+                    <div></div>
+                </div>
+            </div>
+            <div class="main-photo">
+                <div class="container main-photo-head">Фоторепортажи с выставок</div>
+                <div class="carousel-wrap">
+                   <div class="carousel-content">
+                       <a class="card-photo card" href="#">
+                           <img class="img-bg" src="https://mvif.ru/assets/images/company/IMG_2372.jpg">
+                           <div>
+                               <div>Криоген-Экспо - 2023</div>
+                               <div>Смотреть</div>
+                           </div>
+                       </a>
+                       <a class="card-photo card" href="#">
+                           <img class="img-bg" src="https://mvif.ru/assets/images/company/IMG_2372.jpg">
+                           <div>
+                               <div>Криоген-Экспо - 2023</div>
+                               <div>Смотреть</div>
+                           </div>
+                       </a>
+                       <a class="card-photo card" href="#">
+                           <img class="img-bg" src="https://mvif.ru/assets/images/company/IMG_2372.jpg">
+                           <div>
+                               <div>Криоген-Экспо - 2023</div>
+                               <div>Смотреть</div>
+                           </div>
+                       </a>
+                       <a class="card-photo card" href="#">
+                           <img class="img-bg" src="https://mvif.ru/assets/images/company/IMG_2372.jpg">
+                           <div>
+                               <div>Криоген-Экспо - 2023</div>
+                               <div>Смотреть</div>
+                           </div>
+                       </a>
+                       <a class="card-photo card" href="#">
+                           <img class="img-bg" src="https://mvif.ru/assets/images/company/IMG_2372.jpg">
+                           <div>
+                               <div>Криоген-Экспо - 2023</div>
+                               <div>Смотреть</div>
+                           </div>
+                       </a>
+                       <a class="card-photo card" href="#">
+                           <img class="img-bg" src="https://mvif.ru/assets/images/company/IMG_2372.jpg">
+                           <div>
+                               <div>Криоген-Экспо - 2023</div>
+                               <div>Смотреть</div>
+                           </div>
+                       </a>
+                       <div class="control left slider-control"></div>
+                       <div class="control right slider-control"></div>
+                   </div>
+                </div>
+            </div>
         </main>
-        <footer></footer>
+        <footer class="footer">
+            <div class="container">
+                <div class="footer-info">
+                    <div>
+                        <div class="footer-info-logo">
+                            <img src="https://mvif.ru/assets/templates/mvif-new/assets/img/other/logo-transparent.png">
+                        </div>
+                        <div class="footer-info-email">
+                            <div class="search-wrap search-footer">
+                                <input class="search-input" type="email" placeholder="Email">
+                                <div class="search-btn"></div>
+                            </div>
+                            <div class="footer-info-email-subtext">Подписаться на рассылку</div>
+                        </div>
+                    </div>
+                    <div class="footer-info-links">
+                        <a href="#">Вакансии</a>
+                        <a href="#">Статьи</a>
+                        <a href="#">Сертификаты</a>
+                        <a href="#">Реквизиты</a>
+                        <a href="#">Новости</a>
+                        <a href="#">Фотогалерея</a>
+                    </div>
+                    <div>
+                        <div class="footer-info-number">+7-777-777-77-77</div>
+                        <div class="footer-info-contacts">
+                            <a href="#">
+                                <div></div>
+                                <div>mail@mail.ru</div>
+                            </a>
+                            <a href="#">
+                                <div></div>
+                                <div>Москва, Большая Семеновская, 49</div>
+                            </a>
+                        </div>
+                        <div class="footer-info-social">
+                            <a href="#">
+                                <img src="https://fluidcourse.ru/letter/chpu/images/social/i2009879946.png">
+                            </a>
+                            <a href="#">
+                                <img src="https://fluidcourse.ru/letter/chpu/images/social/i868823857.png">
+                            </a>
+                            <a href="#">
+                                <img src="https://fluidcourse.ru/letter/chpu/images/social/i-608925430.png">
+                            </a>
+                            <a href="#">
+                                <img src="https://fluidcourse.ru/letter/chpu/images/social/i1344590058.png">
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="footer-bottom">2024 Мониторинг Вентиль и Фитинг</div>
+            </div>
+        </footer>
     </body>
 </html>
