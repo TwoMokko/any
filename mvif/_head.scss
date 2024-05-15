@@ -1,0 +1,115 @@
+@use "function" as *;
+@use 'variable' as *;
+
+.head {
+    @mixin Header($params: null) {
+        font-size: 0.8rem;
+        &-line {
+            height: 1px;
+            width: 100%;
+            background-color: $colorLine;
+        }
+        > div {
+            display: flex;
+            flex-wrap: GetParam($params, head_display_wrap, nowrap);
+            justify-content: GetParam($params, head_justify, space-between);
+            align-items: center;
+            &:first-child {
+                padding-top: 2rem;
+                padding-bottom: 1rem;
+                gap: GetParam($params, head_gap, 8px);
+            }
+        }
+        &-logo {
+            &-wrap {
+                cursor: pointer;
+                img {
+                    height: GetParam($params, logo_size_height, 75px);
+                    width: auto;
+                }
+            }
+        }
+        &-menu-burger {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            height: 2rem;
+            padding: 0 1rem;
+            border-radius: 24px;
+            border: 1px solid $colorBtn1;
+            cursor: pointer;
+            &:hover {
+                background-color: $colorBtn1;
+                color: $colorTextLight;
+            }
+            > div:last-child {
+                display: GetParam($params, menu_display, null);
+            }
+        }
+
+        .search-head {
+            display: GetParam($params, search_display, null);
+        }
+
+        &-contacts-offer {
+            display: flex;
+            flex-direction: GetParam($params, cont_offer_display, null);
+            gap: 8px;
+        }
+
+        &-contacts {
+            display: GetParam($params, contacts_display, null);
+            justify-content: space-between;
+            gap: 4px;
+            > div {
+
+                a {
+                    padding: 4px;
+                    color: $colorTextDark;
+                    cursor: pointer;
+                    &:hover {
+                        color: $colorText2
+                    }
+                }
+            }
+        }
+        &-offer {
+            width: 200px;
+            text-align: center;
+            > a {
+                padding: 0.5rem 1rem;
+                border-radius: 16px;
+                background-color: $colorBtn2;
+                color: $colorTextLight;
+                border: 1px solid $colorBtn2;
+                &:hover {
+                    background-color: transparent;
+                    color: $colorText2;
+                }
+            }
+        }
+
+        &-menu-wrap {
+            padding: 0.5rem;
+            > a {
+                padding: 0.5rem;
+                color: $colorTextDark;
+                cursor: pointer;
+                &:hover {
+                    color: $colorText1;
+                }
+            }
+        }
+    }
+
+
+
+    @include MixScreen(null, $sizeXS) { @include Header((logo_size_height: 40px, cont_offer_display: column-reverse, contacts_display: none, search_display: none, head_display_wrap: wrap, head_gap: 16px, head_justify: center, menu_display: none)); }
+    @include MixScreen($sizeXS, $sizeM) { @include Header((logo_size_height: 40px, cont_offer_display: column-reverse, contacts_display: none, search_display: none, head_display_wrap: wrap, head_gap: 16px, head_justify: center)); }
+    @include MixScreen($sizeM, $sizeL) { @include Header((logo_size_height: 40px, cont_offer_display: column-reverse, contacts_display: none, search_display: none, menu_display: none)); }
+    @include MixScreen($sizeL, $sizeXL) { @include Header((logo_size_height: 40px, cont_offer_display: column-reverse, contacts_display: none, search_display: none)); }
+    @include MixScreen($sizeXL, $size3XL) { @include Header((logo_size_height: 40px, cont_offer_display: column-reverse, contacts_display: none, menu_display: none)); }
+    @include MixScreen($size3XL, $size4XL) { @include Header((logo_size_height: 50px, cont_offer_display: column-reverse, contacts_display: flex)); }
+    @include MixScreen($size4XL, $size5XL) { @include Header((logo_size_height: 50px)); }
+    @include MixScreen($size5XL) { @include Header(()); }
+}

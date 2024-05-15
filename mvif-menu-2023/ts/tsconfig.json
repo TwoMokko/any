@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "module": "none",
+    "target": "esnext",
+    "lib" : ["ESNext", "DOM", "es5", "es6", "dom", "dom.iterable"],
+    "rootDirs": ["./"],
+    "outFile": "../js/main.js",
+    "outDir": "../../parsePDF",
+    "declaration": true,
+    "sourceMap": true,
+    "alwaysStrict": true
+  },
+  "include": ["**/*"],
+  "exclude": ["node_module"]
+}

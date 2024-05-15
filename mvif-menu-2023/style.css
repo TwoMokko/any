@@ -1,0 +1,94 @@
+* {
+  font-family: "PT Sans Narrow", sans-serif;
+  line-height: 1.2;
+}
+
+.inner {
+  width: 1000px;
+  max-width: 85%;
+  margin: auto;
+}
+
+@media screen and (max-width: 1500px) and (min-width: 1200px) {
+  .inner {
+    width: 990px;
+  }
+}
+@media screen and (max-width: 999px) {
+  .inner {
+    max-width: 95%;
+  }
+}
+.sisea-results-list {
+  padding-top: 48px;
+  padding-bottom: 48px;
+  display: grid;
+  grid-auto-rows: 300px;
+  grid-template-columns: repeat(2, 1fr);
+  grid-column-gap: 2rem;
+  grid-row-gap: 2rem;
+}
+.sisea-results-list .sisea-result {
+  border: 2px solid #0078c1;
+  transition: box-shadow 0.3s ease-in-out;
+  -webkit-box-shadow: 5px 5px 10px 0 rgba(50, 50, 50, 0.35);
+  -moz-box-shadow: 5px 5px 10px 0 rgba(50, 50, 50, 0.35);
+  box-shadow: 5px 5px 10px 0 rgba(50, 50, 50, 0.35);
+  background-color: white;
+  padding: 24px;
+  overflow: hidden;
+}
+.sisea-results-list .sisea-result > h3 {
+  overflow: hidden;
+  -webkit-line-clamp: 3;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+}
+.sisea-results-list .sisea-result > h3:hover {
+  color: #0078c1;
+}
+.sisea-results-list .sisea-result > h3:hover > a {
+  color: #0078c1;
+}
+.sisea-results-list .sisea-result > h3 > a {
+  text-decoration: none;
+  color: black;
+}
+.sisea-results-list .sisea-result .extract {
+  overflow: hidden;
+  -webkit-line-clamp: 7;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+}
+.sisea-results-list .sisea-result .extract .simplesearch-highlight {
+  background-color: rgba(0, 120, 193, 0.5882352941);
+}
+
+.sisea-paging {
+  display: none;
+}
+
+.my-paging {
+  display: none;
+  gap: 16px;
+  justify-content: center;
+  padding-bottom: 50px;
+}
+.my-paging > div {
+  padding: 8px 16px;
+  background-color: #0078C1;
+  color: white;
+}
+.my-paging > div:first-child, .my-paging > div:last-child {
+  cursor: pointer;
+}
+.my-paging > div:first-child:hover, .my-paging > div:last-child:hover {
+  background-color: rgba(0, 120, 193, 0.5882352941);
+}
+
+.disable-btn {
+  background-color: lightgray !important;
+  pointer-events: none;
+}
+
+/*# sourceMappingURL=style.css.map */

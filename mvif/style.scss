@@ -1,5 +1,6 @@
 @use "sass:map";
 @use 'variable' as *;
+@use 'function' as *;
 @use 'head' as *;
 @use 'footer' as *;
 @use 'main_page' as *;
@@ -13,13 +14,33 @@
     font-style: normal;
 }
 
+html {
+    height: 100%;
+}
+
 body {
     margin: 0;
     font-size: 16px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    > header {
+        flex: none;
+    }
+    > main {
+        flex: auto;
+    }
+    > footer {
+        flex: none;
+    }
 }
 
 .container {
-    margin: 0 16%;
+    @mixin Container($params: null) {
+        margin: GetParam($params, mg, 0 16%);
+    }
+    @include MixScreen(null, $size2XL) { @include Container((mg: 0 10%)); }
+    @include MixScreen($size2XL) { @include Container(()); }
 }
 
 a {
@@ -90,8 +111,8 @@ a {
     }
     &.img-prod {
         object-fit: contain;
-        width: 70%;
-        height: 70%;
+        width: 60%;
+        height: 60%;
         right: 1rem;
         bottom: 1rem;
     }
@@ -110,6 +131,8 @@ a {
     }
     &-footer {
         //width: 100%;
+        width: fit-content;
+        margin: auto;
         outline: 1px solid $colorLight;
         input {
             color: $colorTextLight;

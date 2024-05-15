@@ -1,0 +1,115 @@
+@use 'function' as *;
+@use 'variable' as *;
+
+
+.main-news {
+    @mixin News($params: null) {
+        display: flex;
+        justify-content: space-between;
+        gap: GetParam($params, gap, 10rem);
+        flex-direction: GetParam($params, flex_dir, null);
+        align-items: GetParam($params, align_items, center);
+        padding: GetParam($params, wrap_padding, 8rem 0 80px);
+
+        .news {
+
+            &-about {
+                color: $colorTextLight;
+                > div:nth-child(1) {
+                    font-size: 1.6rem;
+                }
+                > div:nth-child(2) {
+                    font-size: GetParam($params, about_font_size, 0.8rem);
+                    width: GetParam($params, about_width, null);
+                    margin: GetParam($params, about_margin, 32px 0 26px);
+                }
+                > div:nth-child(3) {
+                    > a {
+                        color: $colorTextLight;
+                        border: 1px solid $colorBtn1;
+                        background-color: $colorBtn1;
+                        padding: 0.7rem 1.5rem;
+                        font-size: GetParam($params, btn_font_size, 1.3rem);
+                        border-radius: 16px;
+                        &:hover {
+                            background-color: transparent;
+                            color: $colorText1;
+                        }
+                    }
+                }
+            }
+            &-cards {
+                &-item {
+                    display: flex;
+                    flex-direction: GetParam($params, card_flex_dir, null);
+                    gap: 1rem;
+                    //width: 900px;
+                    overflow: hidden;
+                    border-radius: 12px;
+                    background-color: $colorBackground;
+                    cursor: pointer;
+                    &:not(:last-child) {
+                        margin-bottom: 1.5rem;
+                    }
+                    &:hover {
+                        .news-info-btn {
+                            > div {
+                                color: $colorText1;
+                            }
+                        }
+                    }
+                }
+            }
+            &-img {
+                max-height: 200px;
+                height: GetParam($params, img_height, null);
+                > img {
+                    height: 100%;
+                    width: 100%;
+                    object-fit: cover;
+                }
+            }
+            &-info {
+                display: flex;
+                gap: 8px;
+                flex-direction: column;
+                justify-content: space-between;
+                padding: 1rem;
+                &-head {
+                    > div:first-child {
+                        color: $colorTextDark;
+                        margin-bottom: 4px;
+                        font-weight: 500;
+                    }
+                    > div:last-child {
+                        color: $colorText2;
+                        font-size: 0.6rem;
+                        font-weight: 700;
+                    }
+                }
+                &-text {
+                    font-size: 0.8rem;
+                    color: $colorTextDark;
+                    overflow: hidden;
+                    -webkit-line-clamp: GetParam($params, text_card_lineclamp, 5);
+                    display: -webkit-box;
+                    -webkit-box-orient: vertical;
+                }
+                &-btn {
+                    > div {
+                        color: $colorText2;
+                        font-weight: 500;
+                    }
+                }
+            }
+
+        }
+    }
+    @include MixScreen(null, $sizeM) { @include News((align_items: revert, gap: 2rem, flex_dir: column, about_width: 100%, about_font_size: 1.2rem, about_margin: 24px 0 20px, text_card_lineclamp: 4, img_height: 200px, card_flex_dir: column, btn_font_size: 1rem, wrap_padding: 4rem 0 4rem)); }
+    @include MixScreen($sizeM, $sizeXL) { @include News((align_items: revert, gap: 2rem, flex_dir: column, about_width: 60%, about_font_size: 1.2rem, about_margin: 24px 0 20px, text_card_lineclamp: 4, wrap_padding: 4rem 0 4rem)); }
+    @include MixScreen($sizeXL, $size4XL) { @include News((align_items: revert, gap: 4rem, flex_dir: column, about_width: 60%, about_font_size: 1.2rem, about_margin: 24px 0 20px)); }
+    @include MixScreen($size4XL, $size6XL) { @include News((gap: 4rem)); }
+    @include MixScreen($size6XL) { @include News(()); }
+}
+
+

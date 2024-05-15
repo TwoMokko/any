@@ -1,0 +1,30 @@
+@use "function" as *;
+@use "variable" as *;
+
+.footer {
+    background-color: $colorBackgroundDark;
+    > div {
+        display: flex;
+        justify-content: space-between;
+        align-items: end;
+        padding-top: 30px;
+        padding-bottom: 30px;
+    }
+    a {
+        color: $colorTextLight;
+    }
+    &-links {
+        display: flex;
+        flex-direction: column;
+    }
+    &-contacts {
+        text-align: end;
+        > div:first-child {
+            display: flex;
+            flex-direction: column;
+        }
+        > div:last-child {
+            width: 224px;
+        }
+    }
+}
