@@ -4,11 +4,11 @@
 
 @import "header";
 @import "footer";
+@import "mainPage";
 
 * {
     box-sizing: border-box;
     font-family: "Intro", sans-serif;
-
 }
 
 html {
@@ -30,9 +30,9 @@ header {
 }
 main {
     flex: auto;
-    font-weight: 400;
-    font-size: 24px;
-    line-height: 24px;
+    //font-weight: 400;
+    //font-size: 24px;
+    //line-height: 24px;
 }
 footer {
     flex: none;
@@ -59,4 +59,5 @@ a {
     background-color: $colorBtnAccent;
     color: $colorTextLight;
     border-radius: 8px;
+    cursor: pointer;
 }

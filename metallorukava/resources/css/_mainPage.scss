@@ -1,0 +1,22 @@
+.main {
+    &-about {
+        &-head {
+            font-size: 48px;
+            line-height: 58px;
+        }
+        &-body {
+            display: flex;
+            > div:first-child {
+
+            }
+            &-text {
+                padding: 37px 0 54px;
+            }
+            &-img {
+                > img {
+
+                }
+            }
+        }
+    }
+}
