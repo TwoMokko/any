@@ -126,8 +126,11 @@ a {
         border-radius: 24px;
     }
     &-head {
-        //width: 40%;
+        width: 40%;
         outline: 1px solid $colorLine;
+        input {
+            width: 100%;
+        }
     }
     &-footer {
         //width: 100%;

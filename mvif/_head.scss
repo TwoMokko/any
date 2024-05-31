@@ -42,6 +42,9 @@
                 background-color: $colorBtn1;
                 color: $colorTextLight;
             }
+            img {
+                width: 1rem;
+            }
             > div:last-child {
                 display: GetParam($params, menu_display, null);
             }
@@ -78,7 +81,7 @@
             text-align: center;
             > a {
                 padding: 0.5rem 1rem;
-                border-radius: 16px;
+                border-radius: 24px;
                 background-color: $colorBtn2;
                 color: $colorTextLight;
                 border: 1px solid $colorBtn2;

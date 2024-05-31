@@ -8,7 +8,13 @@
         position: relative;
         overflow: hidden;
         .carousel-content {
-            display: flex;
+            &.carousel-photo {
+                display: flex;
+            }
+            &.carousel-prod {
+                display: grid;
+                grid-template-columns: repeat(4, 1fr);
+            }
             justify-content: space-between;
             gap: 20px;
             width: max-content;

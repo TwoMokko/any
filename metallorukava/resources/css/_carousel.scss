@@ -1,0 +1,15 @@
+@use "function" as *;
+@use "variable" as *;
+@use "mixins" as *;
+
+.carousel {
+    &-head {
+        margin-bottom: 56px;
+        @include textHeader;
+    }
+    &-client {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 100px;
+    }
+}

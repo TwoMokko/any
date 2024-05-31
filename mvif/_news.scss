@@ -19,7 +19,7 @@
                     font-size: 1.6rem;
                 }
                 > div:nth-child(2) {
-                    font-size: GetParam($params, about_font_size, 0.8rem);
+                    font-size: GetParam($params, about_font_size, 1rem);
                     width: GetParam($params, about_width, null);
                     margin: GetParam($params, about_margin, 32px 0 26px);
                 }
@@ -29,8 +29,8 @@
                         border: 1px solid $colorBtn1;
                         background-color: $colorBtn1;
                         padding: 0.7rem 1.5rem;
-                        font-size: GetParam($params, btn_font_size, 1.3rem);
-                        border-radius: 16px;
+                        font-size: GetParam($params, btn_font_size, 1rem);
+                        border-radius: 24px;
                         &:hover {
                             background-color: transparent;
                             color: $colorText1;

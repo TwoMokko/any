@@ -5,6 +5,7 @@
 @import "header";
 @import "footer";
 @import "mainPage";
+@import "carousel";
 
 * {
     box-sizing: border-box;
@@ -26,7 +27,7 @@ header {
     flex: none;
     font-weight: 400;
     font-size: 20px;
-    line-height: 29px;
+    line-height: 24px;
 }
 main {
     flex: auto;
@@ -47,8 +48,8 @@ a {
 }
 
 .container {
-    padding-left: 10%;
-    padding-right: 10%;
+    padding-left: 14%;
+    padding-right: 14%;
 }
 
 .btn {
@@ -60,4 +61,13 @@ a {
     color: $colorTextLight;
     border-radius: 8px;
     cursor: pointer;
+    &:hover {
+        opacity: 0.8;
+    }
+}
+
+.logo {
+    > img {
+        width: 244px;
+    }
 }
