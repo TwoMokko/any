@@ -10,6 +10,7 @@
         .carousel-content {
             &.carousel-photo {
                 display: flex;
+                width: max-content;
             }
             &.carousel-prod {
                 display: grid;
@@ -17,9 +18,9 @@
             }
             justify-content: space-between;
             gap: 20px;
-            width: max-content;
+
             .card {
-                height: GetParam($params, card_height, 250px);
+
                 border-radius: 12px;
                 cursor: pointer;
                 color: $colorTextDark;
@@ -28,6 +29,7 @@
                 flex-direction: column;
                 justify-content: end;
                 &-prod {
+                    height: GetParam($params, card_height, 300px);
                     background-color: $colorCardBackground;
                     position: relative;
                     overflow: hidden;
@@ -43,12 +45,13 @@
                             font-size: 1.2rem;
                         }
                     }
-                    width: GetParam($params, prod_card_width, 250px);
+                    //width: GetParam($params, prod_card_width, 250px);
                     &:hover > div {
                         border: 1px solid red;
                     }
                 }
                 &-photo {
+                    height: GetParam($params, card_height, 250px);
                     background-color: $colorBackgroundOpacity;
                     width: GetParam($params, photo_card_width, 420px);
                     padding: 1rem;

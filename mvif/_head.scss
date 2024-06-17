@@ -41,10 +41,22 @@
             &:hover {
                 background-color: $colorBtn1;
                 color: $colorTextLight;
+                .burger-not-hover {
+                    display: none;
+                }
+                .burger-hover {
+                    display: revert;
+                }
             }
-            img {
-                width: 1rem;
+            &-img {
+                &.burger-hover {
+                    display: none;
+                }
+                img {
+                    width: 1rem;
+                }
             }
+
             > div:last-child {
                 display: GetParam($params, menu_display, null);
             }

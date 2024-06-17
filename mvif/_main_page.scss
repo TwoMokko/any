@@ -22,6 +22,9 @@
                 //z-index: -1;
             }
             &-text {
+                > div:nth-child(1) {
+                    line-height: 20px;
+                }
                 &-wrap {
                     position: absolute;
                     top: 0;
@@ -82,6 +85,7 @@
                 > div:first-child {
                     //flex: auto;
                     max-width: GetParam($params, info_max_width, 70%);
+                    line-height: 20px;
                     > span {
                         color: $colorText3;
                         font-weight: bold;
@@ -233,6 +237,7 @@
             }
             &-info {
                 > div:first-child {
+                    line-height: 20px;
                     width: GetParam($params, sub_info_width, 100%);
                 }
                 &-btn {
