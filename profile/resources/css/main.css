@@ -1,53 +1,18 @@
-* {
-  box-sizing: border-box;
-  font-family: "Intro", sans-serif;
-}
-
-html {
-  height: 100%;
-}
-
-body {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  margin: 0;
-}
-
-header {
-  flex: none;
-}
-
-main {
-  flex: auto;
-}
-
-footer {
-  flex: none;
-}
-
-.container {
-  padding-left: 6%;
-  padding-right: 6%;
-}
-
-a {
-  display: inline-block;
-  text-decoration: none;
-  cursor: pointer;
-}
-
+/* Colors */
+/* Sizes */
+/* Colors */
+/* Sizes */
 .header {
   height: 60px;
   display: flex;
   align-items: center;
   gap: 60px;
   width: 100%;
-  background: #2e2e2e;
-  color: #d1d1d1;
+  background-color: #2E2E2E;
+  color: #D1D1D1;
 }
 .header a {
-  color: #d1d1d1;
+  color: #D1D1D1;
 }
 .header ul {
   margin: 0;
@@ -61,8 +26,8 @@ a {
   display: inline-block;
 }
 .header-logo img {
-  width: 154px;
-  height: 38px;
+  width: auto;
+  height: 24px;
 }
 .header-menu {
   flex: auto;
@@ -73,14 +38,14 @@ a {
   align-items: center;
 }
 .header-menu > ul > li a {
-  padding: 8px 12px;
+  padding: 22px 20px;
   cursor: pointer;
 }
 .header-menu .sub-li {
   position: relative;
 }
 .header-menu .sub-li .sub-ul {
-  padding: 12px;
+  padding: 20px;
   color: #FFF;
   font-size: 14px;
 }
@@ -98,14 +63,14 @@ a {
 }
 .header-contacts-number {
   font-size: 14px;
-  padding: 8px 12px;
+  padding: 22px 20px;
 }
 .header-contacts-cities {
   position: relative;
 }
 .header-contacts-cities-btn {
   font-size: 14px;
-  padding: 8px 12px;
+  padding: 22px 20px;
 }
 .header-contacts-cities-grid {
   display: grid;
@@ -119,7 +84,7 @@ a {
   color: #FFF;
   text-align: left;
   line-height: 1.6;
-  text-wrap: nowrap;
+  white-space: nowrap;
 }
 .header-contacts-cities-grid > a:hover {
   color: #B0CEDC;
@@ -129,24 +94,46 @@ a {
 }
 
 .drop-list {
+  display: none;
   z-index: 2;
   position: absolute;
-  top: 46px;
-  background: #1477A7;
+  top: 60px;
+  background-color: #1477A7;
   border-radius: 0 0 5px 5px;
 }
+.drop-list.active {
+  display: grid;
+}
 
+.btn-arrow::after {
+  content: "";
+  display: inline-block;
+  margin-left: 12px;
+  width: 9px;
+  height: 5px;
+  background: url(http://profile.fluid-line.loc/assets/svg/arrow.svg);
+  transition: all 0.5s;
+}
+.btn-arrow.active {
+  background-color: #1477A7;
+}
+.btn-arrow.active::after {
+  rotate: -180deg;
+}
+
+/* Colors */
+/* Sizes */
 .footer {
   display: flex;
   align-items: center;
-  background: #2e2e2e;
+  background-color: #2E2E2E;
   gap: 130px;
   padding-top: 24px;
   padding-bottom: 24px;
   color: #D1D1D1;
 }
 .footer a {
-  color: #d1d1d1;
+  color: #D1D1D1;
 }
 .footer-logo {
   flex: none;
@@ -180,6 +167,124 @@ a {
   flex: none;
   display: flex;
   gap: 24px;
+}
+
+/* Colors */
+/* Sizes */
+.filter {
+  padding: 24px;
+  margin-bottom: 48px;
+  background-color: #FFF;
+  border-radius: 10px;
+}
+.filter-inputs {
+  display: flex;
+  justify-content: space-evenly;
+  margin-bottom: 32px;
+}
+.filter-inputs-group {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+.filter-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.input-wrap > div:nth-child(1) {
+  margin-bottom: 12px;
+}
+.input-wrap > div:nth-child(2) {
+  display: flex;
+  gap: 12px;
+}
+.input-wrap > div:nth-child(2) > input {
+  width: 100%;
+  background-color: transparent;
+  border: 1px solid #B0CEDC;
+  color: #000;
+  height: 30px;
+  padding: 6px;
+  border-radius: 4px;
+}
+.input-wrap > div:nth-child(2) > input:focus-visible {
+  outline: none;
+  border: 1px solid #1477A7;
+}
+
+* {
+  box-sizing: border-box;
+  font-family: "Intro", sans-serif;
+}
+
+html {
+  height: 100%;
+}
+
+body {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+}
+
+header {
+  flex: none;
+}
+
+main {
+  flex: auto;
+  background-color: #E2E2E2;
+}
+
+footer {
+  flex: none;
+}
+
+.container {
+  padding-left: 6%;
+  padding-right: 6%;
+}
+
+.container-more {
+  padding-left: 12%;
+  padding-right: 12%;
+}
+
+h1 {
+  color: #1477A7;
+  text-align: center;
+}
+
+a {
+  display: inline-block;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.btn {
+  height: 30px;
+  width: 100px;
+  font-weight: 400;
+  border-radius: 5px;
+  border: 1px solid;
+  cursor: pointer;
+}
+.btn.accent {
+  color: #FFF;
+  border-color: #2EA8EC;
+  background-color: #2EA8EC;
+}
+.btn.accent:hover {
+  color: #2EA8EC;
+  background-color: transparent;
+}
+.btn.secondary {
+  color: #000;
+  border-color: #D9D9D9;
+  background-color: #D9D9D9;
 }
 
 /*# sourceMappingURL=main.css.map */

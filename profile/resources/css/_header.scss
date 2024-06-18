@@ -1,0 +1,136 @@
+@use "sass:map";
+@use "variable" as *;
+//@use "function" as *;
+
+.header {
+    height: 60px;
+    display: flex;
+    align-items: center;
+    //justify-content: space-between;
+    gap: 60px;
+    width: 100%;
+    background-color: $colorBackgroundDark;
+    color: $colorTextLightGrey;
+
+    a {
+        color: $colorTextLightGrey;
+    }
+
+    ul {
+        margin: 0;
+        padding: 0;
+    }
+
+    li {
+        list-style-type: none;
+    }
+
+    &-logo {
+        flex: none;
+        display: inline-block;
+        img {
+            width: auto;
+            height: 24px;
+        }
+    }
+    &-menu {
+        flex: auto;
+        font-size: 14px;
+
+        > ul {
+            display: flex;
+            align-items: center;
+            > li {
+                a {
+                    padding: 22px 20px;
+                    cursor: pointer;
+                }
+            }
+        }
+        .sub-li {
+            position: relative;
+            .sub-ul {
+                padding: 20px;
+                color: $colorTextLight;
+                font-size: 14px;
+                > li {
+                    a {
+                        color: white;
+                        padding: 4px;
+                        &:hover {
+                            color: $colorTextLightHover;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    &-contacts {
+        flex: none;
+        display: flex;
+        align-items: center;
+        &-number {
+            font-size: 14px;
+            padding: 22px 20px;
+        }
+        &-cities {
+            position: relative;
+
+            &-btn {
+                font-size: 14px;
+                padding: 22px 20px;
+            }
+            &-grid {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                right: 0;
+                padding: 20px 0;
+                > a {
+                    padding: 0 20px;
+                    font-size: 12px;
+                    color: $colorTextLight;
+                    text-align: left;
+                    line-height: 1.6;
+                    white-space: nowrap;
+                    &:hover {
+                        color: $colorTextLightHover;
+                    }
+                    &:not(:nth-child(3n+3)) {
+                        border-right: 1px solid white;
+                    }
+                }
+            }
+        }
+    }
+}
+
+.drop-list {
+    display: none;
+    z-index: 2;
+    position: absolute;
+    top: 60px;
+    background-color: $colorBackgroundAccent;
+    border-radius: 0 0 5px 5px;
+    &.active {
+        display: grid;
+    }
+}
+
+.btn-arrow {
+    &::after {
+        content: "";
+        display: inline-block;
+        margin-left: 12px;
+        width: 9px;
+        height: 5px;
+        background: url(http://profile.fluid-line.loc/assets/svg/arrow.svg);
+        transition: all 0.5s;
+    }
+    &.active {
+        background-color: $colorBtnAccent;
+        &::after {
+            rotate: -180deg;
+        }
+    }
+
+}

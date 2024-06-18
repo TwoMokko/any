@@ -1,0 +1,50 @@
+@use "sass:map";
+@use "variable" as *;
+//@use "function" as *;
+
+
+.footer {
+    display: flex;
+    align-items: center;
+    background-color: $colorBackgroundDark;
+    gap: 130px;
+    padding-top: 24px;
+    padding-bottom: 24px;
+    color: $colorTextLightGrey;
+    a {
+        color: $colorTextLightGrey;
+    }
+    &-logo {
+        flex: none;
+        display: flex;
+        flex-direction: column;
+        gap: 17px;
+        img {
+            width: 198px;
+            height: 50px;
+        }
+    }
+    &-contacts {
+        flex: auto;
+        > div:first-child {
+            font-size: 20px;
+        }
+        &-info {
+            margin-top: 25px;
+            display: grid;
+            row-gap: 6px;
+            -moz-column-gap: 18px;
+            column-gap: 18px;
+            grid-template-columns: 235px 395px;
+            &-elem {
+                display: flex;
+                justify-content: space-between;
+            }
+        }
+    }
+    &-socials {
+        flex: none;
+        display: flex;
+        gap: 24px;
+    }
+}

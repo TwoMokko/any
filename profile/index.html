@@ -2,24 +2,24 @@
 <html lang="ru">
     <head>
         <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Profile</title>
-
-        <!--        <link rel="icon" href="/assets/resources/img/favicon.svg">-->
+        <link rel="icon" href="resources/img/favicon.svg">
         <link rel="stylesheet" href="/profile/resources/css/main.css">
-        <!--            <script src="/profile/resources/js/main.js"></script>-->
+        <script src="/profile/resources/js/main.js"></script>
     </head>
     <body>
         <header class="header container">
             <div>
                 <a class="header-logo" href="https://fluid-line.ru/">
-                    <img src="https://fluid-line.ru/assets/page/logo/logo.svg" alt="logo">
+                    <img src="resources/img/logo-white.svg" alt="logo">
                 </a>
             </div>
             <div class="header-menu">
                 <ul>
                     <li><a href="https://fluid-line.ru/">Продукция</a></li>
-                    <li class="sub-li">
-                        <a>О компании</a>
+                    <li class="sub-li drop-wrap">
+                        <a class="btn-arrow" onclick="showNavHeader(this)">О компании</a>
                         <ul class="sub-ul drop-list">
                             <li><a href="https://fluid-line.ru/about/">О компании</a></li>
                             <li><a href="https://fluid-line.ru/certificate/">Сертификаты</a></li>
@@ -28,8 +28,8 @@
                         </ul>
                     </li>
                     <li><a href="https://fluid-line.ru/contacts/">Контакты</a></li>
-                    <li class="sub-li">
-                        <a>Справочная информация</a>
+                    <li class="sub-li drop-wrap">
+                        <a class="btn-arrow" onclick="showNavHeader(this)">Справочная информация</a>
                         <ul class="sub-ul drop-list">
                             <!--<li><a href="https://fluid-line.ru/edinica/">Перевод единиц измерения</a></li>
                             <li><a href="https://fluid-line.ru/flowcalc/">Калькулятор значения CV и расхода</a></li>
@@ -42,8 +42,8 @@
                 </ul>
             </div>
             <div class="header-contacts">
-                <div class="header-contacts-cities">
-                    <a class="header-contacts-cities-btn">Москва</a>
+                <div class="header-contacts-cities drop-wrap">
+                    <a class="header-contacts-cities-btn btn-arrow" onclick="showNavHeader(this)">Москва</a>
                     <div class="header-contacts-cities-grid drop-list">
                         <a>Астрахань</a>
                         <a>Барнаул</a>
@@ -97,10 +97,78 @@
                 <a class="header-contacts-number" href="tel:{{ currentPhone }}">+7 495 984 41 00</a>
             </div>
         </header>
-        <main></main>
+        <main>
+            <div class="container-more">
+                <h1>Заказы</h1>
+                <form action="./test.php" class="filter">
+                    <div class="filter-inputs">
+                        <div class="filter-inputs-group">
+                            <div class="input-wrap">
+                                <div>Поиск по номеру КП</div>
+                                <div>
+                                    <input name="offer_number" type="text"/>
+                                </div>
+                            </div>
+                            <div class="input-wrap calendar">
+                                <div>Дата заказа</div>
+                                <div>
+                                    <input name="order_start_date" type="date" placeholder="С"/>
+                                    <input name="order_end_date" type="date" placeholder="По"/>
+                                </div>
+                            </div>
+                            <div class="input-wrap">
+                                <div>Цена заказа (цена в валюте заказа)</div>
+                                <div>
+                                    <input name="price_start" type="number" placeholder="От" value="0"/>
+                                    <input name="price_end" type="number" placeholder="До" value="0"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="filter-inputs-group">
+                            <div class="input-wrap">
+                                <div>Поиск по трек-номеру доставки</div>
+                                <div>
+                                    <input name="track_number" type="text"/>
+                                </div>
+                            </div>
+                            <div class="input-wrap">
+                                <div>Поиск по номеру ТН</div>
+                                <div>
+                                    <input name="tn_number" type="text"/>
+                                </div>
+                            </div>
+                            <div class="input-wrap select">
+                                <div>Поиск по статусу доставки</div>
+                                <div>
+                                    <select name="delivery_status">
+                                        <option>неизвестный статус</option>
+                                        <option>не отправлен</option>
+                                        <option>груз принят</option>
+                                        <option>в промежуточном пункте</option>
+                                        <option>отправлен с промежуточного пункта</option>
+                                        <option>в пути</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="input-wrap calendar">
+                                <div>Дата доставки</div>
+                                <div>
+                                    <input name="delivery_date_start" type="date" placeholder="С"/>
+                                    <input name="delivery_date_end" type="date" placeholder="По"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="filter-buttons">
+                        <button class="btn accent" type="submit" onclick = "Base.Request.sendForm(this.closest('form'), 'POST', () => { console.log('do filter') }); return false;">Фильтровать</button>
+                        <button class="btn secondary">Сбросить</button>
+                    </div>
+                </form>
+            </div>
+        </main>
         <footer class="footer container">
             <div class="footer-logo">
-                <img src="https://fluid-line.ru/assets/page/logo/logo.svg" alt="logo">
+                <img src="resources/img/logo-white.svg" alt="logo">
                 <div>© 2023 ООО «Флюид-Лайн»</div>
             </div>
             <div class="footer-contacts">
@@ -129,7 +197,7 @@
                         <path d="M12.4615 17.5385V6L23.5385 11.5385L12.4615 17.5385Z" fill="white"></path>
                     </svg>
                 </a>
-                <a href="https://vk.com/fluidline" target="_blank">
+                <a href="https://m.sitehelp.me/vkGroup?siteId=crg6eszgcc5r6cv6oglb0i48r1cywcij&clientId=ZJG8W1OedrH5CPy3Dwz8xJ2iMWUR0l4n&url=https%3A%2F%2Fvk.com%2Ffluidline" target="_blank">
                     <svg data-v-5388d60b="" width="25" height="24" viewBox="0 0 25 24" fill="none"
                          xmlns="http://www.w3.org/2000/svg">
                         <rect x="0.153809" width="24" height="24" rx="5" fill="#1477A7"></rect>
@@ -145,7 +213,7 @@
                               fill="white"></path>
                     </svg>
                 </a>
-                <a href="https://t.me/fluidline_ru/" target="_blank">
+                <a href="https://m.sitehelp.me/telegram?siteId=crg6eszgcc5r6cv6oglb0i48r1cywcij&clientId=ZJG8W1OedrH5CPy3Dwz8xJ2iMWUR0l4n&url=https%3A%2F%2Ft.me%2Ffld_fluidline%2F" target="_blank">
                     <svg data-v-5388d60b="" width="25" height="24" viewBox="0 0 25 24" fill="none"
                          xmlns="http://www.w3.org/2000/svg">
                         <rect x="0.153809" width="24" height="24" rx="5" fill="#2EA8EC"></rect>
