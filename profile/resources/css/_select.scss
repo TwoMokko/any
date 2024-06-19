@@ -1,0 +1,113 @@
+@use "sass:map";
+@use "variable" as *;
+//@use "function" as *;
+
+.select-wrap {
+    margin-top: 8px;
+    display: block;
+    width: 100%;
+    position: relative;
+
+    .new-select {
+        position: relative;
+        padding: 20px;
+
+        user-select: none;
+        border-radius: 8px;
+        background-color: $colorBackgroundLight;
+        //color: $colorDarkOpacity;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        z-index: 3;
+        &:not(.disabled) {
+            cursor: pointer;
+        }
+        &.not-active {
+            pointer-events: none;
+            opacity: 0.5;
+        }
+
+        &:after {
+            content: '';
+            display: block;
+            width: 30px;
+            height: 30px;
+            position: absolute;
+            right: 20px;
+            top: 15px;
+            bottom: 15px;
+            background: url('../img/arrow-select.svg') no-repeat right center / cover;
+            opacity: 0.6;
+            background-size: contain;
+            margin: auto;
+
+            -webkit-transition: all .27s ease-in-out;
+            -o-transition: all .27s ease-in-out;
+            transition: all .27s ease-in-out;
+
+            -webkit-transform: rotate(0deg);
+            -ms-transform: rotate(0deg);
+            -o-transform: rotate(0deg);
+            transform: rotate(0deg);
+        }
+
+        &.on {
+            border-radius: 8px 8px 0 0;
+            &:after {
+                -webkit-transform: rotate(180deg);
+                -ms-transform: rotate(180deg);
+                -o-transform: rotate(180deg);
+                transform: rotate(180deg);
+            }
+        }
+
+        &-list {
+            position: absolute;
+            left: 0;
+            cursor: pointer;
+            width: 100%;
+            z-index: 2;
+            background-color: $colorBackgroundLight;
+            user-select: none;
+            //color: $colorDarkOpacity;
+            border-radius: 0 0 8px 8px;
+            box-shadow: 0 15px 59px -17px rgba(0,0,0,0.24);
+
+            overflow-y: scroll;
+            height: 114px;
+
+            &::-webkit-scrollbar {
+                width: 12px;                                            /* ширина всей полосы прокрутки */
+            }
+
+            &::-webkit-scrollbar-track {
+                background: $colorTextLightGrey;                      /* цвет зоны отслеживания */
+                border-radius: 8px;
+            }
+
+            &::-webkit-scrollbar-thumb {
+                background-color: $colorAccentLight;                    /* цвет бегунка */
+                border-radius: 20px;                                    /* округлось бегунка */
+                border: 3px solid $colorTextLightGrey;                /* отступ вокруг бегунка */
+            }
+
+            &.on {
+                display: block;
+            }
+
+            > div:last-child span {
+                border-radius: 0 0 8px 8px;
+            }
+
+            &-item {
+                display: block;
+                padding: 10px 15px;
+                &:hover {
+                    background-color: $colorTextLightGrey;
+                }
+            }
+        }
+    }
+
+}

@@ -1,0 +1,78 @@
+@use "sass:map";
+@use "variable" as *;
+//@use "function" as *;
+
+.table-wrap {
+    //flex: auto;
+    width: 78%;
+    background-color: $colorBackgroundLight;
+    border-radius: 10px;
+    //margin-bottom: 48px;
+    height: max-content;
+}
+
+.table {
+    overflow-x: auto;
+    scrollbar-width: none;
+    width: 100%;
+    //position: relative;
+    > table {
+        width: 100%;
+        border-collapse: collapse;
+        border-spacing: 3px;
+    }
+    &-info {
+        height: 70px;
+        padding: 24px;
+        display: flex;
+        justify-content: space-between;
+    }
+    &-head {
+        background-color: $colorBackgroundAccentLight;
+        height: 70px;
+        color: $colorTextLight;
+        font-size: 12px;
+        font-weight: 700;
+    }
+    &-headrow {
+
+    }
+    &-headcell {
+        width: 119px;
+        padding: 0 20px;
+        &-bordered {
+            position: relative;
+            height: 35px;
+            &::after {
+                content: "";
+                display: block;
+                position: absolute;
+                height: 1px;
+                background-color: $colorBackgroundLight;
+                left: 10px;
+                right: 10px;
+                bottom: 0;
+            }
+        }
+    }
+
+    &-row {
+        height: 85px;
+        &:not(:last-child) {
+            border-bottom: 1px solid $colorTextLightGrey;
+        }
+        &:hover {
+            background-color: $colorTextLightGrey;
+        }
+    }
+    &-cell {
+        text-align: center;
+        font-size: 12px;
+        &:last-child {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            padding: 12px 24px;
+        }
+    }
+}

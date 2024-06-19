@@ -21,3 +21,17 @@ declare namespace Base {
         }, url: string, method: string, func?: Function): void;
     }
 }
+declare namespace Components {
+    class Select {
+        sourceSelect: HTMLSelectElement;
+        sourceOptions: NodeList;
+        private readonly header;
+        private list;
+        private isOpen;
+        private isSelect;
+        private readonly duration;
+        constructor(sourceSelect: HTMLSelectElement);
+        private createOptions;
+        private doClickOnOption;
+    }
+}

@@ -5,6 +5,8 @@
 @import "header";
 @import "footer";
 @import "filter";
+@import "table";
+@import "select";
 
 * {
     box-sizing: border-box;
@@ -33,13 +35,18 @@ footer {
     flex: none;
 }
 
+.hide {
+    display: none;
+}
+
 .container {
     padding-left: 6%;
     padding-right: 6%;
 }
-.container-more {
-    padding-left: 12%;
-    padding-right: 12%;
+.with-nav {
+    display: flex;
+    gap: 2%;
+    margin-bottom: 48px;
 }
 
 h1 {
@@ -54,8 +61,7 @@ a {
 }
 
 .btn {
-    height: 30px;
-    width: 100px;
+    padding: 8px 16px;
     font-weight: 400;
     border-radius: 5px;
     border: 1px solid;
@@ -73,5 +79,19 @@ a {
         color: $colorTextDark;
         border-color: $colorBtnSecondary;
         background-color: $colorBtnSecondary;
+    }
+}
+
+input {
+    width: 100%;
+    background-color: transparent;
+    border: 1px solid $colorBorderAccent;
+    color: $colorTextDark;
+    height: 30px;
+    padding: 6px;
+    border-radius: 4px;
+    &:focus-visible {
+        outline: none;
+        border: 1px solid $colorBtnAccent;
     }
 }

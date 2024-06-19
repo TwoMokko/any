@@ -1,3 +1,4 @@
+@charset "UTF-8";
 /* Colors */
 /* Sizes */
 /* Colors */
@@ -172,20 +173,15 @@
 /* Colors */
 /* Sizes */
 .filter {
+  width: 20%;
   padding: 24px;
-  margin-bottom: 48px;
   background-color: #FFF;
   border-radius: 10px;
-}
-.filter-inputs {
-  display: flex;
-  justify-content: space-evenly;
-  margin-bottom: 32px;
+  height: max-content;
 }
 .filter-inputs-group {
   display: flex;
   flex-direction: column;
-  gap: 24px;
 }
 .filter-buttons {
   display: flex;
@@ -199,19 +195,171 @@
 .input-wrap > div:nth-child(2) {
   display: flex;
   gap: 12px;
+  margin-bottom: 24px;
 }
-.input-wrap > div:nth-child(2) > input {
+/* Colors */
+/* Sizes */
+.table-wrap {
+  width: 78%;
+  background-color: #FFF;
+  border-radius: 10px;
+  height: max-content;
+}
+
+.table {
+  overflow-x: auto;
+  scrollbar-width: none;
   width: 100%;
-  background-color: transparent;
-  border: 1px solid #B0CEDC;
-  color: #000;
-  height: 30px;
-  padding: 6px;
-  border-radius: 4px;
 }
-.input-wrap > div:nth-child(2) > input:focus-visible {
-  outline: none;
-  border: 1px solid #1477A7;
+.table > table {
+  width: 100%;
+  border-collapse: collapse;
+  border-spacing: 3px;
+}
+.table-info {
+  height: 70px;
+  padding: 24px;
+  display: flex;
+  justify-content: space-between;
+}
+.table-head {
+  background-color: #2EA8EC;
+  height: 70px;
+  color: #FFF;
+  font-size: 12px;
+  font-weight: 700;
+}
+.table-headcell {
+  width: 119px;
+  padding: 0 20px;
+}
+.table-headcell-bordered {
+  position: relative;
+  height: 35px;
+}
+.table-headcell-bordered::after {
+  content: "";
+  display: block;
+  position: absolute;
+  height: 1px;
+  background-color: #FFF;
+  left: 10px;
+  right: 10px;
+  bottom: 0;
+}
+.table-row {
+  height: 85px;
+}
+.table-row:not(:last-child) {
+  border-bottom: 1px solid #D1D1D1;
+}
+.table-row:hover {
+  background-color: #D1D1D1;
+}
+.table-cell {
+  text-align: center;
+  font-size: 12px;
+}
+.table-cell:last-child {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 12px 24px;
+}
+
+/* Colors */
+/* Sizes */
+.select-wrap {
+  margin-top: 8px;
+  display: block;
+  width: 100%;
+  position: relative;
+}
+.select-wrap .new-select {
+  position: relative;
+  padding: 20px;
+  user-select: none;
+  border-radius: 8px;
+  background-color: #FFF;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  z-index: 3;
+}
+.select-wrap .new-select:not(.disabled) {
+  cursor: pointer;
+}
+.select-wrap .new-select.not-active {
+  pointer-events: none;
+  opacity: 0.5;
+}
+.select-wrap .new-select:after {
+  content: "";
+  display: block;
+  width: 30px;
+  height: 30px;
+  position: absolute;
+  right: 20px;
+  top: 15px;
+  bottom: 15px;
+  background: url("../img/arrow-select.svg") no-repeat right center/cover;
+  opacity: 0.6;
+  background-size: contain;
+  margin: auto;
+  -webkit-transition: all 0.27s ease-in-out;
+  -o-transition: all 0.27s ease-in-out;
+  transition: all 0.27s ease-in-out;
+  -webkit-transform: rotate(0deg);
+  -ms-transform: rotate(0deg);
+  -o-transform: rotate(0deg);
+  transform: rotate(0deg);
+}
+.select-wrap .new-select.on {
+  border-radius: 8px 8px 0 0;
+}
+.select-wrap .new-select.on:after {
+  -webkit-transform: rotate(180deg);
+  -ms-transform: rotate(180deg);
+  -o-transform: rotate(180deg);
+  transform: rotate(180deg);
+}
+.select-wrap .new-select-list {
+  position: absolute;
+  left: 0;
+  cursor: pointer;
+  width: 100%;
+  z-index: 2;
+  background-color: #FFF;
+  user-select: none;
+  border-radius: 0 0 8px 8px;
+  box-shadow: 0 15px 59px -17px rgba(0, 0, 0, 0.24);
+  overflow-y: scroll;
+  height: 114px;
+}
+.select-wrap .new-select-list::-webkit-scrollbar {
+  width: 12px; /* ширина всей полосы прокрутки */
+}
+.select-wrap .new-select-list::-webkit-scrollbar-track {
+  background: #D1D1D1; /* цвет зоны отслеживания */
+  border-radius: 8px;
+}
+.select-wrap .new-select-list::-webkit-scrollbar-thumb {
+  background-color: #2EA8EC; /* цвет бегунка */
+  border-radius: 20px; /* округлось бегунка */
+  border: 3px solid #D1D1D1; /* отступ вокруг бегунка */
+}
+.select-wrap .new-select-list.on {
+  display: block;
+}
+.select-wrap .new-select-list > div:last-child span {
+  border-radius: 0 0 8px 8px;
+}
+.select-wrap .new-select-list-item {
+  display: block;
+  padding: 10px 15px;
+}
+.select-wrap .new-select-list-item:hover {
+  background-color: #D1D1D1;
 }
 
 * {
@@ -243,14 +391,19 @@ footer {
   flex: none;
 }
 
+.hide {
+  display: none;
+}
+
 .container {
   padding-left: 6%;
   padding-right: 6%;
 }
 
-.container-more {
-  padding-left: 12%;
-  padding-right: 12%;
+.with-nav {
+  display: flex;
+  gap: 2%;
+  margin-bottom: 48px;
 }
 
 h1 {
@@ -265,8 +418,7 @@ a {
 }
 
 .btn {
-  height: 30px;
-  width: 100px;
+  padding: 8px 16px;
   font-weight: 400;
   border-radius: 5px;
   border: 1px solid;
@@ -285,6 +437,20 @@ a {
   color: #000;
   border-color: #D9D9D9;
   background-color: #D9D9D9;
+}
+
+input {
+  width: 100%;
+  background-color: transparent;
+  border: 1px solid #B0CEDC;
+  color: #000;
+  height: 30px;
+  padding: 6px;
+  border-radius: 4px;
+}
+input:focus-visible {
+  outline: none;
+  border: 1px solid #1477A7;
 }
 
 /*# sourceMappingURL=main.css.map */

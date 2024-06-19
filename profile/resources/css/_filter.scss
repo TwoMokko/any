@@ -3,18 +3,21 @@
 //@use "function" as *;
 
 .filter {
+    //flex: 10%;
+    width: 20%;
     padding: 24px;
-    margin-bottom: 48px;
+    //margin-bottom: 48px;
     background-color: $colorBackgroundLight;
     border-radius: 10px;
+    height: max-content;
     &-inputs {
-        display: flex;
-        justify-content: space-evenly;
-        margin-bottom: 32px;
+        //display: flex;
+        //justify-content: space-evenly;
+        //margin-bottom: 32px;
         &-group {
             display: flex;
             flex-direction: column;
-            gap: 24px;
+            //gap: 24px;
         }
     }
     &-buttons {
@@ -32,18 +35,19 @@
         &:nth-child(2) {
             display: flex;
             gap: 12px;
+            margin-bottom: 24px;
             > input {
-                width: 100%;
-                background-color: transparent;
-                border: 1px solid $colorBorderAccent;
-                color: $colorTextDark;
-                height: 30px;
-                padding: 6px;
-                border-radius: 4px;
-                &:focus-visible {
-                    outline: none;
-                    border: 1px solid $colorBtnAccent;
-                }
+                //width: 100%;
+                //background-color: transparent;
+                //border: 1px solid $colorBorderAccent;
+                //color: $colorTextDark;
+                //height: 30px;
+                //padding: 6px;
+                //border-radius: 4px;
+                //&:focus-visible {
+                //    outline: none;
+                //    border: 1px solid $colorBtnAccent;
+                //}
             }
         }
     }
