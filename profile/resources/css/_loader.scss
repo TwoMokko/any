@@ -1,0 +1,25 @@
+@use "sass:map";
+@use "variable" as *;
+//@use "function" as *;
+
+.table-row {
+    &.load::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 8px;
+        background: repeating-linear-gradient(to right, $colorBackgroundLight 0%, $colorBackgroundAccentLight 50%, $colorBackgroundLight 100%);
+        //width: 100%;
+        background-size: 200% auto;
+        //background-position: 0 100%;
+        animation: gradient 2s infinite;
+        animation-fill-mode: forwards;
+        animation-timing-function: linear;}
+}
+
+@keyframes gradient {
+    0%   { background-position: 0 0; }
+    100% { background-position: -200% 0; }
+}

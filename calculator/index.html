@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calc</title>
+<!--    <link rel="icon" href="resources/img/favicon.svg">-->
+<!--    <link rel="stylesheet" href="/calculator/css/main.css">-->
+<!--    <script src="/profile/resources/js/main.js"></script>-->
+    <style>
+        /* Colors */
+        /* Sizes */
+        * {
+            box-sizing: border-box;
+            font-family: "Intro", sans-serif;
+        }
+
+        html {
+            height: 100%;
+        }
+
+        body {
+            height: 100%;
+            margin: 0;
+        }
+
+        .container {
+            padding-left: 10%;
+            padding-right: 10%;
+        }
+
+        a {
+            display: inline-block;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: 1px solid #1477A7;
+            background-color: #1477A7;
+            color: #FFF;
+        }
+        .btn:hover {
+            background-color: transparent;
+            color: #1477A7;
+        }
+
+        .calculator {
+            margin-top: 64px;
+            display: flex;
+            gap: 24px;
+        }
+
+        .btn-wrap {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .checkbox-wrap {
+            display: grid;
+            grid-template-columns: repeat(8, 1fr);
+            row-gap: 8px;
+            column-gap: 8px;
+        }
+        .checkbox-wrap > label {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            cursor: pointer;
+        }
+        .checkbox-wrap > label > input {
+            display: none;
+        }
+        .checkbox-wrap > label > span {
+            display: inline-block;
+            padding: 4px 8px;
+        }
+        .checkbox-wrap > label > span::before {
+            content: "";
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            margin-right: 8px;
+            border: 1px solid #1477A7;
+        }
+        .checkbox-wrap > label > input:checked + span:before {
+            background-color: #1477A7;
+        }
+
+        .choose-wrap {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .choose-wrap > div:nth-child(1) {
+            flex: none;
+        }
+        .choose-wrap > div:nth-child(2) {
+            flex: auto;
+        }
+        .choose-wrap > div:nth-child(3) {
+            flex: none;
+            align-self: end;
+        }
+
+        .textarea-wrap textarea {
+            width: 100%;
+            height: 100%;
+            padding: 12px;
+            background-color: transparent;
+            border: 1px solid #1477A7;
+            resize: none;
+        }
+        .textarea-wrap textarea:focus {
+            outline: none;
+            box-shadow: none;
+        }
+
+        /*# sourceMappingURL=main.css.map */
+
+    </style>
+</head>
+<body>
+    <header></header>
+    <main>
+        <div class="container calculator">
+            <div class="btn-wrap">
+                <a class="btn" onclick="console.log(this)">Форма закупщиков</a>
+                <a class="btn" onclick="console.log(this)">Обновление базы данных</a>
+                <a class="btn" onclick="console.log(this)">Краны и металлорукава</a>
+                <a class="btn" onclick="console.log(this)">Паспорта для таможни</a>
+                <a class="btn" onclick="console.log(this)">Обновить характеристики</a>
+                <a class="btn" onclick="console.log(this)">Составление кодировки</a>
+                <a class="btn" onclick="console.log(this)">,ase for search by parameter</a>
+                <a class="btn" onclick="console.log(this)">Обновить таблиицу опций</a>
+                <a class="btn" onclick="console.log(this)">Перезаписать файл конфигурации</a>
+                <a class="btn" onclick="console.log(this)">Поиск по характеристикам</a>
+            </div>
+            <div class="choose-wrap">
+                <div class="checkbox-wrap">
+                    <label class="checkbox">
+                        <input type="checkbox" value="" name="">
+                        <span>Тип первого подсоедиинения</span>
+                    </label>
+                    <label class="checkbox">
+                        <input type="checkbox" value="" name="">
+                        <span>Тип первого подсоедиинения</span>
+                    </label>
+                    <label class="checkbox">
+                        <input type="checkbox" value="" name="">
+                        <span>Тип первого подсоедиинения</span>
+                    </label>
+                    <label class="checkbox">
+                        <input type="checkbox" value="" name="">
+                        <span>Тип первого подсоедиинения</span>
+                    </label>
+                    <label class="checkbox">
+                        <input type="checkbox" value="" name="">
+                        <span>Тип первого подсоедиинения</span>
+                    </label>
+                    <label class="checkbox">
+                        <input type="checkbox" value="" name="">
+                        <span>Тип первого подсоедиинения</span>
+                    </label>
+                    <label class="checkbox">
+                        <input type="checkbox" value="" name="">
+                        <span>Тип первого подсоедиинения</span>
+                    </label>
+                    <label class="checkbox">
+                        <input type="checkbox" value="" name="">
+                        <span>Тип первого подсоедиинения</span>
+                    </label>
+                    <label class="checkbox">
+                        <input type="checkbox" value="" name="">
+                        <span>Тип первого подсоедиинения</span>
+                    </label>
+                    <label class="checkbox">
+                        <input type="checkbox" value="" name="">
+                        <span>Тип первого подсоедиинения</span>
+                    </label>
+                    <label class="checkbox">
+                        <input type="checkbox" value="" name="">
+                        <span>Тип первого подсоедиинения</span>
+                    </label>
+                    <label class="checkbox">
+                        <input type="checkbox" value="" name="">
+                        <span>Тип первого подсоедиинения</span>
+                    </label>
+                    <label class="checkbox">
+                        <input type="checkbox" value="" name="">
+                        <span>Тип первого подсоедиинения</span>
+                    </label>
+                    <label class="checkbox">
+                        <input type="checkbox" value="" name="">
+                        <span>Тип первого подсоедиинения</span>
+                    </label>
+                    <label class="checkbox">
+                        <input type="checkbox" value="" name="">
+                        <span>Тип первого подсоедиинения</span>
+                    </label>
+                    <label class="checkbox">
+                        <input type="checkbox" value="" name="">
+                        <span>Тип первого подсоедиинения</span>
+                    </label>
+                    <label class="checkbox">
+                        <input type="checkbox" value="" name="">
+                        <span>Тип первого подсоедиинения</span>
+                    </label>
+                    <label class="checkbox">
+                        <input type="checkbox" value="" name="">
+                        <span>Тип первого подсоедиинения</span>
+                    </label>
+                    <label class="checkbox">
+                        <input type="checkbox" value="" name="">
+                        <span>Тип первого подсоедиинения</span>
+                    </label>
+                    <label class="checkbox">
+                        <input type="checkbox" value="" name="">
+                        <span>Тип первого подсоедиинения</span>
+                    </label>
+                    <label class="checkbox">
+                        <input type="checkbox" value="" name="">
+                        <span>Тип первого подсоедиинения</span>
+                    </label>
+                    <label class="checkbox">
+                        <input type="checkbox" value="" name="">
+                        <span>Тип первого подсоедиинения</span>
+                    </label>
+                    <label class="checkbox">
+                        <input type="checkbox" value="" name="">
+                        <span>Тип первого подсоедиинения</span>
+                    </label>
+                    <label class="checkbox">
+                        <input type="checkbox" value="" name="">
+                        <span>Тип первого подсоедиинения</span>
+                    </label>
+                    <label class="checkbox">
+                        <input type="checkbox" value="" name="">
+                        <span>Тип первого подсоедиинения</span>
+                    </label>
+                    <label class="checkbox">
+                        <input type="checkbox" value="" name="">
+                        <span>Тип первого подсоедиинения</span>
+                    </label>
+                    <label class="checkbox">
+                        <input type="checkbox" value="" name="">
+                        <span>Тип первого подсоедиинения</span>
+                    </label>
+                    <label class="checkbox">
+                        <input type="checkbox" value="" name="">
+                        <span>Тип первого подсоедиинения</span>
+                    </label>
+                    <label class="checkbox">
+                        <input type="checkbox" value="" name="">
+                        <span>Тип первого подсоедиинения</span>
+                    </label>
+                    <label class="checkbox">
+                        <input type="checkbox" value="" name="">
+                        <span>Тип первого подсоедиинения</span>
+                    </label>
+                    <label class="checkbox">
+                        <input type="checkbox" value="" name="">
+                        <span>Тип первого подсоедиинения</span>
+                    </label>
+                    <label class="checkbox">
+                        <input type="checkbox" value="" name="">
+                        <span>Тип первого подсоедиинения</span>
+                    </label>
+                    <label class="checkbox">
+                        <input type="checkbox" value="" name="">
+                        <span>Тип первого подсоедиинения</span>
+                    </label>
+                    <label class="checkbox">
+                        <input type="checkbox" value="" name="">
+                        <span>Тип первого подсоедиинения</span>
+                    </label>
+                    <label class="checkbox">
+                        <input type="checkbox" value="" name="">
+                        <span>Тип первого подсоедиинения</span>
+                    </label>
+                    <label class="checkbox">
+                        <input type="checkbox" value="" name="">
+                        <span>Тип первого подсоедиинения</span>
+                    </label>
+                    <label class="checkbox">
+                        <input type="checkbox" value="" name="">
+                        <span>Тип первого подсоедиинения</span>
+                    </label>
+                    <label class="checkbox">
+                        <input type="checkbox" value="" name="">
+                        <span>Тип первого подсоедиинения</span>
+                    </label>
+                    <label class="checkbox">
+                        <input type="checkbox" value="" name="">
+                        <span>Тип первого подсоедиинения</span>
+                    </label>
+                    <label class="checkbox">
+                        <input type="checkbox" value="" name="">
+                        <span>Тип первого подсоедиинения</span>
+                    </label>
+                    <label class="checkbox">
+                        <input type="checkbox" value="" name="">
+                        <span>Тип первого подсоедиинения</span>
+                    </label>
+                    <label class="checkbox">
+                        <input type="checkbox" value="" name="">
+                        <span>Тип первого подсоедиинения</span>
+                    </label>
+                    <label class="checkbox">
+                        <input type="checkbox" value="" name="">
+                        <span>Тип первого подсоедиинения</span>
+                    </label>
+                    <label class="checkbox">
+                        <input type="checkbox" value="" name="">
+                        <span>Тип первого подсоедиинения</span>
+                    </label>
+                    <label class="checkbox">
+                        <input type="checkbox" value="" name="">
+                        <span>Тип первого подсоедиинения</span>
+                    </label>
+                    <label class="checkbox">
+                        <input type="checkbox" value="" name="">
+                        <span>Тип первого подсоедиинения</span>
+                    </label>
+                    <label class="checkbox">
+                        <input type="checkbox" value="" name="">
+                        <span>Тип первого подсоедиинения</span>
+                    </label>
+                    <label class="checkbox">
+                        <input type="checkbox" value="" name="">
+                        <span>Тип первого подсоедиинения</span>
+                    </label>
+                </div>
+                <div class="textarea-wrap">
+                    <textarea></textarea>
+                </div>
+                <div>
+                    <a class="btn" onclick="console.log(this)">Разбивка со словарем</a>
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer></footer>
+</body>
+</html>

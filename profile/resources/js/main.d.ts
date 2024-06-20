@@ -1,5 +1,7 @@
 declare function showNavHeader(btn: HTMLElement): void;
 declare function createElement(tagName: string, className: string | null, textContent: string | null, container: HTMLElement | null): any;
+declare function setEmailFromCookie(input: HTMLInputElement): void;
+declare function getCookie(name: string): string;
 type TypeResponseError = {
     state: 'error';
     body: {
@@ -33,5 +35,9 @@ declare namespace Components {
         constructor(sourceSelect: HTMLSelectElement);
         private createOptions;
         private doClickOnOption;
+        private switchSelect;
+        private open;
+        private close;
+        getIsSelect(): boolean;
     }
 }

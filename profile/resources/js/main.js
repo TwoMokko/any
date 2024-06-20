@@ -24,6 +24,16 @@ function createElement(tagName, className, textContent, container) {
         container.append(elem);
     return elem;
 }
+function setEmailFromCookie(input) {
+    document.cookie = "user=test@mail.ru";
+    // const test = getCookie('user');
+    // console.log('cookie', test);
+    input.value = getCookie('user');
+}
+function getCookie(name) {
+    let matches = document.cookie.match(new RegExp("(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"));
+    return matches ? decodeURIComponent(matches[1]) : undefined;
+}
 var Base;
 (function (Base) {
     class Request {
@@ -126,7 +136,7 @@ var Components;
                 if (this.header.classList.contains('disabled')) {
                     return;
                 }
-                // this.switchSelect();
+                this.switchSelect();
             });
             sourceSelect.after(wrap);
             // this.list.slideUp(0);
@@ -157,6 +167,23 @@ var Components;
                     elem.selected = true;
             });
             // $sourceOption.trigger('change'); это если на change есть событие
+        }
+        //
+        switchSelect() {
+            this.isOpen ? this.close() : this.open();
+        }
+        open() {
+            this.isOpen = true;
+            this.header.classList.add('on');
+            // this.list.slideDown(this.duration);
+        }
+        close() {
+            this.isOpen = false;
+            this.header.classList.remove('on');
+            // this.list.slideUp(this.duration);
+        }
+        getIsSelect() {
+            return this.isSelect;
         }
     }
     Components.Select = Select;

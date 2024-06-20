@@ -21,3 +21,15 @@ function createElement(tagName: string, className: string|null, textContent: str
     if (container) container.append(elem);
     return elem;
 }
+
+function setEmailFromCookie(input: HTMLInputElement): void {
+    document.cookie = "user=test@mail.ru";
+    input.value = getCookie('user');
+}
+
+function getCookie(name: string): string {
+    let matches = document.cookie.match(new RegExp(
+        "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
+    ));
+    return matches ? decodeURIComponent(matches[1]) : undefined;
+}

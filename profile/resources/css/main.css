@@ -200,9 +200,10 @@
 /* Colors */
 /* Sizes */
 .table-wrap {
-  width: 78%;
+  width: 100%;
   background-color: #FFF;
   border-radius: 10px;
+  overflow: hidden;
   height: max-content;
 }
 
@@ -248,6 +249,7 @@
   bottom: 0;
 }
 .table-row {
+  position: relative;
   height: 85px;
 }
 .table-row:not(:last-child) {
@@ -276,10 +278,12 @@
   position: relative;
 }
 .select-wrap .new-select {
+  border: 1px solid #B0CEDC;
+  color: #000;
+  padding: 6px;
   position: relative;
-  padding: 20px;
   user-select: none;
-  border-radius: 8px;
+  border-radius: 4px;
   background-color: #FFF;
   width: 100%;
   display: flex;
@@ -315,7 +319,7 @@
   transform: rotate(0deg);
 }
 .select-wrap .new-select.on {
-  border-radius: 8px 8px 0 0;
+  border-radius: 4px 4px 0 0;
 }
 .select-wrap .new-select.on:after {
   -webkit-transform: rotate(180deg);
@@ -324,6 +328,9 @@
   transform: rotate(180deg);
 }
 .select-wrap .new-select-list {
+  border-bottom: 1px solid #B0CEDC;
+  border-left: 1px solid #B0CEDC;
+  border-right: 1px solid #B0CEDC;
   position: absolute;
   left: 0;
   cursor: pointer;
@@ -341,10 +348,10 @@
 }
 .select-wrap .new-select-list::-webkit-scrollbar-track {
   background: #D1D1D1; /* цвет зоны отслеживания */
-  border-radius: 8px;
+  border-radius: 0 0 6px 0;
 }
 .select-wrap .new-select-list::-webkit-scrollbar-thumb {
-  background-color: #2EA8EC; /* цвет бегунка */
+  background-color: #FFF; /* цвет бегунка */
   border-radius: 20px; /* округлось бегунка */
   border: 3px solid #D1D1D1; /* отступ вокруг бегунка */
 }
@@ -362,6 +369,30 @@
   background-color: #D1D1D1;
 }
 
+/* Colors */
+/* Sizes */
+.table-row.load::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 8px;
+  background: repeating-linear-gradient(to right, #FFF 0%, #2EA8EC 50%, #FFF 100%);
+  background-size: 200% auto;
+  animation: gradient 2s infinite;
+  animation-fill-mode: forwards;
+  animation-timing-function: linear;
+}
+
+@keyframes gradient {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
 * {
   box-sizing: border-box;
   font-family: "Intro", sans-serif;
@@ -376,6 +407,17 @@ body {
   display: flex;
   flex-direction: column;
   margin: 0;
+}
+body::-webkit-scrollbar {
+  width: 12px; /* ширина всей полосы прокрутки */
+}
+body::-webkit-scrollbar-track {
+  background: #2E2E2E; /* цвет зоны отслеживания */
+}
+body::-webkit-scrollbar-thumb {
+  background-color: #E2E2E2; /* цвет бегунка */
+  border-radius: 20px; /* округлось бегунка */
+  border: 3px solid #2E2E2E; /* отступ вокруг бегунка */
 }
 
 header {
@@ -402,7 +444,7 @@ footer {
 
 .with-nav {
   display: flex;
-  gap: 2%;
+  gap: 16px;
   margin-bottom: 48px;
 }
 

@@ -101,6 +101,7 @@
             <h1>Заказы</h1>
             <div class="container with-nav">
                 <form action="./test.php" class="filter">
+                    <input type="text" name="cookie_email" class="hide">
                     <div class="filter-inputs">
                         <div class="filter-inputs-group">
                             <div class="input-wrap">
@@ -197,24 +198,24 @@
                                 </th></tr>
                             </thead>
                             <tbody>
-                            <tr class="table-row">
-                                <td class="table-cell"
-                                >1</td>
-                                <td class="table-cell">90 240.00 RUB</td>
-                                <td class="table-cell"><a href="" class="link">Лаура Бейбит</a></td>
-                                <td class="table-cell"></td>
-                                <td class="table-cell"></td>
-                                <td class="table-cell">Не оплачен</td>
-                                <td class="table-cell">Не отгружен</td>
-                                <td class="table-cell">27.12.2023</td>
-                                <td class="table-cell"></td>
-                                <td class="table-cell"></td>
-                                <td class="table-cell">
-                                    <input type="text" class="custom-value__field" disabled="">
-                                    <button class="btn accent" type="button"> Редактировать</button>
-                                    <button class="btn accent hide" type="button"> Сохранить</button>
-                                </td>
-                            </tr>
+                                <tr class="table-row load">
+                                    <td class="table-cell"
+                                    >1</td>
+                                    <td class="table-cell">90 240.00 RUB</td>
+                                    <td class="table-cell"><a href="" class="link">Лаура Бейбит</a></td>
+                                    <td class="table-cell"></td>
+                                    <td class="table-cell"></td>
+                                    <td class="table-cell">Не оплачен</td>
+                                    <td class="table-cell">Не отгружен</td>
+                                    <td class="table-cell">27.12.2023</td>
+                                    <td class="table-cell"></td>
+                                    <td class="table-cell"></td>
+                                    <td class="table-cell">
+                                        <input type="text" class="custom-value__field" disabled="">
+                                        <button class="btn accent" type="button"> Редактировать</button>
+                                        <button class="btn accent hide" type="button"> Сохранить</button>
+                                    </td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
@@ -281,6 +282,7 @@
         <script>
             document.addEventListener("DOMContentLoaded", () => {
                 const select = new Components.Select(document.querySelector('[name="delivery_status"]'));
+                setEmailFromCookie(document.querySelector('input[name="cookie_email"]'));
             })
         </script>
     </body>

@@ -4,9 +4,10 @@
 
 .table-wrap {
     //flex: auto;
-    width: 78%;
+    width: 100%;
     background-color: $colorBackgroundLight;
     border-radius: 10px;
+    overflow: hidden;
     //margin-bottom: 48px;
     height: max-content;
 }
@@ -57,6 +58,7 @@
     }
 
     &-row {
+        position: relative;
         height: 85px;
         &:not(:last-child) {
             border-bottom: 1px solid $colorTextLightGrey;

@@ -7,6 +7,7 @@
 @import "filter";
 @import "table";
 @import "select";
+@import "loader";
 
 * {
     box-sizing: border-box;
@@ -22,6 +23,19 @@ body {
     display: flex;
     flex-direction: column;
     margin: 0;
+    &::-webkit-scrollbar {
+        width: 12px;                                            /* ширина всей полосы прокрутки */
+    }
+
+    &::-webkit-scrollbar-track {
+        background: $colorBackgroundDark;                      /* цвет зоны отслеживания */
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background-color: $colorBackground;                    /* цвет бегунка */
+        border-radius: 20px;                                    /* округлось бегунка */
+        border: 3px solid $colorBackgroundDark;                /* отступ вокруг бегунка */
+    }
 }
 
 header {
@@ -45,7 +59,7 @@ footer {
 }
 .with-nav {
     display: flex;
-    gap: 2%;
+    gap: 16px;
     margin-bottom: 48px;
 }
 

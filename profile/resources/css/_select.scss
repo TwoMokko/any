@@ -9,11 +9,17 @@
     position: relative;
 
     .new-select {
+        border: 1px solid $colorBorderAccent;
+        color: $colorTextDark;
+        //height: 30px;
+        padding: 6px;
+
+
         position: relative;
-        padding: 20px;
+        //padding: 20px;
 
         user-select: none;
-        border-radius: 8px;
+        border-radius: 4px;
         background-color: $colorBackgroundLight;
         //color: $colorDarkOpacity;
         width: 100%;
@@ -53,7 +59,7 @@
         }
 
         &.on {
-            border-radius: 8px 8px 0 0;
+            border-radius: 4px 4px 0 0;
             &:after {
                 -webkit-transform: rotate(180deg);
                 -ms-transform: rotate(180deg);
@@ -63,6 +69,11 @@
         }
 
         &-list {
+            border-bottom: 1px solid $colorBorderAccent;
+            border-left: 1px solid $colorBorderAccent;
+            border-right: 1px solid $colorBorderAccent;
+            //color: $colorTextDark;
+
             position: absolute;
             left: 0;
             cursor: pointer;
@@ -83,11 +94,11 @@
 
             &::-webkit-scrollbar-track {
                 background: $colorTextLightGrey;                      /* цвет зоны отслеживания */
-                border-radius: 8px;
+                border-radius: 0 0 6px 0;
             }
 
             &::-webkit-scrollbar-thumb {
-                background-color: $colorAccentLight;                    /* цвет бегунка */
+                background-color: $colorBackgroundLight;                    /* цвет бегунка */
                 border-radius: 20px;                                    /* округлось бегунка */
                 border: 3px solid $colorTextLightGrey;                /* отступ вокруг бегунка */
             }

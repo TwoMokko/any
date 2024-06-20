@@ -45,7 +45,7 @@ namespace Components {
                 if (this.header.classList.contains('disabled')) {
                     return;
                 }
-                // this.switchSelect();
+                this.switchSelect();
             });
 
             sourceSelect.after(wrap);
@@ -80,25 +80,25 @@ namespace Components {
             // $sourceOption.trigger('change'); это если на change есть событие
         }
         //
-        // private switchSelect(): void {
-        //     this.isOpen ? this.close() : this.open();
-        // }
-        //
-        // private open(): void {
-        //     this.isOpen = true;
-        //     this.header.classList.add('on');
-        //     this.list.slideDown(this.duration);
-        // }
-        //
-        // private close(): void {
-        //     this.isOpen = false;
-        //     this.header.classList.remove('on');
-        //     this.list.slideUp(this.duration);
-        // }
-        //
-        // public getIsSelect(): boolean {
-        //     return this.isSelect;
-        // }
+        private switchSelect(): void {
+            this.isOpen ? this.close() : this.open();
+        }
+
+        private open(): void {
+            this.isOpen = true;
+            this.header.classList.add('on');
+            // this.list.slideDown(this.duration);
+        }
+
+        private close(): void {
+            this.isOpen = false;
+            this.header.classList.remove('on');
+            // this.list.slideUp(this.duration);
+        }
+
+        public getIsSelect(): boolean {
+            return this.isSelect;
+        }
         //
         // public getValue(): string {
         //     return (this.sourceOptions.filter(':selected').val() as string);
