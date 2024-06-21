@@ -173,29 +173,30 @@
                     <div class="table">
                         <table>
                             <thead class="table-head">
-                            <tr class="table-headrow"><!--v-if-->
-                                <th rowspan="2" class="table-headcell">Позиции</th>
-                                <th rowspan="2" class="table-headcell">Стоимость с&nbsp;НДС</th>
-                                <th rowspan="2" class="table-headcell">Менеджер</th>
-                                <th rowspan="2" class="table-headcell">Триггер письма</th>
-                                <th rowspan="2" class="table-headcell">Ссылка оплаты</th>
-                                <th colspan="2" class="table-headcell-bordered">Статус</th>
-                                <th colspan="3" class="table-headcell-bordered">Дата</th>
-                                <th rowspan="2" class="table-headcell">Комментарии</th>
-                            </tr>
-                            <tr>
-                                <th class="table-headcell"><p>Оплаты</p></th>
-                                <th class="table-headcell"><p>Отгрузки</p></th>
-                                <th class="table-headsubcell">
-                                    <div><p id="invoiceDate" class="table-headcellafter">Заказа</p></div>
-                                </th>
-                                <th class="table-headsubcell">
-                                    <div><p id="lastShipmentDate" class="table-headcellafter">Отгрузки</p>
-                                    </div>
-                                </th>
-                                <th class="table-headsubcell">
-                                    <div><p id="lastPaymentDate" class="table-headcellafter">Оплаты</p></div>
-                                </th></tr>
+                                <tr class="table-headrow"><!--v-if-->
+                                    <th rowspan="2" class="table-headcell">Позиции</th>
+                                    <th rowspan="2" class="table-headcell">Стоимость с&nbsp;НДС</th>
+                                    <th rowspan="2" class="table-headcell">Менеджер</th>
+                                    <th rowspan="2" class="table-headcell">Триггер письма</th>
+                                    <th rowspan="2" class="table-headcell">Ссылка оплаты</th>
+                                    <th colspan="2" class="table-headcell-bordered">Статус</th>
+                                    <th colspan="3" class="table-headcell-bordered">Дата</th>
+                                    <th rowspan="2" class="table-headcell">Комментарии</th>
+                                </tr>
+                                <tr>
+                                    <th class="table-headcell"><p>Оплаты</p></th>
+                                    <th class="table-headcell"><p>Отгрузки</p></th>
+                                    <th class="table-headsubcell">
+                                        <div><p id="invoiceDate" class="table-headcellafter">Заказа</p></div>
+                                    </th>
+                                    <th class="table-headsubcell">
+                                        <div><p id="lastShipmentDate" class="table-headcellafter">Отгрузки</p>
+                                        </div>
+                                    </th>
+                                    <th class="table-headsubcell">
+                                        <div><p id="lastPaymentDate" class="table-headcellafter">Оплаты</p></div>
+                                    </th>
+                                </tr>
                             </thead>
                             <tbody>
                                 <tr class="table-row load">
@@ -211,9 +212,98 @@
                                     <td class="table-cell"></td>
                                     <td class="table-cell"></td>
                                     <td class="table-cell">
-                                        <input type="text" class="custom-value__field" disabled="">
-                                        <button class="btn accent" type="button"> Редактировать</button>
-                                        <button class="btn accent hide" type="button"> Сохранить</button>
+                                        <input type="text" class="custom-value-field" name="">
+<!--                                        <button class="btn accent" type="button"> Редактировать</button>-->
+<!--                                        <button class="btn accent hide" type="button"> Сохранить</button>-->
+                                    </td>
+                                </tr>
+                                <tr class="table-row-secondary">
+                                    <td colspan="14">
+                                        <div class="expanded">
+                                            <div class="table-secondary">
+                                                <table>
+                                                    <thead>
+                                                        <tr>
+                                                            <th>№</th>
+                                                            <th>Наименование</th>
+                                                            <th>Кол-во</th>
+                                                            <th>Стоимость за шт. без НДС</th>
+                                                            <th>Стоимость<br data-v-cc0a306e="">с НДС</th>
+                                                            <th>Отгружено</th>
+                                                            <th>Паспорт</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td>1</td>
+                                                            <td>G80.1-S-20M-80A-250bar-CL0.25-VE; Цифровой Манометр от 0 до
+                                                                250бар, D80мм, 20Mx1.5, подсоед. снизу c поверкой
+                                                            </td>
+                                                            <td>5 шт</td>
+                                                            <td>18 800.00 ₽</td>
+                                                            <td>90 240.00 ₽</td>
+                                                            <td>0 шт</td>
+                                                            <td>
+                                                                <a href="">
+                                                                    <img src="resources/img/download.svg">
+                                                                </a>
+                                                            </td>
+                                                        </tr>
+                                                        <tr class="total">
+                                                            <td>Итого:</td>
+                                                            <td></td>
+                                                            <td>5 шт</td>
+                                                            <td>18800.00 ₽</td>
+                                                            <td>90240.00 ₽</td>
+                                                            <td>0 шт</td>
+                                                            <td></td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <div class="invoice-docs">
+                                                <div>
+                                                    <div>Документы по заказу</div>
+                                                    <div>
+                                                        <img src="resources/img/download.svg">
+                                                    </div>
+                                                </div>
+                                                <div>
+                                                    <div>Коммерческое предложение</div>
+                                                    <div>
+                                                        <a>
+                                                            <div>1.</div>
+                                                            <div>Коммерческое предложение и счет на оплату №44719 от 27 декабря 2023 г..pdf</div>
+                                                            <div>
+                                                                <img src="resources/img/download.svg">
+                                                            </div>
+                                                        </a>
+                                                        <a>
+                                                            <span>2.</span>
+                                                            <span>Коммерческое предложение и счет на оплату №44719 от 27 декабря 2023 г..pdf</span>
+                                                            <img src="resources/img/download.svg">
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr class="table-row load">
+                                    <td class="table-cell">2</td>
+                                    <td class="table-cell">90 240.00 RUB</td>
+                                    <td class="table-cell"><a href="" class="link">Лаура Бейбит</a></td>
+                                    <td class="table-cell"></td>
+                                    <td class="table-cell"></td>
+                                    <td class="table-cell">Не оплачен</td>
+                                    <td class="table-cell">Не отгружен</td>
+                                    <td class="table-cell">27.12.2023</td>
+                                    <td class="table-cell"></td>
+                                    <td class="table-cell"></td>
+                                    <td class="table-cell">
+                                        <input type="text" class="custom-value-field" name="">
+                                        <!--                                        <button class="btn accent" type="button"> Редактировать</button>-->
+                                        <!--                                        <button class="btn accent hide" type="button"> Сохранить</button>-->
                                     </td>
                                 </tr>
                             </tbody>
@@ -235,12 +325,12 @@
                         <a href="tel:+74959844100">+7 495 984 41 00</a>
                     </div>
                     <div class="footer-contacts-info-elem">
-                        <div>Адрес</div>
-                        <a target="_blank" href="https://yandex.ru/maps/-/CDqW5Bng">Москва, Большая Семеновская ул. д.49</a>
-                    </div>
-                    <div class="footer-contacts-info-elem">
                         <div>Email</div>
                         <a href="mailto:mail@fluid-line.ru">mail@fluid-line.ru</a>
+                    </div>
+                    <div class="footer-contacts-info-elem">
+                        <div>Адрес</div>
+                        <a target="_blank" href="https://yandex.ru/maps/-/CDqW5Bng">Москва, Большая Семеновская ул. д.49</a>
                     </div>
                 </div>
             </div>

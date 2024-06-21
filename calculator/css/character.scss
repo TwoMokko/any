@@ -1,0 +1,122 @@
+@use "sass:map";
+@use "variable" as *;
+
+* {
+    box-sizing: border-box;
+    font-family: "Intro", sans-serif;
+}
+
+html {
+    height: 100%;
+}
+
+body {
+    height: 100%;
+    margin: 0;
+}
+
+main {
+    margin: 64px 0;
+}
+
+.container {
+    padding-left: 10%;
+    padding-right: 10%;
+}
+
+a {
+    display: inline-block;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.btn {
+    padding: 12px 24px;
+    border: 1px solid $colorBtnAccent;
+    background-color: $colorBtnAccent;
+    color: $colorTextLight;
+    &:hover {
+        background-color: transparent;
+        color: $colorTextAccent;
+    }
+}
+
+.head {
+    margin-bottom: 16px;
+    font-size: 1.2rem;
+    color: $colorTextAccent;
+}
+
+.character {
+    display: flex;
+    gap: 24px;
+    align-items: end;
+    justify-content: space-between;
+    margin-bottom: 32px;
+    &-group {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px;
+        &-select {
+            > div:first-child {
+                margin-bottom: 8px;
+            }
+        }
+    }
+}
+.option {
+    margin-bottom: 32px;
+    > div:nth-child(2) {
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+    }
+    &-group {
+        display: grid;
+        grid-template-columns: repeat(10, 1fr);
+        &-select {
+            > div:first-child {
+                margin-bottom: 8px;
+            }
+        }
+    }
+}
+
+input {
+    //height: 44px;
+    padding: 12px 8px;
+    &:focus-visible {
+        outline: none;
+        border: 1px solid $colorBtnAccent;
+    }
+    &:not(.show-element) {
+        width: 120px;
+    }
+    &.show-element {
+        width: 480px;
+    }
+}
+select {
+    height: 44px;
+    width: 120px;
+}
+
+.table-wrap {
+    table {
+        border: 1px solid $colorBackgroundAccent;
+        thead {
+            tr {
+                th {
+                    padding: 12px;
+                }
+            }
+        }
+        tbody {
+            tr {
+                td {
+                    padding: 12px;
+                }
+            }
+        }
+    }
+}

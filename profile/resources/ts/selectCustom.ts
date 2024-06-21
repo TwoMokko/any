@@ -50,6 +50,7 @@ namespace Components {
 
             sourceSelect.after(wrap);
 
+            this.slideToggle();
             // this.list.slideUp(0);
         }
 
@@ -66,6 +67,7 @@ namespace Components {
             this.sourceOptions.forEach((elem) => {
                 const option = createElement('div', 'new-select-list-item', elem.textContent, this.list)
                 option.addEventListener('click', (event) => {
+                    console.log('event', typeof event);
                     this.doClickOnOption(event.target);
                 })
             });
@@ -77,6 +79,7 @@ namespace Components {
                 if (elem.selected) elem.selected = false;
                 if (elem.textContent === event.textContent) elem.selected = true;
             });
+            this.slideToggle();
             // $sourceOption.trigger('change'); это если на change есть событие
         }
         //
@@ -87,17 +90,21 @@ namespace Components {
         private open(): void {
             this.isOpen = true;
             this.header.classList.add('on');
-            // this.list.slideDown(this.duration);
+            this.slideToggle();
         }
 
         private close(): void {
             this.isOpen = false;
             this.header.classList.remove('on');
-            // this.list.slideUp(this.duration);
+            this.slideToggle();
         }
 
         public getIsSelect(): boolean {
             return this.isSelect;
+        }
+
+        private slideToggle() {
+            this.list.classList.toggle('hide');
         }
         //
         // public getValue(): string {

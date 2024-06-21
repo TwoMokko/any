@@ -39,5 +39,8 @@ declare namespace Components {
         private open;
         private close;
         getIsSelect(): boolean;
+        private slideToggle;
     }
+}
+declare namespace Components {
 }

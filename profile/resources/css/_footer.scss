@@ -31,14 +31,16 @@
         }
         &-info {
             margin-top: 25px;
-            display: grid;
-            row-gap: 6px;
-            -moz-column-gap: 18px;
-            column-gap: 18px;
-            grid-template-columns: 235px 395px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
             &-elem {
                 display: flex;
+                gap: 12px;
                 justify-content: space-between;
+                > a {
+                    text-align: end;
+                }
             }
         }
     }

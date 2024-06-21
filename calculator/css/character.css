@@ -1,0 +1,110 @@
+/* Colors */
+/* Sizes */
+* {
+  box-sizing: border-box;
+  font-family: "Intro", sans-serif;
+}
+
+html {
+  height: 100%;
+}
+
+body {
+  height: 100%;
+  margin: 0;
+}
+
+main {
+  margin: 64px 0;
+}
+
+.container {
+  padding-left: 10%;
+  padding-right: 10%;
+}
+
+a {
+  display: inline-block;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.btn {
+  padding: 12px 24px;
+  border: 1px solid #1477A7;
+  background-color: #1477A7;
+  color: #FFF;
+}
+.btn:hover {
+  background-color: transparent;
+  color: #1477A7;
+}
+
+.head {
+  margin-bottom: 16px;
+  font-size: 1.2rem;
+  color: #1477A7;
+}
+
+.character {
+  display: flex;
+  gap: 24px;
+  align-items: end;
+  justify-content: space-between;
+  margin-bottom: 32px;
+}
+.character-group {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+.character-group-select > div:first-child {
+  margin-bottom: 8px;
+}
+
+.option {
+  margin-bottom: 32px;
+}
+.option > div:nth-child(2) {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+.option-group {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+}
+.option-group-select > div:first-child {
+  margin-bottom: 8px;
+}
+
+input {
+  padding: 12px 8px;
+}
+input:focus-visible {
+  outline: none;
+  border: 1px solid #1477A7;
+}
+input:not(.show-element) {
+  width: 120px;
+}
+input.show-element {
+  width: 480px;
+}
+
+select {
+  height: 44px;
+  width: 120px;
+}
+
+.table-wrap table {
+  border: 1px solid #1477A7;
+}
+.table-wrap table thead tr th {
+  padding: 12px;
+}
+.table-wrap table tbody tr td {
+  padding: 12px;
+}
+
+/*# sourceMappingURL=character.css.map */

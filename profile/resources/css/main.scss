@@ -32,7 +32,7 @@ body {
     }
 
     &::-webkit-scrollbar-thumb {
-        background-color: $colorBackground;                    /* цвет бегунка */
+        background-color: $colorBackgroundMain;                    /* цвет бегунка */
         border-radius: 20px;                                    /* округлось бегунка */
         border: 3px solid $colorBackgroundDark;                /* отступ вокруг бегунка */
     }
@@ -43,7 +43,7 @@ header {
 }
 main {
     flex: auto;
-    background-color: $colorBackground;
+    background-color: $colorBackgroundMain;
 }
 footer {
     flex: none;

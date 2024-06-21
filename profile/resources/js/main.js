@@ -26,8 +26,6 @@ function createElement(tagName, className, textContent, container) {
 }
 function setEmailFromCookie(input) {
     document.cookie = "user=test@mail.ru";
-    // const test = getCookie('user');
-    // console.log('cookie', test);
     input.value = getCookie('user');
 }
 function getCookie(name) {
@@ -139,6 +137,7 @@ var Components;
                 this.switchSelect();
             });
             sourceSelect.after(wrap);
+            this.slideToggle();
             // this.list.slideUp(0);
         }
         // public static factory($sourceSelect: JQuery): Select[] {
@@ -154,6 +153,7 @@ var Components;
             this.sourceOptions.forEach((elem) => {
                 const option = createElement('div', 'new-select-list-item', elem.textContent, this.list);
                 option.addEventListener('click', (event) => {
+                    console.log('event', typeof event);
                     this.doClickOnOption(event.target);
                 });
             });
@@ -166,6 +166,7 @@ var Components;
                 if (elem.textContent === event.textContent)
                     elem.selected = true;
             });
+            this.slideToggle();
             // $sourceOption.trigger('change'); это если на change есть событие
         }
         //
@@ -175,17 +176,31 @@ var Components;
         open() {
             this.isOpen = true;
             this.header.classList.add('on');
-            // this.list.slideDown(this.duration);
+            this.slideToggle();
         }
         close() {
             this.isOpen = false;
             this.header.classList.remove('on');
-            // this.list.slideUp(this.duration);
+            this.slideToggle();
         }
         getIsSelect() {
             return this.isSelect;
         }
+        slideToggle() {
+            this.list.classList.toggle('hide');
+        }
     }
     Components.Select = Select;
+})(Components || (Components = {}));
+var Components;
+(function (Components) {
+    class Table {
+        constructor() {
+        }
+        init() {
+        }
+        redraw() {
+        }
+    }
 })(Components || (Components = {}));
 //# sourceMappingURL=main.js.map
