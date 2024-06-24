@@ -41,7 +41,7 @@
     &-headcell {
         width: 119px;
         padding: 0 20px;
-        &-bordered {
+        &.bordered {
             position: relative;
             height: 35px;
             &::after {

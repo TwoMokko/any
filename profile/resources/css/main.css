@@ -236,11 +236,11 @@
   width: 119px;
   padding: 0 20px;
 }
-.table-headcell-bordered {
+.table-headcell.bordered {
   position: relative;
   height: 35px;
 }
-.table-headcell-bordered::after {
+.table-headcell.bordered::after {
   content: "";
   display: block;
   position: absolute;
@@ -453,7 +453,7 @@
   bottom: 0;
   left: 0;
   right: 0;
-  height: 8px;
+  height: 5px;
   background: repeating-linear-gradient(to right, #FFF 0%, #2EA8EC 50%, #FFF 100%);
   background-size: 200% auto;
   animation: gradient 2s infinite;

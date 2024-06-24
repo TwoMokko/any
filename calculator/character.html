@@ -4,7 +4,149 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Character</title>
-        <link rel="stylesheet" href="/calculator/css/character.css">
+<!--        <link rel="stylesheet" href="/calculator/css/character.css">-->
+
+        <style>
+            /* Colors */
+            /* Sizes */
+            * {
+                box-sizing: border-box;
+                font-family: "Intro", sans-serif;
+            }
+            *:not(thead) ::selection {
+                background: #1477A7;
+                color: #FFF;
+            }
+
+            html {
+                height: 100%;
+            }
+
+            body {
+                height: 100%;
+                margin: 0;
+            }
+
+            main {
+                margin: 64px 0;
+            }
+
+            .container {
+                padding-left: 10%;
+                padding-right: 10%;
+            }
+
+            a {
+                display: inline-block;
+                text-decoration: none;
+                cursor: pointer;
+            }
+
+            .btn {
+                padding: 12px 24px;
+                border: 1px solid #1477A7;
+                background-color: #1477A7;
+                color: #FFF;
+            }
+            .btn:hover {
+                background-color: transparent;
+                color: #1477A7;
+            }
+
+            .head {
+                margin-bottom: 16px;
+                font-size: 1.2rem;
+                color: #1477A7;
+            }
+
+            .character {
+                display: flex;
+                gap: 24px;
+                align-items: end;
+                justify-content: space-between;
+                margin-bottom: 32px;
+            }
+            .character-group {
+                display: grid;
+                grid-template-columns: repeat(4, 1fr);
+                gap: 16px;
+            }
+            .character-group-select > div:first-child {
+                margin-bottom: 8px;
+            }
+
+            .option {
+                margin-bottom: 32px;
+            }
+            .option > div:nth-child(2) {
+                display: flex;
+                flex-direction: column;
+                gap: 24px;
+            }
+            .option-group {
+                display: grid;
+                grid-template-columns: repeat(10, 1fr);
+                column-gap: 24px;
+                row-gap: 12px;
+            }
+            .option-group-select > div:first-child {
+                margin-bottom: 8px;
+            }
+
+            input {
+                padding: 12px 8px;
+            }
+            input:focus-visible {
+                outline: none;
+                border: 1px solid #1477A7;
+            }
+            input:not(.show-element) {
+                width: 120px;
+            }
+            input.show-element {
+                width: 480px;
+            }
+
+            select {
+                height: 44px;
+                width: 120px;
+            }
+            select:focus-visible {
+                outline: none;
+            }
+
+            .table-wrap {
+                padding-bottom: 64px;
+            }
+            .table-wrap table {
+                border-spacing: 0;
+                border: 1px solid #1477A7;
+            }
+            .table-wrap table thead {
+                background-color: #1477A7;
+                color: #FFF;
+            }
+            .table-wrap table thead ::selection {
+                background: #FFF;
+                color: #1477A7;
+            }
+            .table-wrap table thead tr th {
+                padding: 12px;
+            }
+            .table-wrap table tbody tr td {
+                padding: 12px;
+                text-align: center;
+            }
+            .table-wrap table tbody tr td:not(:last-child) {
+                border-right: 1px solid #1477A7;
+            }
+            .table-wrap table tbody tr:not(:last-child) > td {
+                border-bottom: 1px solid #1477A7;
+            }
+
+            /*# sourceMappingURL=character.css.map */
+
+        </style>
     </head>
     <body>
         <header></header>
@@ -351,7 +493,6 @@
                 <table>
                     <thead>
                         <tr>
-                            <th></th>
                             <th>Рейтинг популярности</th>
                             <th>Артикул</th>
                             <th>Наименование</th>
@@ -365,7 +506,6 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td></td>
                             <td>3185</td>
                             <td>H1B-H-12M-PK</td>
                             <td>Шаровый кран из нержавеющей стали S316 проходной 2-х ходовой Hy-Lok - 12мм - Hy-Lok - 12мм</td>
@@ -377,7 +517,6 @@
                             <td>Да</td>
                         </tr>
                         <tr>
-                            <td></td>
                             <td>3185</td>
                             <td>H1B-H-12M-PK</td>
                             <td>Шаровый кран из нержавеющей стали S316 проходной 2-х ходовой Hy-Lok - 12мм - Hy-Lok - 12мм</td>

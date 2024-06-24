@@ -1,3 +1,41 @@
+type tableData = {
+    orders: {
+        [key: string]: orders;
+    };
+    limit: number;
+};
+interface orders {
+    invoiceId: string;
+    positions: number;
+    orderAmount: string;
+    manager: {
+        id: number;
+        name: string;
+        surname: string;
+    };
+    paymentLink: string;
+    paymentStatus: string;
+    shipmentStatus: string;
+    deliveryStatus: string;
+    orderDate: dateForTable;
+    shipmentDate: dateForTable;
+    paymentDate: dateForTable;
+    deliveryDate: dateForTable;
+}
+type dateForTable = {
+    date: string;
+    timezone_type: number;
+    timezone: string;
+};
+declare namespace Components {
+    class FilterManager {
+        private select;
+        private table;
+        constructor();
+        private redrawTable;
+        private getData;
+    }
+}
 declare function showNavHeader(btn: HTMLElement): void;
 declare function createElement(tagName: string, className: string | null, textContent: string | null, container: HTMLElement | null): any;
 declare function setEmailFromCookie(input: HTMLInputElement): void;
@@ -43,4 +81,15 @@ declare namespace Components {
     }
 }
 declare namespace Components {
+    class Table {
+        private data;
+        private container;
+        private tbody;
+        private tr;
+        constructor(container: HTMLElement, data: tableData);
+        private init;
+        redraw(): void;
+        redrawRow(trTarget: HTMLTableRowElement, data: any): void;
+        private sortOnDate;
+    }
 }
