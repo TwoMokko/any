@@ -23,8 +23,8 @@ namespace Components {
             createElement('th', 'table-headcell', 'Менеджер', trTop).setAttribute('rowspan', '2');
             createElement('th', 'table-headcell', 'Триггер письма', trTop).setAttribute('rowspan', '2');
             createElement('th', 'table-headcell', 'Ссылка оплаты', trTop).setAttribute('rowspan', '2');
-            createElement('th', 'table-headcell bordered', 'Статус', trTop).setAttribute('rowspan', '2');
-            createElement('th', 'table-headcell bordered', 'Дата', trTop).setAttribute('rowspan', '3');
+            createElement('th', 'table-headcell bordered', 'Статус', trTop).setAttribute('colspan', '2');
+            createElement('th', 'table-headcell bordered', 'Дата', trTop).setAttribute('colspan', '3');
             createElement('th', 'table-headcell', 'Комментарии', trTop).setAttribute('rowspan', '2');
 
             createElement('th', 'table-headcell', 'Оплаты', trBot);
@@ -37,8 +37,38 @@ namespace Components {
         }
 
         public redraw(): void {
+            const data = {
+                table: [
+                     {
+                        number: 1,
+                        name: 'name',
+                        count: '5 count',
+                        price: '18 800',
+                        priceNDS: '90 200',
+                        otgruz: '0 count',
+                        link: 'link',
+                    },
+                     {
+                        number: 2,
+                        name: 'name 2',
+                        count: '5 count 2',
+                        price: '18 802',
+                        priceNDS: '90 202',
+                        otgruz: '0 count 2',
+                        link: 'link 2',
+                    },
+                ],
+                files: [
+                    'pdf',
+                    'txt',
+                    'xlsx'
+                ],
+                filename: 'filename',
+                link: 'lin filame'
+            }
+
             // очистить таблицу
-            // this.tbody.innerHTML = '';
+            this.tbody.innerHTML = '';
 
             // наполнить таблицу,создав новые элементы
             for (const key in this.data.orders) {
@@ -63,22 +93,22 @@ namespace Components {
                 input.type = 'text';
                 input.name = 'name';
 
-                tr.addEventListener('onclick', (event): void => {
-                    console.log({event});
-                    console.log('target', event.target);
-                })
+                tr.onclick = (event): void => {
+                    console.log(event.target.closest('tr'));
+                    this.redrawRow(event.target.closest('tr'), data);
+                };
             }
 
             // навешать онклик на строки (труе фолс?)
         }
 
         public redrawRow(trTarget: HTMLTableRowElement, data): void {
-            this.tr.remove();
+            if (this.tr) this.tr.remove();
             this.tr = document.createElement('tr');
             this.tr.className = 'table-row-secondary';
             trTarget.after(this.tr);
             const td = createElement('td', null, null, this.tr);
-            td.colspan = '14';
+            td.setAttribute('colspan', '14');
 
             const expanded = createElement('div', 'expanded', null, td);
 
@@ -105,10 +135,10 @@ namespace Components {
             const tBody = createElement('tbody', null, null, tableSecondary);
 
             // TODO работа с данными, наполнение таблицы, вынести этот кусок кода в отдельный метод
-            for ( let i = 0; i < data.length; i++ ) {
+            for ( let i = 0; i < data.table.length; i++ ) {
                 const tr = createElement('tr', null, null, tBody);
-                for ( let j = 0; j < data.length; j++ ) {
-                    const td = createElement('td', null, data.text, tr);
+                for ( let key in data.table[i]) {
+                    const td = createElement('td', null, data.table[i][key], tr);
                 }
                 const lastTd = createElement('td', null, null, tr);
                 const anchor: HTMLAnchorElement = createElement('a', null, null, lastTd);
@@ -141,11 +171,11 @@ namespace Components {
             const offerList = createElement('div', null, null, offerWrap);
 
             // TODO работа с данными
-            for (let i = 0; i < data.length; i++) {
+            for (let i = 0; i < 4; i++) {
                 const anchor = createElement('a', null, null, offerList);
-                anchor.href = data[i].link;
+                anchor.href = 'link';
                 createElement('div', null, `${i + 1}.`, anchor);
-                createElement('div', null, data[i].text, anchor);
+                createElement('div', null, 'txt', anchor);
                 createElement('img', null, null, createElement('div', null, null, anchor)).src = 'resources/img/download.svg';
             }
         }
