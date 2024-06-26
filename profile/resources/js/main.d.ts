@@ -91,5 +91,11 @@ declare namespace Components {
         redraw(): void;
         redrawRow(trTarget: HTMLTableRowElement, data: any): void;
         private sortOnDate;
+        private createSubRowTable;
+        private fillSubRowTable;
+        private createSubRowTotal;
+        private createSubRowDocs;
+        private fillSubRowDocs;
+        private sendDataOnclickRow;
     }
 }
