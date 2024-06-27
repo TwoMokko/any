@@ -1,3 +1,13 @@
+declare namespace Components {
+    class FilterButtons {
+        private doFilter;
+        private doReset;
+        private callSend;
+        constructor(container: HTMLElement, func: Function);
+        private init;
+        private addEvents;
+    }
+}
 type tableData = {
     orders: {
         [key: string]: orders;
@@ -30,6 +40,7 @@ type dateForTable = {
 declare namespace Components {
     class FilterManager {
         private select;
+        private filterBtn;
         private table;
         constructor();
         private redrawTable;
@@ -38,8 +49,16 @@ declare namespace Components {
 }
 declare function showNavHeader(btn: HTMLElement): void;
 declare function createElement(tagName: string, className: string | null, textContent: string | null, container: HTMLElement | null): any;
+declare function setAttributes(element: HTMLElement, attr: object): void;
 declare function setEmailFromCookie(input: HTMLInputElement): void;
 declare function getCookie(name: string): string;
+declare namespace Components {
+    class Pagination {
+        constructor();
+        show(): void;
+        hide(): void;
+    }
+}
 type TypeResponseError = {
     state: 'error';
     body: {
@@ -89,13 +108,14 @@ declare namespace Components {
         constructor(container: HTMLElement, data: tableData);
         private init;
         redraw(): void;
-        redrawRow(trTarget: HTMLTableRowElement, data: any): void;
+        redrawRow(trTarget: HTMLElement, data: any): void;
         private sortOnDate;
         private createSubRowTable;
         private fillSubRowTable;
         private createSubRowTotal;
         private createSubRowDocs;
         private fillSubRowDocs;
+        private onclickTableRow;
         private sendDataOnclickRow;
     }
 }

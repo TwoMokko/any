@@ -1,20 +1,88 @@
 "use strict";
 var Components;
 (function (Components) {
+    class FilterButtons {
+        doFilter;
+        doReset;
+        callSend;
+        constructor(container, func) {
+            const filterWrap = createElement('div', 'filter-buttons', null, container);
+            this.callSend = func;
+            this.init(filterWrap);
+            this.addEvents();
+        }
+        init(filterWrap) {
+            this.doFilter = createElement('button', 'btn accent', 'Фильтровать', filterWrap);
+            this.doFilter.setAttribute('type', 'submit');
+            this.doReset = createElement('button', 'btn secondary', 'Сбросить', filterWrap);
+        }
+        addEvents() {
+            this.doFilter.onclick = () => {
+                Base.Request.sendForm(this.doFilter.closest('form'), 'POST', () => { console.log('do filter'); });
+                this.callSend();
+                return false;
+            };
+            this.doReset.onclick = () => {
+                this.callSend();
+                return false;
+            };
+        }
+    }
+    Components.FilterButtons = FilterButtons;
+})(Components || (Components = {}));
+var Components;
+(function (Components) {
     class FilterManager {
         select;
+        filterBtn;
         table;
         constructor() {
             this.select = new Components.Select(document.querySelector('[name="delivery_status"]'));
+            this.filterBtn = new Components.FilterButtons(document.querySelector('form.filter'), () => { this.redrawTable(); });
             this.table = new Components.Table(document.querySelector('.table'), this.getData());
             // запрос и рисовать таблицу со всеми значениями?
         }
         redrawTable() {
+            console.log('redraw table');
         }
         getData() {
             return {
                 "orders": {
                     "e6ba4f9b-dd1a-11ed-82ba-00155d000a01": {
+                        "invoiceId": "19984",
+                        "positions": 26,
+                        "orderAmount": "1 065 121.20 RUB",
+                        "manager": {
+                            "id": 2,
+                            "name": "Евгения",
+                            "surname": "Каманина"
+                        },
+                        "paymentLink": "https://orders.cloudpayments.ru/d/AbiyfsoQ22QkqpTI",
+                        "paymentStatus": "Оплачен",
+                        "shipmentStatus": "Отгружен",
+                        "deliveryStatus": "груз доставлен",
+                        "orderDate": {
+                            "date": "2023-04-17 00:00:00.000000",
+                            "timezone_type": 3,
+                            "timezone": "Europe/Berlin"
+                        },
+                        "shipmentDate": {
+                            "date": "2023-06-14 16:03:23.000000",
+                            "timezone_type": 3,
+                            "timezone": "Europe/Berlin"
+                        },
+                        "paymentDate": {
+                            "date": "2023-06-13 00:00:00.000000",
+                            "timezone_type": 3,
+                            "timezone": "Europe/Berlin"
+                        },
+                        "deliveryDate": {
+                            "date": "2023-06-19 13:10:00.000000",
+                            "timezone_type": 3,
+                            "timezone": "Europe/Berlin"
+                        }
+                    },
+                    "e6ba4f9b-dd1a-11ed-82ba-00155d000fa01": {
                         "invoiceId": "19984",
                         "positions": 26,
                         "orderAmount": "1 065 121.20 RUB",
@@ -114,6 +182,11 @@ function createElement(tagName, className, textContent, container) {
         container.append(elem);
     return elem;
 }
+function setAttributes(element, attr) {
+    for (const name in attr) {
+        element.setAttribute(name, attr[name]);
+    }
+}
 function setEmailFromCookie(input) {
     document.cookie = "user=test@mail.ru";
     input.value = getCookie('user');
@@ -122,6 +195,18 @@ function getCookie(name) {
     let matches = document.cookie.match(new RegExp("(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"));
     return matches ? decodeURIComponent(matches[1]) : undefined;
 }
+var Components;
+(function (Components) {
+    class Pagination {
+        constructor() {
+        }
+        show() {
+        }
+        hide() {
+        }
+    }
+    Components.Pagination = Pagination;
+})(Components || (Components = {}));
 var Base;
 (function (Base) {
     class Request {
@@ -300,19 +385,23 @@ var Components;
             const tHead = createElement('thead', 'table-head', null, table);
             const trTop = createElement('tr', 'table-headrow', null, tHead);
             const trBot = createElement('tr', null, null, tHead);
-            createElement('th', 'table-headcell', 'Позиции', trTop).setAttribute('rowspan', '2');
-            createElement('th', 'table-headcell', 'Стоимость с НДС', trTop).setAttribute('rowspan', '2');
-            createElement('th', 'table-headcell', 'Менеджер', trTop).setAttribute('rowspan', '2');
-            createElement('th', 'table-headcell', 'Триггер письма', trTop).setAttribute('rowspan', '2');
-            createElement('th', 'table-headcell', 'Ссылка оплаты', trTop).setAttribute('rowspan', '2');
-            createElement('th', 'table-headcell bordered', 'Статус', trTop).setAttribute('colspan', '2');
-            createElement('th', 'table-headcell bordered', 'Дата', trTop).setAttribute('colspan', '3');
-            createElement('th', 'table-headcell', 'Комментарии', trTop).setAttribute('rowspan', '2');
-            createElement('th', 'table-headcell', 'Оплаты', trBot);
-            createElement('th', 'table-headcell', 'Отгрузки', trBot);
-            createElement('th', 'table-headcell sort', 'Заказа', trBot);
-            createElement('th', 'table-headcell sort', 'Отгрузки', trBot);
-            createElement('th', 'table-headcell sort', 'Оплаты', trBot);
+            setAttributes(createElement('th', 'table-headcell', 'Номер КП', trTop), { 'rowspan': '2', 'data-column': 'invoiceId' });
+            setAttributes(createElement('th', 'table-headcell', 'Позиции', trTop), { 'rowspan': '2', 'data-column': 'position' });
+            setAttributes(createElement('th', 'table-headcell', 'Стоимость с НДС', trTop), { 'rowspan': '2', 'data-column': 'priceAll' });
+            setAttributes(createElement('th', 'table-headcell', 'Менеджер', trTop), { 'rowspan': '2', 'data-column': 'manager' });
+            setAttributes(createElement('th', 'table-headcell', 'Триггер письма', trTop), { 'rowspan': '2', 'data-column': 'triggerLetter' });
+            setAttributes(createElement('th', 'table-headcell', 'Ссылка оплаты', trTop), { 'rowspan': '2', 'data-column': 'linkPayment' });
+            // TODO: подумать, как выключать статус и дату, если нижних колонок нет, менять colspan
+            setAttributes(createElement('th', 'table-headcell bordered', 'Статус', trTop), { 'colspan': '3', 'data-column': 'status' });
+            setAttributes(createElement('th', 'table-headcell bordered', 'Дата', trTop), { 'colspan': '4', 'data-column': 'date' });
+            // setAttributes(createElement('th', 'table-headcell', 'Комментарии', trTop), { 'rowspan': '2', 'data-column': 'comment' });
+            setAttributes(createElement('th', 'table-headcell', 'Оплаты', trBot), { 'data-colunm': 'statusPayment' });
+            setAttributes(createElement('th', 'table-headcell', 'Отгрузки', trBot), { 'data-colunm': 'statusShipment' });
+            setAttributes(createElement('th', 'table-headcell', 'Доставки', trBot), { 'data-colunm': 'statusDelivery' });
+            setAttributes(createElement('th', 'table-headcell sort', 'Заказа', trBot), { 'data-colunm': 'dateOrder' });
+            setAttributes(createElement('th', 'table-headcell sort', 'Отгрузки', trBot), { 'data-colunm': 'datePayment' });
+            setAttributes(createElement('th', 'table-headcell sort', 'Оплаты', trBot), { 'data-colunm': 'dateShipment' });
+            setAttributes(createElement('th', 'table-headcell sort', 'Доставки', trBot), { 'data-colunm': 'dateDelivery' });
             this.tbody = createElement('tbody', null, null, table);
         }
         redraw() {
@@ -323,39 +412,40 @@ var Components;
                 console.log(key);
                 console.log(this.data.orders[key]);
                 const tr = createElement('tr', 'table-row', null, this.tbody);
-                createElement('td', 'table-cell', `${this.data.orders[key].positions}`, tr);
-                createElement('td', 'table-cell', this.data.orders[key].orderAmount, tr);
+                setAttributes(createElement('td', 'table-cell', `${this.data.orders[key].invoiceId}`, tr), { 'data-column': 'invoiceId' });
+                setAttributes(createElement('td', 'table-cell', `${this.data.orders[key].positions}`, tr), { 'data-column': 'position' });
+                setAttributes(createElement('td', 'table-cell', this.data.orders[key].orderAmount, tr), { 'data-column': 'priceAll' });
                 const anchorWrap = createElement('td', 'table-cell', null, tr);
+                setAttributes(anchorWrap, { 'data-column': 'manager' });
                 const anchor = createElement('a', null, `${this.data.orders[key].manager.name} ${this.data.orders[key].manager.surname}`, anchorWrap);
                 anchor.href = '';
-                createElement('td', 'table-cell', '', tr);
-                createElement('td', 'table-cell', '', tr);
-                createElement('td', 'table-cell', this.data.orders[key].paymentStatus, tr);
-                createElement('td', 'table-cell', this.data.orders[key].shipmentStatus, tr);
-                createElement('td', 'table-cell', this.data.orders[key].orderDate.date.split(' ', 2)[0], tr);
-                createElement('td', 'table-cell', '', tr);
-                createElement('td', 'table-cell', '', tr);
-                const inputWrap = createElement('td', 'table-cell', '', tr);
-                const input = createElement('input', 'custom-value-field', null, inputWrap);
-                input.type = 'text';
-                input.name = 'name';
+                setAttributes(createElement('td', 'table-cell', 'дописать', tr), { 'data-column': 'triggerLetter' });
+                setAttributes(createElement('td', 'table-cell', 'что делать с сылкой', tr), { 'data-column': 'linkPayment' });
+                setAttributes(createElement('td', 'table-cell', this.data.orders[key].paymentStatus, tr), { 'data-column': 'statusPayment' });
+                setAttributes(createElement('td', 'table-cell', this.data.orders[key].shipmentStatus, tr), { 'data-column': 'statusShipment' });
+                setAttributes(createElement('td', 'table-cell', this.data.orders[key].deliveryStatus, tr), { 'data-column': 'statusDelivery' });
+                setAttributes(createElement('td', 'table-cell', this.data.orders[key].orderDate.date.split(' ', 2)[0], tr), { 'data-column': 'dateOrder' });
+                setAttributes(createElement('td', 'table-cell', this.data.orders[key].paymentDate.date.split(' ', 2)[0], tr), { 'data-column': 'datePayment' });
+                setAttributes(createElement('td', 'table-cell', this.data.orders[key].shipmentDate.date.split(' ', 2)[0], tr), { 'data-column': 'dateShipment' });
+                setAttributes(createElement('td', 'table-cell', this.data.orders[key].deliveryDate.date.split(' ', 2)[0], tr), { 'data-column': 'dateDelivery' });
+                // const inputWrap = createElement('td', 'table-cell', '', tr);
+                // setAttributes(inputWrap, { 'data-column': 'comment' })
+                // const input = createElement('input', 'custom-value-field', null, inputWrap);
+                // input.type = 'text';
+                // input.name = 'name';
                 tr.onclick = (event) => {
-                    console.log(event.target.closest('tr'));
-                    const trTarget = event.target.closest('tr');
-                    trTarget.classList.add('load');
-                    setTimeout(() => { this.sendDataOnclickRow('', {}, trTarget); }, 1000);
-                    // this.redrawRow(event.target.closest('tr'), data);
+                    this.onclickTableRow(event);
                 };
             }
             // навешать онклик на строки (труе фолс?)
         }
         redrawRow(trTarget, data) {
-            if (this.tr)
-                this.tr.remove();
-            this.tr = document.createElement('tr');
-            this.tr.className = 'table-row-secondary';
-            trTarget.after(this.tr);
-            const td = createElement('td', null, null, this.tr);
+            // let nextTr = trTarget.nextElementSibling;
+            // if (nextTr.classList.contains('table-row-secondary')) nextTr.remove();
+            const nextTr = document.createElement('tr');
+            nextTr.className = 'table-row-secondary';
+            trTarget.after(nextTr);
+            const td = createElement('td', null, null, nextTr);
             td.setAttribute('colspan', '14');
             const expanded = createElement('div', 'expanded', null, td);
             const tBody = this.createSubRowTable(expanded);
@@ -433,6 +523,28 @@ var Components;
                 createElement('div', null, `${num}.`, anchor);
                 createElement('div', null, data[key], anchor);
                 createElement('img', null, null, createElement('div', null, null, anchor)).src = 'resources/img/download.svg';
+            }
+        }
+        onclickTableRow(event) {
+            const trTarget = event.target.closest('tr');
+            const nextTr = (trTarget.nextSibling) ? trTarget.nextSibling : null;
+            console.log(trTarget.nextSibling);
+            if (nextTr && nextTr.classList.contains('table-row-secondary')) {
+                console.log('существует');
+                if (nextTr.classList.contains('hide')) {
+                    nextTr.classList.remove('hide');
+                    trTarget.classList.add('active');
+                }
+                else {
+                    nextTr.classList.add('hide');
+                    trTarget.classList.remove('active');
+                }
+            }
+            else {
+                trTarget.classList.add('load');
+                setTimeout(() => { this.sendDataOnclickRow('', {}, trTarget); }, 1000);
+                trTarget.classList.add('active');
+                // this.redrawRow(event.target.closest('tr'), data);
             }
         }
         sendDataOnclickRow(pathData, sendData, tr) {

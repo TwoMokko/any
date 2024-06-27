@@ -22,6 +22,12 @@ function createElement(tagName: string, className: string|null, textContent: str
     return elem;
 }
 
+function setAttributes(element: HTMLElement, attr: object): void {
+    for (const name in attr) {
+    element.setAttribute(name, attr[name]);
+}
+}
+
 function setEmailFromCookie(input: HTMLInputElement): void {
     document.cookie = "user=test@mail.ru";
     input.value = getCookie('user');

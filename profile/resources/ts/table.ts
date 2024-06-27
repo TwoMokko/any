@@ -19,20 +19,26 @@ namespace Components {
             const trTop = createElement('tr', 'table-headrow', null, tHead);
             const trBot = createElement('tr', null, null, tHead);
 
-            createElement('th', 'table-headcell', 'Позиции', trTop).setAttribute('rowspan', '2');
-            createElement('th', 'table-headcell', 'Стоимость с НДС', trTop).setAttribute('rowspan', '2');
-            createElement('th', 'table-headcell', 'Менеджер', trTop).setAttribute('rowspan', '2');
-            createElement('th', 'table-headcell', 'Триггер письма', trTop).setAttribute('rowspan', '2');
-            createElement('th', 'table-headcell', 'Ссылка оплаты', trTop).setAttribute('rowspan', '2');
-            createElement('th', 'table-headcell bordered', 'Статус', trTop).setAttribute('colspan', '2');
-            createElement('th', 'table-headcell bordered', 'Дата', trTop).setAttribute('colspan', '3');
-            createElement('th', 'table-headcell', 'Комментарии', trTop).setAttribute('rowspan', '2');
+            setAttributes(createElement('th', 'table-headcell', 'Номер КП', trTop), { 'rowspan': '2', 'data-column': 'invoiceId' });
+            setAttributes(createElement('th', 'table-headcell', 'Позиции', trTop), { 'rowspan': '2', 'data-column': 'position' });
+            setAttributes(createElement('th', 'table-headcell', 'Стоимость с НДС', trTop), { 'rowspan': '2', 'data-column': 'priceAll' });
+            setAttributes(createElement('th', 'table-headcell', 'Менеджер', trTop), { 'rowspan': '2', 'data-column': 'manager' });
+            setAttributes(createElement('th', 'table-headcell', 'Триггер письма', trTop), { 'rowspan': '2', 'data-column': 'triggerLetter' });
+            setAttributes(createElement('th', 'table-headcell', 'Ссылка оплаты', trTop), {'rowspan': '2', 'data-column': 'linkPayment' });
 
-            createElement('th', 'table-headcell', 'Оплаты', trBot);
-            createElement('th', 'table-headcell', 'Отгрузки', trBot);
-            createElement('th', 'table-headcell sort', 'Заказа', trBot);
-            createElement('th', 'table-headcell sort', 'Отгрузки', trBot);
-            createElement('th', 'table-headcell sort', 'Оплаты', trBot);
+            // TODO: подумать, как выключать статус и дату, если нижних колонок нет, менять colspan
+            setAttributes(createElement('th', 'table-headcell bordered', 'Статус', trTop), {'colspan': '3', 'data-column': 'status' });
+            setAttributes(createElement('th', 'table-headcell bordered', 'Дата', trTop), {'colspan': '4', 'data-column': 'date' });
+
+            // setAttributes(createElement('th', 'table-headcell', 'Комментарии', trTop), { 'rowspan': '2', 'data-column': 'comment' });
+
+            setAttributes(createElement('th', 'table-headcell', 'Оплаты', trBot), { 'data-colunm': 'statusPayment' });
+            setAttributes(createElement('th', 'table-headcell', 'Отгрузки', trBot), { 'data-colunm': 'statusShipment' });
+            setAttributes(createElement('th', 'table-headcell', 'Доставки', trBot), { 'data-colunm': 'statusDelivery' });
+            setAttributes(createElement('th', 'table-headcell sort', 'Заказа', trBot), { 'data-colunm': 'dateOrder' });
+            setAttributes(createElement('th', 'table-headcell sort', 'Отгрузки', trBot), { 'data-colunm': 'datePayment' });
+            setAttributes(createElement('th', 'table-headcell sort', 'Оплаты', trBot), { 'data-colunm': 'dateShipment' });
+            setAttributes(createElement('th', 'table-headcell sort', 'Доставки', trBot), { 'data-colunm': 'dateDelivery' });
 
             this.tbody = createElement('tbody', null, null, table);
         }
@@ -47,42 +53,47 @@ namespace Components {
                 console.log(this.data.orders[key]);
                 const tr = createElement('tr', 'table-row', null, this.tbody);
 
-                createElement('td', 'table-cell', `${this.data.orders[key].positions}`, tr);
-                createElement('td', 'table-cell', this.data.orders[key].orderAmount, tr);
+                setAttributes(createElement('td', 'table-cell', `${this.data.orders[key].invoiceId}`, tr), { 'data-column': 'invoiceId' });
+                setAttributes(createElement('td', 'table-cell', `${this.data.orders[key].positions}`, tr), { 'data-column': 'position' });
+                setAttributes(createElement('td', 'table-cell', this.data.orders[key].orderAmount, tr), { 'data-column': 'priceAll' });
+
                 const anchorWrap = createElement('td', 'table-cell', null, tr);
+                setAttributes(anchorWrap, { 'data-column': 'manager' });
                 const anchor = createElement('a', null, `${this.data.orders[key].manager.name} ${this.data.orders[key].manager.surname}`, anchorWrap);
                 anchor.href = '';
-                createElement('td', 'table-cell', '', tr);
-                createElement('td', 'table-cell', '', tr);
-                createElement('td', 'table-cell', this.data.orders[key].paymentStatus, tr);
-                createElement('td', 'table-cell', this.data.orders[key].shipmentStatus, tr);
-                createElement('td', 'table-cell', this.data.orders[key].orderDate.date.split(' ', 2)[0], tr);
-                createElement('td', 'table-cell', '', tr);
-                createElement('td', 'table-cell', '', tr);
-                const inputWrap = createElement('td', 'table-cell', '', tr);
-                const input = createElement('input', 'custom-value-field', null, inputWrap);
-                input.type = 'text';
-                input.name = 'name';
+
+                setAttributes(createElement('td', 'table-cell', 'дописать', tr), { 'data-column': 'triggerLetter' });
+                setAttributes(createElement('td', 'table-cell', 'что делать с сылкой', tr), { 'data-column': 'linkPayment' });
+                setAttributes(createElement('td', 'table-cell', this.data.orders[key].paymentStatus, tr), { 'data-column': 'statusPayment' });
+                setAttributes(createElement('td', 'table-cell', this.data.orders[key].shipmentStatus, tr), { 'data-column': 'statusShipment' });
+                setAttributes(createElement('td', 'table-cell', this.data.orders[key].deliveryStatus, tr), { 'data-column': 'statusDelivery' });
+                setAttributes(createElement('td', 'table-cell', this.data.orders[key].orderDate.date.split(' ', 2)[0], tr), { 'data-column': 'dateOrder' });
+                setAttributes(createElement('td', 'table-cell', this.data.orders[key].paymentDate.date.split(' ', 2)[0], tr), { 'data-column': 'datePayment' });
+                setAttributes(createElement('td', 'table-cell', this.data.orders[key].shipmentDate.date.split(' ', 2)[0], tr), { 'data-column': 'dateShipment' });
+                setAttributes(createElement('td', 'table-cell', this.data.orders[key].deliveryDate.date.split(' ', 2)[0], tr), { 'data-column': 'dateDelivery' });
+
+                // const inputWrap = createElement('td', 'table-cell', '', tr);
+                // setAttributes(inputWrap, { 'data-column': 'comment' })
+                // const input = createElement('input', 'custom-value-field', null, inputWrap);
+                // input.type = 'text';
+                // input.name = 'name';
 
                 tr.onclick = (event): void => {
-                    console.log(event.target.closest('tr'));
-                    const trTarget = event.target.closest('tr');
-                    trTarget.classList.add('load');
-                    setTimeout(() => { this.sendDataOnclickRow('', {}, trTarget) }, 1000);
-                    // this.redrawRow(event.target.closest('tr'), data);
+                    this.onclickTableRow(event);
                 };
             }
 
             // навешать онклик на строки (труе фолс?)
         }
 
-        public redrawRow(trTarget: HTMLTableRowElement, data): void {
-            if (this.tr) this.tr.remove();
+        public redrawRow(trTarget: HTMLElement, data): void {
+            // let nextTr = trTarget.nextElementSibling;
+            // if (nextTr.classList.contains('table-row-secondary')) nextTr.remove();
 
-            this.tr = document.createElement('tr');
-            this.tr.className = 'table-row-secondary';
-            trTarget.after(this.tr);
-            const td = createElement('td', null, null, this.tr);
+             const nextTr = document.createElement('tr');
+            nextTr.className = 'table-row-secondary';
+            trTarget.after(nextTr);
+            const td = createElement('td', null, null, nextTr);
             td.setAttribute('colspan', '14');
 
             const expanded = createElement('div', 'expanded', null, td);
@@ -180,7 +191,34 @@ namespace Components {
             }
         }
 
-        private sendDataOnclickRow(pathData: string, sendData, tr: HTMLTableRowElement): void {
+        private onclickTableRow(event): void {
+            const trTarget = event.target.closest('tr');
+            const nextTr = (trTarget.nextSibling) ? trTarget.nextSibling : null;
+            console.log(trTarget.nextSibling)
+
+            if (nextTr && nextTr.classList.contains('table-row-secondary')) {
+                console.log('существует');
+                if (nextTr.classList.contains('hide')) {
+                    nextTr.classList.remove('hide');
+                    trTarget.classList.add('active');
+                }
+                else {
+                    nextTr.classList.add('hide');
+                    trTarget.classList.remove('active');
+                }
+            }
+            else {
+                trTarget.classList.add('load');
+                setTimeout(() => { this.sendDataOnclickRow('', {}, trTarget) }, 1000);
+                trTarget.classList.add('active');
+                // this.redrawRow(event.target.closest('tr'), data);
+            }
+
+
+
+        }
+
+        private sendDataOnclickRow(pathData: string, sendData, tr: HTMLElement): void {
             const dataRow =  {
                 "0008d69c-4010-11ee-82c1-00155d000a01": {
                     "items": [

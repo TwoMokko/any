@@ -54,6 +54,7 @@ namespace Base {
             console.log(formData);
 
             Request.send(formData, url, method, func);
+
         }
 
         public static sendData(data: { [key: string]: string|boolean|number }, url: string, method: string, func?: Function): void {

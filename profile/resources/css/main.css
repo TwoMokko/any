@@ -254,6 +254,9 @@
   position: relative;
   height: 85px;
 }
+.table-row.active {
+  background-color: #B0CEDC;
+}
 .table-row:not(:last-child) {
   border-bottom: 1px solid #D1D1D1;
 }
@@ -263,9 +266,6 @@
 .table-cell {
   text-align: center;
   font-size: 12px;
-}
-.table-cell:last-child {
-  padding: 12px 24px;
 }
 .table-cell .custom-value-field {
   background-color: #FFF;
