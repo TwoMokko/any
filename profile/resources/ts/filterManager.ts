@@ -33,10 +33,12 @@ namespace Components {
         private select          : Select;
         private filterBtn       : FilterButtons;
         private table           : Table;
+        private pagination      : Pagination;
         constructor() {
             this.select = new Components.Select(document.querySelector('[name="delivery_status"]'));
             this.filterBtn = new FilterButtons(document.querySelector('form.filter'), () => { this.redrawTable(); });
             this.table = new Table(document.querySelector('.table'), this.getData());
+            this.pagination = new Pagination(document.querySelector('main'));
             // запрос и рисовать таблицу со всеми значениями?
         }
         private redrawTable(): void {

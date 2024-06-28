@@ -51,7 +51,7 @@ namespace Base {
         public static sendForm(form: HTMLFormElement, method: string, func?: Function): void {
             let url = form.getAttribute('action');
             let formData = new FormData(form);
-            console.log(formData);
+            // console.log(formData);
 
             Request.send(formData, url, method, func);
 

@@ -67,7 +67,7 @@
             border-bottom: 1px solid $colorTextLightGrey;
         }
         &:hover {
-            background-color: $colorTextLightGrey;
+            background-color: $colorBtnSecondary;
         }
     }
     &-cell {
@@ -139,20 +139,20 @@
             flex: auto;
             background-color: $colorBackgroundTable;
             > div {
-                &:nth-child(1) {
-                    display: flex;
-                    gap: 8px;
-                    padding: 8px 16px;
-                    border: 1px solid $colorBtnAccent;
-                    width: fit-content;
-                    border-radius: 6px;
-                    align-items: center;
-                    cursor: pointer;
-                    margin-bottom: 16px;
-                    &:hover {
-                        color: $colorTextAccent;
-                    }
-                }
+                //&:nth-child(1) {
+                //    display: flex;
+                //    gap: 8px;
+                //    padding: 8px 16px;
+                //    border: 1px solid $colorBtnAccent;
+                //    width: fit-content;
+                //    border-radius: 6px;
+                //    align-items: center;
+                //    cursor: pointer;
+                //    margin-bottom: 16px;
+                //    &:hover {
+                //        color: $colorTextAccent;
+                //    }
+                //}
                 &:last-child {
                     margin-top: 16px;
                 }

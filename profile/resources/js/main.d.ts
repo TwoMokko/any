@@ -42,6 +42,7 @@ declare namespace Components {
         private select;
         private filterBtn;
         private table;
+        private pagination;
         constructor();
         private redrawTable;
         private getData;
@@ -54,7 +55,8 @@ declare function setEmailFromCookie(input: HTMLInputElement): void;
 declare function getCookie(name: string): string;
 declare namespace Components {
     class Pagination {
-        constructor();
+        constructor(container: HTMLElement);
+        private init;
         show(): void;
         hide(): void;
     }
@@ -100,21 +102,29 @@ declare namespace Components {
     }
 }
 declare namespace Components {
+    class SubTable {
+        constructor();
+        redraw(trTarget: HTMLElement, data: any): void;
+        private createTable;
+        private fillTable;
+        private createTotal;
+        private createDocs;
+        private fillDocs;
+        private downloadFile;
+        private getFile;
+    }
+}
+declare namespace Components {
     class Table {
         private data;
+        private subTable;
         private container;
         private tbody;
         private tr;
         constructor(container: HTMLElement, data: tableData);
         private init;
         redraw(): void;
-        redrawRow(trTarget: HTMLElement, data: any): void;
         private sortOnDate;
-        private createSubRowTable;
-        private fillSubRowTable;
-        private createSubRowTotal;
-        private createSubRowDocs;
-        private fillSubRowDocs;
         private onclickTableRow;
         private sendDataOnclickRow;
     }

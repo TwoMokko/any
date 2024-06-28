@@ -2,12 +2,15 @@ namespace Components {
     export class Table {
         private data                : tableData;
 
+        private subTable            : SubTable;
+
         private container           : HTMLElement;
         private tbody               : HTMLElement;
         private tr                  : HTMLTableRowElement;
         constructor(container: HTMLElement, data: tableData) {
             this.data               = data;
             this.container          = container;
+            this.subTable           = new SubTable();
 
             this.init();
             this.redraw();
@@ -49,8 +52,6 @@ namespace Components {
 
             // наполнить таблицу,создав новые элементы
             for (const key in this.data.orders) {
-                console.log(key);
-                console.log(this.data.orders[key]);
                 const tr = createElement('tr', 'table-row', null, this.tbody);
 
                 setAttributes(createElement('td', 'table-cell', `${this.data.orders[key].invoiceId}`, tr), { 'data-column': 'invoiceId' });
@@ -86,118 +87,16 @@ namespace Components {
             // навешать онклик на строки (труе фолс?)
         }
 
-        public redrawRow(trTarget: HTMLElement, data): void {
-            // let nextTr = trTarget.nextElementSibling;
-            // if (nextTr.classList.contains('table-row-secondary')) nextTr.remove();
-
-             const nextTr = document.createElement('tr');
-            nextTr.className = 'table-row-secondary';
-            trTarget.after(nextTr);
-            const td = createElement('td', null, null, nextTr);
-            td.setAttribute('colspan', '14');
-
-            const expanded = createElement('div', 'expanded', null, td);
-
-            const tBody: HTMLElement = this.createSubRowTable(expanded);
-            this.fillSubRowTable(data, tBody);
-            this.createSubRowTotal(tBody);
-
-
-            const invoiceDocs = createElement('div', 'invoice-docs', null, expanded);
-
-            const btnWrap = createElement('div', null, null, invoiceDocs);
-            createElement('div', null, 'Документы по заказу', btnWrap);
-            const btnImgWrap = createElement('div', null, null, btnWrap);
-            createElement('img', null, null, btnImgWrap).src = 'resources/img/download.svg';
-
-            const offerList: HTMLElement = this.createSubRowDocs(invoiceDocs, 'Коммерческое предложение');
-            const shipmentList: HTMLElement = this.createSubRowDocs(invoiceDocs, 'Отгрузка');
-            this.fillSubRowDocs(offerList, data.files.commercial);
-            this.fillSubRowDocs(shipmentList, data.files.shipment);
-
-        }
-
         private sortOnDate(): void {
             console.log('sort on date');
         }
 
-        private createSubRowTable(expanded: HTMLElement): HTMLElement {
-            const tableSecondaryWrap = createElement('div', 'table-secondary', null, expanded);
-            const tableSecondary = createElement('table', null, null, tableSecondaryWrap);
-            const tHead = createElement('thead', null, null, tableSecondary);
-            const tHeadRow = createElement('tr', null, null, tHead);
-
-            const tHeadTextContent = [
-                '№',
-                'Наименование',
-                'Кол-во',
-                'Стоимость за шт. без НДС',
-                'Стоимость с НДС',
-                'Отгружено',
-                'Паспорт',
-            ];
-
-            tHeadTextContent.forEach((item: string, i: number, thTopTextContent: string[]) => {
-                createElement('th', null, item, tHeadRow);
-            });
-
-            return createElement('tbody', null, null, tableSecondary);
-        }
-
-        private fillSubRowTable(data, tBody: HTMLElement): void {
-            let num = 1;
-            for (const item in data.items) {
-                const tr = createElement('tr', null, null, tBody);
-                createElement('td', null, String(num), tr);
-                num++;
-                for ( let key in data.items[item]) {
-
-                    const td = createElement('td', null, data.items[item][key], tr);
-                }
-                const lastTd = createElement('td', null, null, tr);
-                const anchor: HTMLAnchorElement = createElement('a', null, null, lastTd);
-                anchor.href = '';
-                const img: HTMLImageElement = createElement('img', null, null, anchor);
-                img.src = 'resources/img/download.svg';
-            }
-        }
-
-        private createSubRowTotal(tBody: HTMLElement): void{
-            // TODO высчитывать textContent
-            const lastTr = createElement('tr', 'total', null, tBody);
-            createElement('td', null, 'Итого:', lastTr);
-            createElement('td', null, null, lastTr);
-            createElement('td', null, '', lastTr);
-            createElement('td', null, '', lastTr);
-            createElement('td', null, '', lastTr);
-            createElement('td', null, '', lastTr);
-            createElement('td', null, null, lastTr);
-        }
-
-        private createSubRowDocs(invoiceDocs: HTMLElement, header: string): HTMLElement {
-            const offerWrap = createElement('div', 'expanded-documents', null, invoiceDocs);
-            createElement('div', null, header, offerWrap);
-            return createElement('div', null, null, offerWrap);
-        }
-
-        private fillSubRowDocs(list: HTMLElement, data): void {
-            for (const key in data) {
-                const anchor = createElement('a', null, null, list);
-                anchor.href = 'link';
-                let num = Number(key) + 1;
-                createElement('div', null, `${num}.`, anchor);
-                createElement('div', null, data[key], anchor);
-                createElement('img', null, null, createElement('div', null, null, anchor)).src = 'resources/img/download.svg';
-            }
-        }
-
         private onclickTableRow(event): void {
+            // TODO: вынести логику в sub table
             const trTarget = event.target.closest('tr');
             const nextTr = (trTarget.nextSibling) ? trTarget.nextSibling : null;
-            console.log(trTarget.nextSibling)
 
             if (nextTr && nextTr.classList.contains('table-row-secondary')) {
-                console.log('существует');
                 if (nextTr.classList.contains('hide')) {
                     nextTr.classList.remove('hide');
                     trTarget.classList.add('active');
@@ -213,9 +112,6 @@ namespace Components {
                 trTarget.classList.add('active');
                 // this.redrawRow(event.target.closest('tr'), data);
             }
-
-
-
         }
 
         private sendDataOnclickRow(pathData: string, sendData, tr: HTMLElement): void {
@@ -399,7 +295,7 @@ namespace Components {
                 }
             }
             tr.classList.remove('load');
-            this.redrawRow(tr, dataRow['0008d69c-4010-11ee-82c1-00155d000a01']);
+            this.subTable.redraw(tr, dataRow['0008d69c-4010-11ee-82c1-00155d000a01']);
 
             // fetch(pathData, {
             //     method: 'POST',

@@ -36,10 +36,12 @@ var Components;
         select;
         filterBtn;
         table;
+        pagination;
         constructor() {
             this.select = new Components.Select(document.querySelector('[name="delivery_status"]'));
             this.filterBtn = new Components.FilterButtons(document.querySelector('form.filter'), () => { this.redrawTable(); });
             this.table = new Components.Table(document.querySelector('.table'), this.getData());
+            this.pagination = new Components.Pagination(document.querySelector('main'));
             // запрос и рисовать таблицу со всеми значениями?
         }
         redrawTable() {
@@ -198,7 +200,12 @@ function getCookie(name) {
 var Components;
 (function (Components) {
     class Pagination {
-        constructor() {
+        constructor(container) {
+            this.init(container);
+        }
+        init(container) {
+            const wrap = createElement('div', 'pagination-wrap container', null, container);
+            createElement('div', 'pagination-number', '1', wrap);
         }
         show() {
         }
@@ -257,7 +264,7 @@ var Base;
         static sendForm(form, method, func) {
             let url = form.getAttribute('action');
             let formData = new FormData(form);
-            console.log(formData);
+            // console.log(formData);
             Request.send(formData, url, method, func);
         }
         static sendData(data, url, method, func) {
@@ -369,14 +376,129 @@ var Components;
 })(Components || (Components = {}));
 var Components;
 (function (Components) {
+    class SubTable {
+        constructor() {
+        }
+        redraw(trTarget, data) {
+            const nextTr = document.createElement('tr');
+            nextTr.className = 'table-row-secondary';
+            trTarget.after(nextTr);
+            const td = createElement('td', null, null, nextTr);
+            td.setAttribute('colspan', '14');
+            const expanded = createElement('div', 'expanded', null, td);
+            const tBody = this.createTable(expanded);
+            this.fillTable(data, tBody);
+            this.createTotal(tBody);
+            const invoiceDocs = createElement('div', 'invoice-docs', null, expanded);
+            // const btnWrap = createElement('div', null, null, invoiceDocs);
+            // createElement('div', null, 'Документы по заказу', btnWrap);
+            // const btnImgWrap = createElement('div', null, null, btnWrap);
+            // createElement('img', null, null, btnImgWrap).src = 'resources/img/download.svg';
+            const offerList = this.createDocs(invoiceDocs, 'Коммерческое предложение');
+            const shipmentList = this.createDocs(invoiceDocs, 'Отгрузка');
+            this.fillDocs(offerList, data.files.commercial);
+            this.fillDocs(shipmentList, data.files.shipment);
+        }
+        createTable(expanded) {
+            const tableSecondaryWrap = createElement('div', 'table-secondary', null, expanded);
+            const tableSecondary = createElement('table', null, null, tableSecondaryWrap);
+            const tHead = createElement('thead', null, null, tableSecondary);
+            const tHeadRow = createElement('tr', null, null, tHead);
+            const tHeadTextContent = [
+                '№',
+                'Наименование',
+                'Кол-во',
+                'Стоимость за шт. без НДС',
+                'Стоимость с НДС',
+                'Отгружено',
+                'Паспорт',
+            ];
+            tHeadTextContent.forEach((item, i, thTopTextContent) => {
+                createElement('th', null, item, tHeadRow);
+            });
+            return createElement('tbody', null, null, tableSecondary);
+        }
+        fillTable(data, tBody) {
+            let num = 1;
+            for (const item in data.items) {
+                const tr = createElement('tr', null, null, tBody);
+                createElement('td', null, String(num), tr);
+                num++;
+                for (let key in data.items[item]) {
+                    const td = createElement('td', null, data.items[item][key], tr);
+                }
+                const lastTd = createElement('td', null, null, tr);
+                const anchor = createElement('a', null, null, lastTd);
+                anchor.href = '';
+                const img = createElement('img', null, null, anchor);
+                img.src = 'resources/img/download.svg';
+            }
+        }
+        createTotal(tBody) {
+            // TODO высчитывать textContent
+            const lastTr = createElement('tr', 'total', null, tBody);
+            createElement('td', null, 'Итого:', lastTr);
+            createElement('td', null, null, lastTr);
+            createElement('td', null, '', lastTr);
+            createElement('td', null, '', lastTr);
+            createElement('td', null, '', lastTr);
+            createElement('td', null, '', lastTr);
+            createElement('td', null, null, lastTr);
+        }
+        createDocs(invoiceDocs, header) {
+            const offerWrap = createElement('div', 'expanded-documents', null, invoiceDocs);
+            createElement('div', null, header, offerWrap);
+            return createElement('div', null, null, offerWrap);
+        }
+        fillDocs(list, data) {
+            for (const key in data) {
+                const anchor = createElement('a', null, null, list);
+                anchor.onclick = () => { this.downloadFile(list); };
+                let num = Number(key) + 1;
+                createElement('div', null, `${num}.`, anchor);
+                createElement('div', null, data[key], anchor);
+                createElement('img', null, null, createElement('div', null, null, anchor)).src = 'resources/img/download.svg';
+            }
+        }
+        downloadFile(container) {
+            const anchor = createElement('a', 'hide', null, container);
+            anchor.href = this.getFile();
+            anchor.download = 'filename.xlsx';
+            anchor.click();
+        }
+        getFile() {
+            const data = {
+                "orderId": "0008d69c-4010-11ee-82c1-00155d000a01",
+                "filename": "Коммерческое предложение и счет на оплату №31904 от 21 августа 2023 г..xlsx"
+            };
+            fetch('http://localhost:8000/api/document', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json;charset=utf-8',
+                },
+                body: JSON.stringify(data)
+            })
+                .then(async (response) => {
+                let file = await response.blob();
+                return window.URL.createObjectURL(file);
+            })
+                .catch(response => { console.log('request failed: ' + 'http://localhost:8000/api/document'); console.log(response); });
+        }
+    }
+    Components.SubTable = SubTable;
+})(Components || (Components = {}));
+var Components;
+(function (Components) {
     class Table {
         data;
+        subTable;
         container;
         tbody;
         tr;
         constructor(container, data) {
             this.data = data;
             this.container = container;
+            this.subTable = new Components.SubTable();
             this.init();
             this.redraw();
         }
@@ -409,8 +531,6 @@ var Components;
             this.tbody.innerHTML = '';
             // наполнить таблицу,создав новые элементы
             for (const key in this.data.orders) {
-                console.log(key);
-                console.log(this.data.orders[key]);
                 const tr = createElement('tr', 'table-row', null, this.tbody);
                 setAttributes(createElement('td', 'table-cell', `${this.data.orders[key].invoiceId}`, tr), { 'data-column': 'invoiceId' });
                 setAttributes(createElement('td', 'table-cell', `${this.data.orders[key].positions}`, tr), { 'data-column': 'position' });
@@ -439,98 +559,14 @@ var Components;
             }
             // навешать онклик на строки (труе фолс?)
         }
-        redrawRow(trTarget, data) {
-            // let nextTr = trTarget.nextElementSibling;
-            // if (nextTr.classList.contains('table-row-secondary')) nextTr.remove();
-            const nextTr = document.createElement('tr');
-            nextTr.className = 'table-row-secondary';
-            trTarget.after(nextTr);
-            const td = createElement('td', null, null, nextTr);
-            td.setAttribute('colspan', '14');
-            const expanded = createElement('div', 'expanded', null, td);
-            const tBody = this.createSubRowTable(expanded);
-            this.fillSubRowTable(data, tBody);
-            this.createSubRowTotal(tBody);
-            const invoiceDocs = createElement('div', 'invoice-docs', null, expanded);
-            const btnWrap = createElement('div', null, null, invoiceDocs);
-            createElement('div', null, 'Документы по заказу', btnWrap);
-            const btnImgWrap = createElement('div', null, null, btnWrap);
-            createElement('img', null, null, btnImgWrap).src = 'resources/img/download.svg';
-            const offerList = this.createSubRowDocs(invoiceDocs, 'Коммерческое предложение');
-            const shipmentList = this.createSubRowDocs(invoiceDocs, 'Отгрузка');
-            this.fillSubRowDocs(offerList, data.files.commercial);
-            this.fillSubRowDocs(shipmentList, data.files.shipment);
-        }
         sortOnDate() {
             console.log('sort on date');
         }
-        createSubRowTable(expanded) {
-            const tableSecondaryWrap = createElement('div', 'table-secondary', null, expanded);
-            const tableSecondary = createElement('table', null, null, tableSecondaryWrap);
-            const tHead = createElement('thead', null, null, tableSecondary);
-            const tHeadRow = createElement('tr', null, null, tHead);
-            const tHeadTextContent = [
-                '№',
-                'Наименование',
-                'Кол-во',
-                'Стоимость за шт. без НДС',
-                'Стоимость с НДС',
-                'Отгружено',
-                'Паспорт',
-            ];
-            tHeadTextContent.forEach((item, i, thTopTextContent) => {
-                createElement('th', null, item, tHeadRow);
-            });
-            return createElement('tbody', null, null, tableSecondary);
-        }
-        fillSubRowTable(data, tBody) {
-            let num = 1;
-            for (const item in data.items) {
-                const tr = createElement('tr', null, null, tBody);
-                createElement('td', null, String(num), tr);
-                num++;
-                for (let key in data.items[item]) {
-                    const td = createElement('td', null, data.items[item][key], tr);
-                }
-                const lastTd = createElement('td', null, null, tr);
-                const anchor = createElement('a', null, null, lastTd);
-                anchor.href = '';
-                const img = createElement('img', null, null, anchor);
-                img.src = 'resources/img/download.svg';
-            }
-        }
-        createSubRowTotal(tBody) {
-            // TODO высчитывать textContent
-            const lastTr = createElement('tr', 'total', null, tBody);
-            createElement('td', null, 'Итого:', lastTr);
-            createElement('td', null, null, lastTr);
-            createElement('td', null, '', lastTr);
-            createElement('td', null, '', lastTr);
-            createElement('td', null, '', lastTr);
-            createElement('td', null, '', lastTr);
-            createElement('td', null, null, lastTr);
-        }
-        createSubRowDocs(invoiceDocs, header) {
-            const offerWrap = createElement('div', 'expanded-documents', null, invoiceDocs);
-            createElement('div', null, header, offerWrap);
-            return createElement('div', null, null, offerWrap);
-        }
-        fillSubRowDocs(list, data) {
-            for (const key in data) {
-                const anchor = createElement('a', null, null, list);
-                anchor.href = 'link';
-                let num = Number(key) + 1;
-                createElement('div', null, `${num}.`, anchor);
-                createElement('div', null, data[key], anchor);
-                createElement('img', null, null, createElement('div', null, null, anchor)).src = 'resources/img/download.svg';
-            }
-        }
         onclickTableRow(event) {
+            // TODO: вынести логику в sub table
             const trTarget = event.target.closest('tr');
             const nextTr = (trTarget.nextSibling) ? trTarget.nextSibling : null;
-            console.log(trTarget.nextSibling);
             if (nextTr && nextTr.classList.contains('table-row-secondary')) {
-                console.log('существует');
                 if (nextTr.classList.contains('hide')) {
                     nextTr.classList.remove('hide');
                     trTarget.classList.add('active');
@@ -728,7 +764,7 @@ var Components;
                 }
             };
             tr.classList.remove('load');
-            this.redrawRow(tr, dataRow['0008d69c-4010-11ee-82c1-00155d000a01']);
+            this.subTable.redraw(tr, dataRow['0008d69c-4010-11ee-82c1-00155d000a01']);
             // fetch(pathData, {
             //     method: 'POST',
             //     body: JSON.stringify(sendData),
