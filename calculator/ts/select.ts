@@ -22,8 +22,12 @@ namespace Components {
             return '';
         }
 
-        public redraw(): void {
+        public redraw(dataResp): void {
 
+        }
+
+        public on(event: string, handler: Function) {
+            this.select.addEventListener(event, () => { handler(); });
         }
     }
 }

@@ -43,52 +43,61 @@ interface connections {
 }
 
 type optionsData = {
-    type: string,
-    assembly: string,
-    series: string,
-    additionalCoverage: string,
-    cleaningUnderOxygen: string,
-    mainMaterial: string,
-    needleType: string,
-    handleType: string,
-    surfaceType: string,
-    sealMaterial: string,
-    geometricConfiguration: string,
-    loadOption: string,
-    panelMounting: string,
-    pressureOption345b: string,
-    darinageOption: string,
-    connectionPlug: string,
-    handleColor: string,
-    driveType: string,
-    conditionalPassageDiameter: string,
-    filterType: string,
-    springType: string,
-    perssureValveSetting: string,
-    highPressureOption: string,
-    len: string,
-    zcrConnectionOption: string,
-    meltingPoint: string,
-    plasticBodyColor: string,
-    connections: connections[]
+    type?: string,
+    assembly?: string,
+    series?: string,
+    additionalCoverage?: string,
+    cleaningUnderOxygen?: string,
+    mainMaterial?: string,
+    needleType?: string,
+    handleType?: string,
+    surfaceType?: string,
+    sealMaterial?: string,
+    geometricConfiguration?: string,
+    loadOption?: string,
+    panelMounting?: string,
+    pressureOption345b?: string,
+    darinageOption?: string,
+    connectionPlug?: string,
+    handleColor?: string,
+    driveType?: string,
+    conditionalPassageDiameter?: string,
+    filterType?: string,
+    springType?: string,
+    perssureValveSetting?: string,
+    highPressureOption?: string,
+    len?: string,
+    zcrConnectionOption?: string,
+    meltingPoint?: string,
+    plasticBodyColor?: string,
+    connections?: connections[]
 }
 
 namespace Components {
     export class Options {
-        data: optionsData
+        data: optionsData;
         elems: object = {};
         constructor(wrap: HTMLElement) {
             console.log('opt', options);
-            for (const key in options) {
-                this.elems[key] = new Select(wrap, options[key], key, {});
-            }
+            Promise.all([
+                fetch('/type', {}),
+                fetch('/assembly'),
+                fetch(''),
+                fetch(''),
+            ]).then(response => {
+                let i = 0;
+                for (const key in options) {
+                    this.elems[key] = new Select(wrap, options[key], key, response[i++]);
+                    this.elems[key].on('change', () => { this.send(); });
+                }
+            });
         }
 
         private collectData(exception: string): optionsData {
-            let data: optionsData;
+            let data: optionsData = {};
             for (const key in this.elems) {
                 if (key === exception) {
-                    delete data[key];
+                    // delete data[key];
                     continue;
                 }
                 data[key] = this.elems[key].getValue();
@@ -96,12 +105,22 @@ namespace Components {
             return data;
         }
 
-        private redrawSelects(): void {
-            // this.elems[key].redraw();
+        private redrawSelects(dataResp): void {
+            let i = 0;
+            for (const key in options) {
+                this.elems[key].redraw(dataResp[i++]);
+            }
         }
 
         private send() {
-
+            Promise.all([
+                fetch('/type', this.collectData('type')),
+                fetch('/assembly'),
+                fetch(''),
+                fetch(''),
+            ]).then(responses => {
+                this.redrawSelects(responses);
+            })
         }
     }
 }
