@@ -36,6 +36,36 @@ const options = {
     plasticBodyColor: "цвет у брс",
 }
 
+const optionsArray = [
+    'type',
+    'assembly',
+    'series',
+    'additionalCoverage',
+    'cleaningUnderOxygen',
+    'mainMaterial',
+    'needleType',
+    'handleType',
+    'surfaceType',
+    'sealMaterial',
+    'geometricConfiguration',
+    'loadOption',
+    'panelMounting',
+    'pressureOption345b',
+    'darinageOption',
+    'connectionPlug',
+    'handleColor',
+    'driveType',
+    'conditionalPassageDiameter',
+    'filterType',
+    'springType',
+    'perssureValveSetting',
+    'highPressureOption',
+    'len',
+    'zcrConnectionOption',
+    'meltingPoint',
+    'plasticBodyColor',
+]
+
 interface connections {
     connectionNo: number,
     connectionType: string,
@@ -78,17 +108,31 @@ namespace Components {
         data: optionsData;
         elems: object = {};
         constructor(wrap: HTMLElement) {
-            console.log('opt', options);
-            Promise.all([
-                fetch('/type', {}),
-                fetch('/assembly'),
-                fetch(''),
-                fetch(''),
-            ]).then(response => {
+            this.fetches(wrap).then(r => {
+
+            });
+        }
+
+        private async fetches(wrap: HTMLElement): Promise<void> {
+            let requests = optionsArray.map(name => fetch(`http://192.168.0.178:5049/products/options/${name}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json;charset=utf-8'
+                },
+                body: JSON.stringify({})
+            }));
+
+            Promise.all(requests).then(async responses => {
+                let result = responses.map(async r => await r.json())
+
                 let i = 0;
                 for (const key in options) {
-                    this.elems[key] = new Select(wrap, options[key], key, response[i++]);
-                    this.elems[key].on('change', () => { this.send(); });
+                    if (key === 'conn1' || key === 'conn2' || key === 'conn3' || key === 'conn4' || key === 'size1' || key === 'size2' || key === 'size3' || key === 'size4') continue;
+
+                    this.elems[key] = new Select(wrap, options[key], key, result[i++]);
+                    this.elems[key].on('change', async () => {
+                        await this.send();
+                    });
                 }
             });
         }
@@ -100,26 +144,35 @@ namespace Components {
                     // delete data[key];
                     continue;
                 }
-                data[key] = this.elems[key].getValue();
+                const value = this.elems[key].getValue();
+                if (value !== '') data[key] = value;
             }
+
             return data;
         }
 
         private redrawSelects(dataResp): void {
             let i = 0;
             for (const key in options) {
+                if (key === 'conn1' || key === 'conn2' || key === 'conn3' || key === 'conn4' || key === 'size1' || key === 'size2' || key === 'size3' || key === 'size4') continue;
+
                 this.elems[key].redraw(dataResp[i++]);
             }
         }
 
-        private send() {
-            Promise.all([
-                fetch('/type', this.collectData('type')),
-                fetch('/assembly'),
-                fetch(''),
-                fetch(''),
-            ]).then(responses => {
-                this.redrawSelects(responses);
+        private async send() {
+            let requests = optionsArray.map(name => fetch(`http://192.168.0.178:5049/products/options/${name}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json;charset=utf-8'
+                },
+                body: JSON.stringify(this.collectData(name))
+            }));
+
+            Promise.all(requests).then(async responses => {
+                let result = responses.map(async r => await r.json());
+                this.redrawSelects(result);
+                // console.log(result);
             })
         }
     }
