@@ -100,7 +100,7 @@ input.show-element {
 
 select {
   height: 44px;
-  width: 120px;
+  width: 100%;
 }
 select:focus-visible {
   outline: none;

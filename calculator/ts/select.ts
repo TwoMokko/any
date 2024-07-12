@@ -24,9 +24,10 @@ namespace Components {
             return this.select.value;
         }
 
-        public async redraw(dataResp) {
+        public async redrawOptions(dataResp): Promise<void> {
            dataResp.then(
                result => {
+                   // console.log(result);
                    this.head.style.backgroundColor = 'transparent';
                    for (const key in this.list) {
                        this.list[key].style.backgroundColor = 'transparent';
@@ -35,15 +36,31 @@ namespace Components {
                            if (result[i] === key) {
                                this.list[key].style.backgroundColor = 'darkseagreen';
 
-                               // Много раз это делается в цикле
+                               // Много раз это делается в цикле, переписать
                                this.head.style.backgroundColor = 'darkseagreen';
                            }
                        }
                    }
                }
            )
+        }
 
+        public async redrawConnections(dataResp): Promise<void> {
+            // console.log(dataResp);
 
+            this.head.style.backgroundColor = 'transparent';
+            for (const key in this.list) {
+                this.list[key].style.backgroundColor = 'transparent';
+
+                for (let i = 0; i < dataResp.length; i++) {
+                    if (dataResp[i] === key) {
+                        this.list[key].style.backgroundColor = 'darkseagreen';
+
+                        // Много раз это делается в цикле, переписать
+                        this.head.style.backgroundColor = 'darkseagreen';
+                    }
+                }
+            }
         }
 
         public on(event: string, handler: Function) {
