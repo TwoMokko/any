@@ -20,11 +20,16 @@ body {
 
 main {
   margin: 64px 0;
+  padding-bottom: 64px;
 }
 
 .container {
   padding-left: 10%;
   padding-right: 10%;
+}
+
+.hide {
+  display: none;
 }
 
 a {
@@ -106,10 +111,8 @@ select:focus-visible {
   outline: none;
 }
 
-.table-wrap {
-  padding-bottom: 64px;
-}
 .table-wrap table {
+  width: 100%;
   border-spacing: 0;
   border: 1px solid #1477A7;
 }
@@ -133,6 +136,26 @@ select:focus-visible {
 }
 .table-wrap table tbody tr:not(:last-child) > td {
   border-bottom: 1px solid #1477A7;
+}
+
+.pagination {
+  display: flex;
+  gap: 4px;
+  justify-content: center;
+  width: 100%;
+  margin-top: 24px;
+  padding: 12px;
+}
+.pagination > div {
+  padding: 8px;
+  color: #FFF;
+  background-color: #1477A7;
+  border: 1px solid #1477A7;
+  cursor: pointer;
+}
+.pagination > div:hover {
+  background-color: transparent;
+  color: #1477A7;
 }
 
 /*# sourceMappingURL=character.css.map */

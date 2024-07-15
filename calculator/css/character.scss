@@ -23,11 +23,16 @@ body {
 
 main {
     margin: 64px 0;
+    padding-bottom: 64px;
 }
 
 .container {
     padding-left: 10%;
     padding-right: 10%;
+}
+
+.hide {
+    display: none;
 }
 
 a {
@@ -114,8 +119,8 @@ select {
 }
 
 .table-wrap {
-    padding-bottom: 64px;
     table {
+        width: 100%;
         border-spacing: 0;
         border: 1px solid $colorBackgroundAccent;
         thead {
@@ -144,6 +149,26 @@ select {
                     border-bottom: 1px solid $colorBackgroundAccent;
                 }
             }
+        }
+    }
+}
+
+.pagination {
+    display: flex;
+    gap: 4px;
+    justify-content: center;
+    width: 100%;
+    margin-top: 24px;
+    padding: 12px;
+    > div {
+        padding: 8px;
+        color: $colorTextLight;
+        background-color: $colorBackgroundAccent;
+        border: 1px solid $colorBackgroundAccent;
+        cursor: pointer;
+        &:hover {
+            background-color: transparent;
+            color: $colorTextAccent;
         }
     }
 }
