@@ -1,4 +1,7 @@
 namespace Components {
+
+    const appDomain = 'http://192.168.0.178:5049/products';
+
     export class Options {
         private data                        : optionsData;
         private elems                       : object = {
@@ -24,7 +27,7 @@ namespace Components {
         }
 
         private async fetchesOptions(wrap: HTMLElement): Promise<void> {
-            let requests = optionsArray.map(name => fetch(`http://192.168.0.178:5049/products/options/${name}`, {
+            let requests = optionsArray.map(name => fetch(`${appDomain}/options/${name}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json;charset=utf-8'
@@ -39,6 +42,7 @@ namespace Components {
                 for (const key in options) {
                     this.elems['options'][key] = new Select(wrap, options[key], key, result[i++]);
                     this.elems['options'][key].on('change', async () => {
+                        this.pagination.setPage(1);
                         await this.onChange()
                     });
                 }
@@ -46,7 +50,7 @@ namespace Components {
         }
 
         private async fetchesConnections(wrap: HTMLElement): Promise<void> {
-            fetch('http://192.168.0.178:5049/products/connections', {
+            fetch(`${appDomain}/connections`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json;charset=utf-8'
@@ -66,14 +70,16 @@ namespace Components {
                         this.elems['connections']['sizes'][key] = new Select(wrap, sizeHead, sizeName, result[key]['connectionSizes']);
 
                         this.elems['connections']['types'][key].on('change', async () => {
+                            this.pagination.setPage(1);
                             await this.onChange()
                         });
                         this.elems['connections']['sizes'][key].on('change', async () => {
+                            this.pagination.setPage(1);
                             await this.onChange()
                         });
                     }
                 })
-                .catch(response => { console.log('request failed: http://192.168.0.178:5049/products/connections'); console.log(response); });
+                .catch(response => { console.log(`request failed: ${appDomain}/connections`); console.log(response); });
         }
 
         private async onChange(): Promise<void> {
@@ -95,40 +101,23 @@ namespace Components {
             }
 
             /* TODO: переписать этот кошмар */
-            // data['connections'] = [
-            //     {
-            //         connectionNo: 0,
-            //         connectionType: '',
-            //         connectionSize: '',
-            //     },
-            //     {
-            //         connectionNo: 0,
-            //         connectionType: '',
-            //         connectionSize: '',
-            //     },
-            //     {
-            //         connectionNo: 0,
-            //         connectionType: '',
-            //         connectionSize: '',
-            //     },
-            //     {
-            //         connectionNo: 0,
-            //         connectionType: '',
-            //         connectionSize: '',
-            //     }
-            // ]
-            // for (let i = 0; i < 4 /* TODO: магическое число заменить */; i++) {
-            //     // if (key === exception) {
-            //     //     // delete data[key];
-            //     //     continue;
-            //     // }
-            //     data['connections'][i]['connectionNo'] = Number(i) + 1;
-            //     const type = this.elems['connections']['types'][i].getValue();
-            //     if (type !== '') data['connections'][i]['connectionType'] = type;
-            //
-            //     const size = this.elems['connections']['sizes'][i].getValue();
-            //     if (size !== '') data['connections'][i]['connectionSize'] = size;
-            // }
+            data['connections'] = []
+            for (let i = 0; i < 4 /* TODO: магическое число заменить */; i++) {
+                // if (key === exception) {
+                //     // delete data[key];
+                //     continue;
+                // }
+                const type = this.elems['connections']['types'][i].getValue();
+                const size = this.elems['connections']['sizes'][i].getValue();
+
+                if (type !== '' || size !== '') {
+                    let connectionsItem = {}
+                    if (size !== '') connectionsItem['connectionSize'] = size;
+                    if (type !== '') connectionsItem['connectionType'] = type;
+                    connectionsItem['connectionNo'] = Number(i) + 1;
+                    data['connections'].push(<connections>connectionsItem);
+                }
+            }
 
             this.data = data;
         }
@@ -158,7 +147,7 @@ namespace Components {
         }
 
         private async sendOptions() {
-            let requests = optionsArray.map(name => fetch(`http://192.168.0.178:5049/products/options/${name}`, {
+            let requests = optionsArray.map(name => fetch(`${appDomain}/options/${name}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json;charset=utf-8'
@@ -173,7 +162,7 @@ namespace Components {
         }
 
         private async sendConnections(): Promise<void> {
-            fetch('http://192.168.0.178:5049/products/connections', {
+            fetch(`${appDomain}/connections`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json;charset=utf-8'
@@ -187,7 +176,7 @@ namespace Components {
         }
         private async sendSold(): Promise<void> {
             const page = this.pagination.getPage().toString();
-            fetch(`http://192.168.0.178:5049/products/sold?PageId=${page}`, {
+            fetch(`${appDomain}/sold?PageId=${page}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json;charset=utf-8'

@@ -29,7 +29,8 @@ function setAttributes(element: HTMLElement, attr: object): void {
 }
 
 function setEmailFromCookie(input: HTMLInputElement): void {
-    document.cookie = "user=test@mail.ru";
+    // TODO: заменить email
+    document.cookie = "user=oleksyuk@camozzi.ru";
     input.value = getCookie('user');
 }
 

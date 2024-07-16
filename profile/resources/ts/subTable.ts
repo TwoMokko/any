@@ -2,11 +2,13 @@ namespace Components {
     import Request = Base.Request;
 
     export class SubTable {
+        private orderId     : string = '';
         constructor() {
 
         }
 
-        public redraw(trTarget: HTMLElement, data): void {
+        public redraw(trTarget: HTMLElement, data, orderId: string): void {
+            this.orderId = orderId;
             const nextTr = document.createElement('tr');
             nextTr.className = 'table-row-secondary';
             trTarget.after(nextTr);
@@ -28,9 +30,12 @@ namespace Components {
             // createElement('img', null, null, btnImgWrap).src = 'resources/img/download.svg';
 
             const offerList: HTMLElement = this.createDocs(invoiceDocs, 'Коммерческое предложение');
-            const shipmentList: HTMLElement = this.createDocs(invoiceDocs, 'Отгрузка');
-            this.fillDocs(offerList, data.files.commercial);
-            this.fillDocs(shipmentList, data.files.shipment);
+            this.fillDocs(offerList, data.files['commercial']);
+
+            if (data.files['shipment']) {
+                const shipmentList: HTMLElement = this.createDocs(invoiceDocs, 'Отгрузка');
+                this.fillDocs(shipmentList, data.files['shipment']);
+            }
         }
 
         private createTable(expanded: HTMLElement): HTMLElement {
@@ -62,8 +67,7 @@ namespace Components {
                 const tr = createElement('tr', null, null, tBody);
                 createElement('td', null, String(num), tr);
                 num++;
-                for ( let key in data.items[item]) {
-
+                for (let key in data.items[item]) {
                     const td = createElement('td', null, data.items[item][key], tr);
                 }
                 const lastTd = createElement('td', null, null, tr);
@@ -95,7 +99,7 @@ namespace Components {
         private fillDocs(list: HTMLElement, data): void {
             for (const key in data) {
                 const anchor = createElement('a', null, null, list);
-                anchor.onclick = () => { this.downloadFile(list); };
+                anchor.onclick = () => { this.downloadFile(list, data[key]); };
                 let num = Number(key) + 1;
                 createElement('div', null, `${num}.`, anchor);
                 createElement('div', null, data[key], anchor);
@@ -103,33 +107,48 @@ namespace Components {
             }
         }
 
-        private downloadFile(container: HTMLElement): void {
+        private downloadFile(container: HTMLElement, filename: string): void {
             const anchor = createElement('a', 'hide', null, container);
-            anchor.href = this.getFile();
-            anchor.download = 'filename.xlsx';
+            anchor.href = this.getFile(filename);
+            anchor.download = filename;
             anchor.click();
         }
 
-        private getFile() {
+        private getFile(filename: string) {
             const data = {
-                "orderId": "0008d69c-4010-11ee-82c1-00155d000a01",
-                "filename": "Коммерческое предложение и счет на оплату №31904 от 21 августа 2023 г..xlsx"
+                orderId: this.orderId,
+                filename: filename
             };
 
-            fetch('http://localhost:8000/api/document', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json;charset=utf-8',
-                },
-                body: JSON.stringify(data)
-            })
-                .then(async response => {
-                    let file = await response.blob();
-                    return  window.URL.createObjectURL(file);
+        //     fetch(`${appDomain}/document`, {
+        //         method: 'POST',
+        //         headers: {
+        //             'Content-Type': 'application/json;charset=utf-8',
+        //         },
+        //         body: JSON.stringify(data)
+        //     })
+        //         .then(async response => {
+        //             let file = await new Blob([response], {type: "application/pdf"});
+        //             console.log(response)
+        //             return  window.URL.createObjectURL(file);
+        //
+        //         })
+        //         .catch(response => { console.log('request failed: ' + `${appDomain}/document`); console.log(response); });
+        //
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", `${appDomain}/document`);
+            xhr.responseType = "arraybuffer";
 
-                })
-                .catch(response => { console.log('request failed: ' + 'http://localhost:8000/api/document'); console.log(response); });
-
+            xhr.onload = function () {
+                if (this.status === 200) {
+                    var blob = new Blob([xhr.response], {type: "application/pdf"});
+                    var objectUrl = URL.createObjectURL(blob);
+                    window.open(objectUrl);
+                }
+            };
+            xhr.send(JSON.stringify(data));
         }
+
+
     }
 }

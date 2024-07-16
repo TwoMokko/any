@@ -32,7 +32,7 @@ main {
 }
 
 .hide {
-    display: none;
+    display: none !important;
 }
 
 a {
@@ -166,6 +166,11 @@ select {
         background-color: $colorBackgroundAccent;
         border: 1px solid $colorBackgroundAccent;
         cursor: pointer;
+        &.not-active {
+            pointer-events: none;
+            cursor: default;
+            opacity: 0.5;
+        }
         &:hover {
             background-color: transparent;
             color: $colorTextAccent;

@@ -3,6 +3,7 @@ namespace Components {
         private limitPage       : number;
         private page            : number;
 
+        private pagination      : HTMLElement;
         private first           : HTMLElement;
         private previous        : HTMLElement;
         private current         : HTMLElement;
@@ -16,16 +17,15 @@ namespace Components {
             this.page           = 1;
 
             this.init(wrap);
-            console.log('реализовать пагинацию');
         }
 
         private init(wrap: HTMLElement): void {
-            const pagination = createElement('div', 'pagination', null, wrap);
-            this.first = createElement('div', '', 'первая страница', pagination);
-            this.previous = createElement('div', '', '<-', pagination);
-            this.current = createElement('div', '', this.page.toString(), pagination);
-            this.next = createElement('div', '', '->', pagination);
-            this.last = createElement('div', '', 'последняя страница', pagination);
+            this.pagination = createElement('div', 'pagination', null, wrap);
+            this.first = createElement('div', '', 'первая страница', this.pagination);
+            this.previous = createElement('div', '', '<-', this.pagination);
+            this.current = createElement('div', '', this.page.toString(), this.pagination);
+            this.next = createElement('div', '', '->', this.pagination);
+            this.last = createElement('div', '', 'последняя страница', this.pagination);
 
             this.setEvents();
         }
@@ -41,9 +41,42 @@ namespace Components {
         public redraw(limitPage: number): void {
             this.limitPage = limitPage;
 
+            this.show();
+            if (this.limitPage === 0) {
+                this.hide();
+                return;
+            }
+
             this.current.textContent = this.page.toString();
 
-            /* TODO: когда this.page = 1 || this.page = limit запретить нажимать предыдущая и след */
+            console.log(this.page);
+            console.log(this.limitPage);
+
+            this.first.classList.remove('not-active');
+            this.previous.classList.remove('not-active');
+            this.next.classList.remove('not-active');
+            this.last.classList.remove('not-active');
+
+            if (this.page === 1) {
+                this.first.classList.add('not-active');
+                this.previous.classList.add('not-active');
+            }
+            if (this.page === this.limitPage) {
+                this.next.classList.add('not-active');
+                this.last.classList.add('not-active');
+            }
+        }
+
+        public show(): void {
+            this.pagination.classList.remove('hide');
+        }
+
+        public hide(): void {
+            this.pagination.classList.add('hide');
+        }
+
+        public setPage(number: number): void {
+            this.page = number;
         }
 
         public getPage(): number {

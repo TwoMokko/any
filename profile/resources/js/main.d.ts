@@ -37,15 +37,18 @@ type dateForTable = {
     timezone_type: number;
     timezone: string;
 };
+declare const appDomain = "https://localhost:8000/api";
 declare namespace Components {
     class FilterManager {
+        private sendData;
         private select;
         private filterBtn;
         private table;
         private pagination;
         constructor();
         private redrawTable;
-        private getData;
+        private updateData;
+        private send;
     }
 }
 declare function showNavHeader(btn: HTMLElement): void;
@@ -103,8 +106,9 @@ declare namespace Components {
 }
 declare namespace Components {
     class SubTable {
+        private orderId;
         constructor();
-        redraw(trTarget: HTMLElement, data: any): void;
+        redraw(trTarget: HTMLElement, data: any, orderId: string): void;
         private createTable;
         private fillTable;
         private createTotal;

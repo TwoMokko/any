@@ -30,9 +30,11 @@ var Components;
     }
     Components.FilterButtons = FilterButtons;
 })(Components || (Components = {}));
+const appDomain = 'https://localhost:8000/api';
 var Components;
 (function (Components) {
     class FilterManager {
+        sendData;
         select;
         filterBtn;
         table;
@@ -40,121 +42,33 @@ var Components;
         constructor() {
             this.select = new Components.Select(document.querySelector('[name="delivery_status"]'));
             this.filterBtn = new Components.FilterButtons(document.querySelector('form.filter'), () => { this.redrawTable(); });
-            this.table = new Components.Table(document.querySelector('.table'), this.getData());
-            this.pagination = new Components.Pagination(document.querySelector('main'));
-            // запрос и рисовать таблицу со всеми значениями?
+            this.updateData();
+            this.send(this.sendData);
         }
         redrawTable() {
             console.log('redraw table');
         }
-        getData() {
-            return {
-                "orders": {
-                    "e6ba4f9b-dd1a-11ed-82ba-00155d000a01": {
-                        "invoiceId": "19984",
-                        "positions": 26,
-                        "orderAmount": "1 065 121.20 RUB",
-                        "manager": {
-                            "id": 2,
-                            "name": "Евгения",
-                            "surname": "Каманина"
-                        },
-                        "paymentLink": "https://orders.cloudpayments.ru/d/AbiyfsoQ22QkqpTI",
-                        "paymentStatus": "Оплачен",
-                        "shipmentStatus": "Отгружен",
-                        "deliveryStatus": "груз доставлен",
-                        "orderDate": {
-                            "date": "2023-04-17 00:00:00.000000",
-                            "timezone_type": 3,
-                            "timezone": "Europe/Berlin"
-                        },
-                        "shipmentDate": {
-                            "date": "2023-06-14 16:03:23.000000",
-                            "timezone_type": 3,
-                            "timezone": "Europe/Berlin"
-                        },
-                        "paymentDate": {
-                            "date": "2023-06-13 00:00:00.000000",
-                            "timezone_type": 3,
-                            "timezone": "Europe/Berlin"
-                        },
-                        "deliveryDate": {
-                            "date": "2023-06-19 13:10:00.000000",
-                            "timezone_type": 3,
-                            "timezone": "Europe/Berlin"
-                        }
-                    },
-                    "e6ba4f9b-dd1a-11ed-82ba-00155d000fa01": {
-                        "invoiceId": "19984",
-                        "positions": 26,
-                        "orderAmount": "1 065 121.20 RUB",
-                        "manager": {
-                            "id": 2,
-                            "name": "Евгения",
-                            "surname": "Каманина"
-                        },
-                        "paymentLink": "https://orders.cloudpayments.ru/d/AbiyfsoQ22QkqpTI",
-                        "paymentStatus": "Оплачен",
-                        "shipmentStatus": "Отгружен",
-                        "deliveryStatus": "груз доставлен",
-                        "orderDate": {
-                            "date": "2023-04-17 00:00:00.000000",
-                            "timezone_type": 3,
-                            "timezone": "Europe/Berlin"
-                        },
-                        "shipmentDate": {
-                            "date": "2023-06-14 16:03:23.000000",
-                            "timezone_type": 3,
-                            "timezone": "Europe/Berlin"
-                        },
-                        "paymentDate": {
-                            "date": "2023-06-13 00:00:00.000000",
-                            "timezone_type": 3,
-                            "timezone": "Europe/Berlin"
-                        },
-                        "deliveryDate": {
-                            "date": "2023-06-19 13:10:00.000000",
-                            "timezone_type": 3,
-                            "timezone": "Europe/Berlin"
-                        }
-                    },
-                    "e6ba4f9b-dd1a-11ed-82ba-00155d000a055": {
-                        "invoiceId": "19984",
-                        "positions": 26,
-                        "orderAmount": "1 065 121.20 RUB",
-                        "manager": {
-                            "id": 2,
-                            "name": "Евгения",
-                            "surname": "Каманина"
-                        },
-                        "paymentLink": "https://orders.cloudpayments.ru/d/AbiyfsoQ22QkqpTI",
-                        "paymentStatus": "Оплачен",
-                        "shipmentStatus": "Отгружен",
-                        "deliveryStatus": "груз доставлен",
-                        "orderDate": {
-                            "date": "2023-04-17 00:00:00.000000",
-                            "timezone_type": 3,
-                            "timezone": "Europe/Berlin"
-                        },
-                        "shipmentDate": {
-                            "date": "2023-06-14 16:03:23.000000",
-                            "timezone_type": 3,
-                            "timezone": "Europe/Berlin"
-                        },
-                        "paymentDate": {
-                            "date": "2023-06-13 00:00:00.000000",
-                            "timezone_type": 3,
-                            "timezone": "Europe/Berlin"
-                        },
-                        "deliveryDate": {
-                            "date": "2023-06-19 13:10:00.000000",
-                            "timezone_type": 3,
-                            "timezone": "Europe/Berlin"
-                        }
-                    }
-                },
-                "limit": 1
+        updateData() {
+            // TODO: данные собирать, переписать это
+            this.sendData = {
+                'email': 'oleksyuk@camozzi.ru',
+                'page': 1
             };
+        }
+        send(data) {
+            fetch(`${appDomain}/table`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json;charset=utf-8'
+                },
+                body: JSON.stringify(data)
+            })
+                .then(async (response) => {
+                let result = await response.json();
+                console.log(result);
+                this.table = new Components.Table(document.querySelector('.table'), result);
+                this.pagination = new Components.Pagination(document.querySelector('main'));
+            });
         }
     }
     Components.FilterManager = FilterManager;
@@ -190,7 +104,8 @@ function setAttributes(element, attr) {
     }
 }
 function setEmailFromCookie(input) {
-    document.cookie = "user=test@mail.ru";
+    // TODO: заменить email
+    document.cookie = "user=oleksyuk@camozzi.ru";
     input.value = getCookie('user');
 }
 function getCookie(name) {
@@ -377,9 +292,11 @@ var Components;
 var Components;
 (function (Components) {
     class SubTable {
+        orderId = '';
         constructor() {
         }
-        redraw(trTarget, data) {
+        redraw(trTarget, data, orderId) {
+            this.orderId = orderId;
             const nextTr = document.createElement('tr');
             nextTr.className = 'table-row-secondary';
             trTarget.after(nextTr);
@@ -395,9 +312,11 @@ var Components;
             // const btnImgWrap = createElement('div', null, null, btnWrap);
             // createElement('img', null, null, btnImgWrap).src = 'resources/img/download.svg';
             const offerList = this.createDocs(invoiceDocs, 'Коммерческое предложение');
-            const shipmentList = this.createDocs(invoiceDocs, 'Отгрузка');
-            this.fillDocs(offerList, data.files.commercial);
-            this.fillDocs(shipmentList, data.files.shipment);
+            this.fillDocs(offerList, data.files['commercial']);
+            if (data.files['shipment']) {
+                const shipmentList = this.createDocs(invoiceDocs, 'Отгрузка');
+                this.fillDocs(shipmentList, data.files['shipment']);
+            }
         }
         createTable(expanded) {
             const tableSecondaryWrap = createElement('div', 'table-secondary', null, expanded);
@@ -453,36 +372,50 @@ var Components;
         fillDocs(list, data) {
             for (const key in data) {
                 const anchor = createElement('a', null, null, list);
-                anchor.onclick = () => { this.downloadFile(list); };
+                anchor.onclick = () => { this.downloadFile(list, data[key]); };
                 let num = Number(key) + 1;
                 createElement('div', null, `${num}.`, anchor);
                 createElement('div', null, data[key], anchor);
                 createElement('img', null, null, createElement('div', null, null, anchor)).src = 'resources/img/download.svg';
             }
         }
-        downloadFile(container) {
+        downloadFile(container, filename) {
             const anchor = createElement('a', 'hide', null, container);
-            anchor.href = this.getFile();
-            anchor.download = 'filename.xlsx';
+            anchor.href = this.getFile(filename);
+            anchor.download = filename;
             anchor.click();
         }
-        getFile() {
+        getFile(filename) {
             const data = {
-                "orderId": "0008d69c-4010-11ee-82c1-00155d000a01",
-                "filename": "Коммерческое предложение и счет на оплату №31904 от 21 августа 2023 г..xlsx"
+                orderId: this.orderId,
+                filename: filename
             };
-            fetch('http://localhost:8000/api/document', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json;charset=utf-8',
-                },
-                body: JSON.stringify(data)
-            })
-                .then(async (response) => {
-                let file = await response.blob();
-                return window.URL.createObjectURL(file);
-            })
-                .catch(response => { console.log('request failed: ' + 'http://localhost:8000/api/document'); console.log(response); });
+            //     fetch(`${appDomain}/document`, {
+            //         method: 'POST',
+            //         headers: {
+            //             'Content-Type': 'application/json;charset=utf-8',
+            //         },
+            //         body: JSON.stringify(data)
+            //     })
+            //         .then(async response => {
+            //             let file = await new Blob([response], {type: "application/pdf"});
+            //             console.log(response)
+            //             return  window.URL.createObjectURL(file);
+            //
+            //         })
+            //         .catch(response => { console.log('request failed: ' + `${appDomain}/document`); console.log(response); });
+            //
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", `${appDomain}/document`);
+            xhr.responseType = "arraybuffer";
+            xhr.onload = function () {
+                if (this.status === 200) {
+                    var blob = new Blob([xhr.response], { type: "application/pdf" });
+                    var objectUrl = URL.createObjectURL(blob);
+                    window.open(objectUrl);
+                }
+            };
+            xhr.send(JSON.stringify(data));
         }
     }
     Components.SubTable = SubTable;
@@ -532,6 +465,7 @@ var Components;
             // наполнить таблицу,создав новые элементы
             for (const key in this.data.orders) {
                 const tr = createElement('tr', 'table-row', null, this.tbody);
+                setAttributes(tr, { 'data-order-id': key });
                 setAttributes(createElement('td', 'table-cell', `${this.data.orders[key].invoiceId}`, tr), { 'data-column': 'invoiceId' });
                 setAttributes(createElement('td', 'table-cell', `${this.data.orders[key].positions}`, tr), { 'data-column': 'position' });
                 setAttributes(createElement('td', 'table-cell', this.data.orders[key].orderAmount, tr), { 'data-column': 'priceAll' });
@@ -544,10 +478,14 @@ var Components;
                 setAttributes(createElement('td', 'table-cell', this.data.orders[key].paymentStatus, tr), { 'data-column': 'statusPayment' });
                 setAttributes(createElement('td', 'table-cell', this.data.orders[key].shipmentStatus, tr), { 'data-column': 'statusShipment' });
                 setAttributes(createElement('td', 'table-cell', this.data.orders[key].deliveryStatus, tr), { 'data-column': 'statusDelivery' });
-                setAttributes(createElement('td', 'table-cell', this.data.orders[key].orderDate.date.split(' ', 2)[0], tr), { 'data-column': 'dateOrder' });
-                setAttributes(createElement('td', 'table-cell', this.data.orders[key].paymentDate.date.split(' ', 2)[0], tr), { 'data-column': 'datePayment' });
-                setAttributes(createElement('td', 'table-cell', this.data.orders[key].shipmentDate.date.split(' ', 2)[0], tr), { 'data-column': 'dateShipment' });
-                setAttributes(createElement('td', 'table-cell', this.data.orders[key].deliveryDate.date.split(' ', 2)[0], tr), { 'data-column': 'dateDelivery' });
+                const orderDate = this.data.orders[key].orderDate ? this.data.orders[key].orderDate.date.split(' ', 2)[0] : '';
+                const paymentDate = this.data.orders[key].paymentDate ? this.data.orders[key].paymentDate.date.split(' ', 2)[0] : '';
+                const shipmentDate = this.data.orders[key].shipmentDate ? this.data.orders[key].shipmentDate.date.split(' ', 2)[0] : '';
+                const deliveryDate = this.data.orders[key].deliveryDate ? this.data.orders[key].deliveryDate.date.split(' ', 2)[0] : '';
+                setAttributes(createElement('td', 'table-cell', orderDate, tr), { 'data-column': 'dateOrder' });
+                setAttributes(createElement('td', 'table-cell', paymentDate, tr), { 'data-column': 'datePayment' });
+                setAttributes(createElement('td', 'table-cell', shipmentDate, tr), { 'data-column': 'dateShipment' });
+                setAttributes(createElement('td', 'table-cell', deliveryDate, tr), { 'data-column': 'dateDelivery' });
                 // const inputWrap = createElement('td', 'table-cell', '', tr);
                 // setAttributes(inputWrap, { 'data-column': 'comment' })
                 // const input = createElement('input', 'custom-value-field', null, inputWrap);
@@ -578,225 +516,19 @@ var Components;
             }
             else {
                 trTarget.classList.add('load');
-                setTimeout(() => { this.sendDataOnclickRow('', {}, trTarget); }, 1000);
+                this.sendDataOnclickRow(trTarget);
                 trTarget.classList.add('active');
                 // this.redrawRow(event.target.closest('tr'), data);
             }
         }
-        sendDataOnclickRow(pathData, sendData, tr) {
-            const dataRow = {
-                "0008d69c-4010-11ee-82c1-00155d000a01": {
-                    "items": [
-                        {
-                            "title": "ACLA-8M; Соединитель угловой из нержавеющей стали O.D. 8мм, серия CLA",
-                            "quantity": "7 шт",
-                            "price": 13412,
-                            "fullPrice": 16094.4,
-                            "shippedQuantity": "7 шт"
-                        },
-                        {
-                            "title": "ACLA-12M; Соединитель угловой из нержавеющей стали O.D. 12мм, серия CLA",
-                            "quantity": "73 шт",
-                            "price": 269735,
-                            "fullPrice": 323682,
-                            "shippedQuantity": "73 шт"
-                        },
-                        {
-                            "title": "ACMC-8M-4N; Штуцер с наружной резьбой из нержавеющей стали O.D. 8мм- NPT 1/4'', серия CMC",
-                            "quantity": "4 шт",
-                            "price": 4160,
-                            "fullPrice": 4992,
-                            "shippedQuantity": "4 шт"
-                        },
-                        {
-                            "title": "CPC-8M; Коннектор из нержавеющей стали O.D. 8мм",
-                            "quantity": "5 шт",
-                            "price": 5200,
-                            "fullPrice": 6240,
-                            "shippedQuantity": "5 шт"
-                        },
-                        {
-                            "title": "AOV20CS04-S; вентиль прямой HiFlux с пневмоприводом, O.D. 1/4\", давление 1378 бар, нормально-закрытый",
-                            "quantity": "1 шт",
-                            "price": 76329,
-                            "fullPrice": 91594.8,
-                            "shippedQuantity": "0 шт"
-                        },
-                        {
-                            "title": "AOV20OS04-S; вентиль прямой HiFlux с пневмоприводом, O.D. 1/4\", давление 1378 бар, нормально-открытый",
-                            "quantity": "1 шт",
-                            "price": 90436.5,
-                            "fullPrice": 108523.8,
-                            "shippedQuantity": "0 шт"
-                        },
-                        {
-                            "title": "VCVH2-H-8M-1/3; Обратный клапан серии CVH из нержавеющей стали S316 , Hy-Lok 8мм - Hy-Lok 8мм",
-                            "quantity": "1 шт",
-                            "price": 9055,
-                            "fullPrice": 10866,
-                            "shippedQuantity": "1 шт"
-                        },
-                        {
-                            "title": "VCVH2-H-12M-1/3; Обратный клапан серии CVH из нержавеющей стали S316 , Hy-Lok 12мм - Hy-Lok 12мм",
-                            "quantity": "10 шт",
-                            "price": 102070,
-                            "fullPrice": 122484,
-                            "shippedQuantity": "10 шт"
-                        },
-                        {
-                            "title": "RV2-H-12M-C; Предохранительный клапан серии RV из нержавеющей стали S316 , Hy-Lok 12мм - Hy-Lok 12мм",
-                            "quantity": "4 шт",
-                            "price": 115016.00000000001,
-                            "fullPrice": 138019.2,
-                            "shippedQuantity": "4 шт"
-                        },
-                        {
-                            "title": "CPC-12M; Коннектор из нержавеющей стали O.D. 12мм",
-                            "quantity": "66 шт",
-                            "price": 93390,
-                            "fullPrice": 112068,
-                            "shippedQuantity": "66 шт"
-                        },
-                        {
-                            "title": "VBZY-10-FN-AEB-220AC; Шаровой кран из нержавеющей стали, Ду10мм, подсоединение внутренняя резьба NPT 3/8\" внутр, с электроприводом HQ-004",
-                            "quantity": "10 шт",
-                            "price": 335016,
-                            "fullPrice": 402019.2,
-                            "shippedQuantity": "0 шт"
-                        },
-                        {
-                            "title": "DR60-A200-1; Pressure Regulator, Регулятор давления",
-                            "quantity": "1 шт",
-                            "price": 18563,
-                            "fullPrice": 22275.6,
-                            "shippedQuantity": "0 шт"
-                        },
-                        {
-                            "title": "DR80-A-S-150-A-1-O; Регулятор давления серии DR80 из нержавеющей стали, Рвх = 420 бар, Рвых = 150 бар, без портов под манометр, подсоединение 1/4\"FNPT, коэффициент расхода CV= 0.2",
-                            "quantity": "4 шт",
-                            "price": 544500,
-                            "fullPrice": 653400,
-                            "shippedQuantity": "0 шт"
-                        },
-                        {
-                            "title": "FT20TS04; тройник HiFlux O.D. 1/4\", давление 1378 бар",
-                            "quantity": "4 шт",
-                            "price": 31482,
-                            "fullPrice": 37778.4,
-                            "shippedQuantity": "0 шт"
-                        },
-                        {
-                            "title": "ACTA-12M; Тройник равнопроходной из нержавеющей стали O.D. 12мм, серия CTA",
-                            "quantity": "38 шт",
-                            "price": 194674,
-                            "fullPrice": 233608.8,
-                            "shippedQuantity": "38 шт"
-                        },
-                        {
-                            "title": "FT20ES04; Угловой фитинг Hiflux 1379 бар",
-                            "quantity": "18 шт",
-                            "price": 104247,
-                            "fullPrice": 125096.4,
-                            "shippedQuantity": "0 шт"
-                        },
-                        {
-                            "title": "A060M4/060M4; фитинг высокого давления, наруж.- наруж. HiFlux O.D. 1/4\", давление 4137 бар",
-                            "quantity": "5 шт",
-                            "price": 37867.5,
-                            "fullPrice": 45441,
-                            "shippedQuantity": "0 шт"
-                        },
-                        {
-                            "title": "ASF-12M-M20; Штуцер O.D. 12мм - накидная гайка M20x1.5",
-                            "quantity": "12 шт",
-                            "price": 38847.600000000006,
-                            "fullPrice": 46617.12,
-                            "shippedQuantity": "0 шт"
-                        },
-                        {
-                            "title": "ACMC-6-4N; Штуцер с наружной резьбой из нержавеющей стали O.D. 3/8''- NPT 1/4'', серия CMC",
-                            "quantity": "5 шт",
-                            "price": 5575,
-                            "fullPrice": 6690,
-                            "shippedQuantity": "5 шт"
-                        },
-                        {
-                            "title": "ACMC-12M-4N; Штуцер с наружной резьбой из нержавеющей стали O.D. 12мм- NPT 1/4'', серия CMC",
-                            "quantity": "15 шт",
-                            "price": 24435,
-                            "fullPrice": 29322,
-                            "shippedQuantity": "15 шт"
-                        },
-                        {
-                            "title": "ACMC-12M-6N; Штуцер с наружной резьбой из нержавеющей стали O.D. 12мм- NPT 3/8'', серия CMC",
-                            "quantity": "20 шт",
-                            "price": 33580,
-                            "fullPrice": 40296,
-                            "shippedQuantity": "20 шт"
-                        },
-                        {
-                            "title": "ACAL-12M; Адаптер угловой из нержавеющей стали O.D. 12мм, серия CAL",
-                            "quantity": "24 шт",
-                            "price": 98880,
-                            "fullPrice": 118656,
-                            "shippedQuantity": "24 шт"
-                        },
-                        {
-                            "title": "CAF-12M-8G; Адаптер с внутренней резьбой из нержавеющей стали O.D. 12мм - G 1/2''",
-                            "quantity": "7 шт",
-                            "price": 18620,
-                            "fullPrice": 22344,
-                            "shippedQuantity": "0 шт"
-                        }
-                    ],
-                    "files": {
-                        "commercial": [
-                            "Коммерческое предложение и счет на оплату №31904 от 21 августа 2023 г..zip",
-                            "Коммерческое предложение и счет на оплату №31904 от 21 августа 2023 г..pdf",
-                            "Коммерческое предложение и счет на оплату №31904 от 21 августа 2023 г..xlsx"
-                        ],
-                        "shipment": [
-                            "Заказ покупателя 00000031904 от 21.08.2023.zip",
-                            "Реализация товаров и услуг 00000013914 от 28.09.2023.xlsx",
-                            "Счет-фактура выданный 000000022995 от 28.09.2023.xlsx"
-                        ]
-                    }
-                }
-            };
+        sendDataOnclickRow(tr) {
             tr.classList.remove('load');
-            this.subTable.redraw(tr, dataRow['0008d69c-4010-11ee-82c1-00155d000a01']);
-            // fetch(pathData, {
-            //     method: 'POST',
-            //     body: JSON.stringify(sendData),
-            //     headers: {
-            //         'Content-type': 'application/json; charset=UTF-8',
-            //     },
-            // })
-            //     .then(async response => {
-            //         const dataRow = response.json();
-            //         tr.classList.remove('load');
-            //
-            //         this.redrawRow(tr, dataRow);
-            //         console.log('SUCCESS:');
-            //     })
-            //     .catch(
-            //         response => { console.log('request failed'); console.log('resp search', response); }
-            //     );
-            // $.ajax({
-            //     type: 'POST',
-            //     url: pathData,
-            //     data: JSON.stringify(sendData),
-            //     dataType: 'json',
-            //     success: (dataRow): void => {
-            //         this.redrawRow(tr, dataRow);
-            //
-            //         console.log('SUCCESS:');
-            //     },
-            //     error: (jqXHR, textStatus, errorThrown): void => {
-            //         console.log('ERROR: ' + textStatus + ", " + errorThrown);
-            //         console.log(jqXHR);
-            //     }
-            // });
+            const orderId = tr.getAttribute('data-order-id');
+            fetch(`${appDomain}/order/${orderId}`)
+                .then(async (response) => {
+                let result = await response.json();
+                this.subTable.redraw(tr, result[orderId], orderId);
+            });
         }
     }
     Components.Table = Table;

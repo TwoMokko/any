@@ -28,8 +28,12 @@ type dateForTable = {
     timezone: string
 }
 
+const appDomain = 'https://localhost:8000/api';
+
 namespace Components {
     export class FilterManager {
+        private sendData            : any;
+
         private select          : Select;
         private filterBtn       : FilterButtons;
         private table           : Table;
@@ -37,122 +41,36 @@ namespace Components {
         constructor() {
             this.select = new Components.Select(document.querySelector('[name="delivery_status"]'));
             this.filterBtn = new FilterButtons(document.querySelector('form.filter'), () => { this.redrawTable(); });
-            this.table = new Table(document.querySelector('.table'), this.getData());
-            this.pagination = new Pagination(document.querySelector('main'));
-            // запрос и рисовать таблицу со всеми значениями?
+
+            this.updateData();
+            this.send(this.sendData);
         }
         private redrawTable(): void {
             console.log('redraw table');
         }
 
-        private getData(): tableData {
-            return  {
-                "orders": {
-                    "e6ba4f9b-dd1a-11ed-82ba-00155d000a01": {
-                        "invoiceId": "19984",
-                        "positions": 26,
-                        "orderAmount": "1 065 121.20 RUB",
-                        "manager": {
-                            "id": 2,
-                            "name": "Евгения",
-                            "surname": "Каманина"
-                        },
-                        "paymentLink": "https://orders.cloudpayments.ru/d/AbiyfsoQ22QkqpTI",
-                        "paymentStatus": "Оплачен",
-                        "shipmentStatus": "Отгружен",
-                        "deliveryStatus": "груз доставлен",
-                        "orderDate": {
-                            "date": "2023-04-17 00:00:00.000000",
-                            "timezone_type": 3,
-                            "timezone": "Europe/Berlin"
-                        },
-                        "shipmentDate": {
-                            "date": "2023-06-14 16:03:23.000000",
-                            "timezone_type": 3,
-                            "timezone": "Europe/Berlin"
-                        },
-                        "paymentDate": {
-                            "date": "2023-06-13 00:00:00.000000",
-                            "timezone_type": 3,
-                            "timezone": "Europe/Berlin"
-                        },
-                        "deliveryDate": {
-                            "date": "2023-06-19 13:10:00.000000",
-                            "timezone_type": 3,
-                            "timezone": "Europe/Berlin"
-                        }
-                    },
-                    "e6ba4f9b-dd1a-11ed-82ba-00155d000fa01": {
-                        "invoiceId": "19984",
-                        "positions": 26,
-                        "orderAmount": "1 065 121.20 RUB",
-                        "manager": {
-                            "id": 2,
-                            "name": "Евгения",
-                            "surname": "Каманина"
-                        },
-                        "paymentLink": "https://orders.cloudpayments.ru/d/AbiyfsoQ22QkqpTI",
-                        "paymentStatus": "Оплачен",
-                        "shipmentStatus": "Отгружен",
-                        "deliveryStatus": "груз доставлен",
-                        "orderDate": {
-                            "date": "2023-04-17 00:00:00.000000",
-                            "timezone_type": 3,
-                            "timezone": "Europe/Berlin"
-                        },
-                        "shipmentDate": {
-                            "date": "2023-06-14 16:03:23.000000",
-                            "timezone_type": 3,
-                            "timezone": "Europe/Berlin"
-                        },
-                        "paymentDate": {
-                            "date": "2023-06-13 00:00:00.000000",
-                            "timezone_type": 3,
-                            "timezone": "Europe/Berlin"
-                        },
-                        "deliveryDate": {
-                            "date": "2023-06-19 13:10:00.000000",
-                            "timezone_type": 3,
-                            "timezone": "Europe/Berlin"
-                        }
-                    },
-                    "e6ba4f9b-dd1a-11ed-82ba-00155d000a055": {
-                        "invoiceId": "19984",
-                        "positions": 26,
-                        "orderAmount": "1 065 121.20 RUB",
-                        "manager": {
-                            "id": 2,
-                            "name": "Евгения",
-                            "surname": "Каманина"
-                        },
-                        "paymentLink": "https://orders.cloudpayments.ru/d/AbiyfsoQ22QkqpTI",
-                        "paymentStatus": "Оплачен",
-                        "shipmentStatus": "Отгружен",
-                        "deliveryStatus": "груз доставлен",
-                        "orderDate": {
-                            "date": "2023-04-17 00:00:00.000000",
-                            "timezone_type": 3,
-                            "timezone": "Europe/Berlin"
-                        },
-                        "shipmentDate": {
-                            "date": "2023-06-14 16:03:23.000000",
-                            "timezone_type": 3,
-                            "timezone": "Europe/Berlin"
-                        },
-                        "paymentDate": {
-                            "date": "2023-06-13 00:00:00.000000",
-                            "timezone_type": 3,
-                            "timezone": "Europe/Berlin"
-                        },
-                        "deliveryDate": {
-                            "date": "2023-06-19 13:10:00.000000",
-                            "timezone_type": 3,
-                            "timezone": "Europe/Berlin"
-                        }
-                    }
-                },
-                "limit": 1
+        private updateData(): void {
+            // TODO: данные собирать, переписать это
+            this. sendData = {
+                'email': 'oleksyuk@camozzi.ru',
+                'page': 1
             }
+        }
+
+        private send(data: any): void {
+            fetch(`${appDomain}/table`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json;charset=utf-8'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(async response => {
+                let result = await response.json();
+                console.log(result);
+                this.table = new Table(document.querySelector('.table'), result);
+                this.pagination = new Pagination(document.querySelector('main'));
+            });
         }
     }
 }
