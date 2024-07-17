@@ -44,6 +44,7 @@ declare namespace Components {
         private select;
         private filterBtn;
         private table;
+        private manager;
         private pagination;
         constructor();
         private redrawTable;
@@ -122,14 +123,49 @@ declare namespace Components {
     class Table {
         private data;
         private subTable;
-        private container;
+        private readonly container;
         private tbody;
         private tr;
-        constructor(container: HTMLElement, data: tableData);
+        private readonly callbackManager;
+        constructor(container: HTMLElement, data: tableData, callbackManager: Function);
         private init;
         redraw(): void;
         private sortOnDate;
         private onclickTableRow;
         private sendDataOnclickRow;
+    }
+}
+declare namespace Components {
+    class Manager {
+        static managerWindow: Instance;
+        static windowOk: Instance;
+        constructor();
+        open(id: number): void;
+        static getContent(data: any, action: string): HTMLElement;
+        static createBtnSend(form: HTMLFormElement): void;
+        static sendOk(): void;
+    }
+}
+declare namespace Components {
+    /**
+     * Менеджер работы с окнами
+     */
+    class Window {
+        private static windows;
+        private static iter;
+        static windowsHTML: Element;
+        static content: Element;
+        static create(title: string | null, content: Element): Instance;
+        static remove(id: number): void;
+    }
+    /**
+     * Работа с окнами
+     */
+    class Instance {
+        private readonly id;
+        private readonly instance;
+        constructor(id: number, title: string | null, content: Element | string);
+        close(): void;
+        private remove;
     }
 }

@@ -1,0 +1,31 @@
+@use "sass:map";
+@use "variable" as *;
+
+.manager {
+    width: 640px;
+    &-head {
+        font-size: 1.2rem;
+        font-weight: 700;
+        margin-bottom: 24px;
+        color: $colorAccentLight;
+    }
+    &-info {
+        display: flex;
+        gap: 32px;
+        margin-bottom: 24px;
+        img {
+            max-height: 140px;
+            width: auto;
+        }
+        &-text {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            > div {
+                display: flex;
+                justify-content: space-between;
+            }
+        }
+    }
+}

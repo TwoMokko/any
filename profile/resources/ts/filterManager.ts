@@ -37,10 +37,12 @@ namespace Components {
         private select          : Select;
         private filterBtn       : FilterButtons;
         private table           : Table;
+        private manager         : Manager;
         private pagination      : Pagination;
         constructor() {
             this.select = new Components.Select(document.querySelector('[name="delivery_status"]'));
             this.filterBtn = new FilterButtons(document.querySelector('form.filter'), () => { this.redrawTable(); });
+            this.manager = new Manager();
 
             this.updateData();
             this.send(this.sendData);
@@ -67,8 +69,7 @@ namespace Components {
             })
             .then(async response => {
                 let result = await response.json();
-                console.log(result);
-                this.table = new Table(document.querySelector('.table'), result);
+                this.table = new Table(document.querySelector('.table'), result, this.manager.open);
                 this.pagination = new Pagination(document.querySelector('main'));
             });
         }

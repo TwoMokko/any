@@ -27,6 +27,12 @@
         padding: 24px;
         display: flex;
         justify-content: space-between;
+        > div:nth-child(1) {
+            cursor: pointer;
+            &:hover {
+                color: $colorAccentLight;
+            }
+        }
     }
     &-head {
         background-color: $colorBackgroundAccentLight;
@@ -83,6 +89,24 @@
         .custom-value-field {
             background-color: $colorBackgroundLight;
             width: 120px;
+        }
+        &-manager {
+            cursor: pointer;
+            color: $colorAccentLight;
+            &:hover {
+                color: $colorTextAccent;
+            }
+        }
+        &-link {
+            width: 80%;
+            height: 24px;
+            background-image: url("/profile/resources/img/link.svg");
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            &:hover {
+                background-image: url("/profile/resources/img/link-hover.svg");
+            }
         }
     }
 }

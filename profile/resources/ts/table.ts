@@ -1,16 +1,19 @@
 namespace Components {
     export class Table {
-        private data                : tableData;
+        private data                        : tableData;
 
-        private subTable            : SubTable;
+        private subTable                    : SubTable;
 
-        private container           : HTMLElement;
-        private tbody               : HTMLElement;
-        private tr                  : HTMLTableRowElement;
-        constructor(container: HTMLElement, data: tableData) {
-            this.data               = data;
-            this.container          = container;
-            this.subTable           = new SubTable();
+        private readonly container          : HTMLElement;
+        private tbody                       : HTMLElement;
+        private tr                          : HTMLTableRowElement;
+
+        private readonly callbackManager    : Function;
+        constructor(container: HTMLElement, data: tableData, callbackManager: Function) {
+            this.data                       = data;
+            this.container                  = container;
+            this.subTable                   = new SubTable();
+            this.callbackManager            = callbackManager;
 
             this.init();
             this.redraw();
@@ -59,13 +62,19 @@ namespace Components {
                 setAttributes(createElement('td', 'table-cell', `${this.data.orders[key].positions}`, tr), { 'data-column': 'position' });
                 setAttributes(createElement('td', 'table-cell', this.data.orders[key].orderAmount, tr), { 'data-column': 'priceAll' });
 
-                const anchorWrap = createElement('td', 'table-cell', null, tr);
+                const anchorWrap = createElement('td', 'table-cell table-cell-manager', `${this.data.orders[key].manager.name} ${this.data.orders[key].manager.surname}`, tr);
                 setAttributes(anchorWrap, { 'data-column': 'manager' });
-                const anchor = createElement('a', null, `${this.data.orders[key].manager.name} ${this.data.orders[key].manager.surname}`, anchorWrap);
-                anchor.href = '';
+                anchorWrap.addEventListener('click', (event: Event) => { event.stopPropagation(); this.callbackManager(this.data.orders[key].manager.id); })
 
                 setAttributes(createElement('td', 'table-cell', 'дописать', tr), { 'data-column': 'triggerLetter' });
-                setAttributes(createElement('td', 'table-cell', 'что делать с сылкой', tr), { 'data-column': 'linkPayment' });
+
+                const linkWrap = createElement('td', 'table-cell', null, tr);
+                setAttributes(linkWrap, { 'data-column': 'linkPayment' });
+                const link = createElement('a', 'table-cell-link', null, linkWrap);
+                link.href = this.data.orders[key].paymentLink;
+                setAttributes(link, { 'target': '_blank' });
+                link.addEventListener('click', (event: Event) => { event.stopPropagation(); });
+
                 setAttributes(createElement('td', 'table-cell', this.data.orders[key].paymentStatus, tr), { 'data-column': 'statusPayment' });
                 setAttributes(createElement('td', 'table-cell', this.data.orders[key].shipmentStatus, tr), { 'data-column': 'statusShipment' });
                 setAttributes(createElement('td', 'table-cell', this.data.orders[key].deliveryStatus, tr), { 'data-column': 'statusDelivery' });
@@ -90,15 +99,13 @@ namespace Components {
                     this.onclickTableRow(event);
                 };
             }
-
-            // навешать онклик на строки (труе фолс?)
         }
 
         private sortOnDate(): void {
             console.log('sort on date');
         }
 
-        private onclickTableRow(event): void {
+        private onclickTableRow(event: any): void {
             // TODO: вынести логику в sub table
             const trTarget = event.target.closest('tr');
             const nextTr = (trTarget.nextSibling) ? trTarget.nextSibling : null;
@@ -122,11 +129,11 @@ namespace Components {
         }
 
         private sendDataOnclickRow(tr: HTMLElement): void {
-            tr.classList.remove('load');
             const orderId = tr.getAttribute('data-order-id');
 
             fetch(`${appDomain}/order/${orderId}`)
                 .then(async response => {
+                    tr.classList.remove('load');
                     let result = await response.json();
                     this.subTable.redraw(tr, result[orderId], orderId);
                 })

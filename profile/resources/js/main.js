@@ -38,10 +38,12 @@ var Components;
         select;
         filterBtn;
         table;
+        manager;
         pagination;
         constructor() {
             this.select = new Components.Select(document.querySelector('[name="delivery_status"]'));
             this.filterBtn = new Components.FilterButtons(document.querySelector('form.filter'), () => { this.redrawTable(); });
+            this.manager = new Components.Manager();
             this.updateData();
             this.send(this.sendData);
         }
@@ -65,8 +67,7 @@ var Components;
             })
                 .then(async (response) => {
                 let result = await response.json();
-                console.log(result);
-                this.table = new Components.Table(document.querySelector('.table'), result);
+                this.table = new Components.Table(document.querySelector('.table'), result, this.manager.open);
                 this.pagination = new Components.Pagination(document.querySelector('main'));
             });
         }
@@ -405,13 +406,13 @@ var Components;
             //         })
             //         .catch(response => { console.log('request failed: ' + `${appDomain}/document`); console.log(response); });
             //
-            var xhr = new XMLHttpRequest();
+            const xhr = new XMLHttpRequest();
             xhr.open("POST", `${appDomain}/document`);
             xhr.responseType = "arraybuffer";
             xhr.onload = function () {
                 if (this.status === 200) {
-                    var blob = new Blob([xhr.response], { type: "application/pdf" });
-                    var objectUrl = URL.createObjectURL(blob);
+                    const blob = new Blob([xhr.response], { type: "application/pdf" });
+                    const objectUrl = URL.createObjectURL(blob);
                     window.open(objectUrl);
                 }
             };
@@ -428,10 +429,12 @@ var Components;
         container;
         tbody;
         tr;
-        constructor(container, data) {
+        callbackManager;
+        constructor(container, data, callbackManager) {
             this.data = data;
             this.container = container;
             this.subTable = new Components.SubTable();
+            this.callbackManager = callbackManager;
             this.init();
             this.redraw();
         }
@@ -469,12 +472,16 @@ var Components;
                 setAttributes(createElement('td', 'table-cell', `${this.data.orders[key].invoiceId}`, tr), { 'data-column': 'invoiceId' });
                 setAttributes(createElement('td', 'table-cell', `${this.data.orders[key].positions}`, tr), { 'data-column': 'position' });
                 setAttributes(createElement('td', 'table-cell', this.data.orders[key].orderAmount, tr), { 'data-column': 'priceAll' });
-                const anchorWrap = createElement('td', 'table-cell', null, tr);
+                const anchorWrap = createElement('td', 'table-cell table-cell-manager', `${this.data.orders[key].manager.name} ${this.data.orders[key].manager.surname}`, tr);
                 setAttributes(anchorWrap, { 'data-column': 'manager' });
-                const anchor = createElement('a', null, `${this.data.orders[key].manager.name} ${this.data.orders[key].manager.surname}`, anchorWrap);
-                anchor.href = '';
+                anchorWrap.addEventListener('click', (event) => { event.stopPropagation(); this.callbackManager(this.data.orders[key].manager.id); });
                 setAttributes(createElement('td', 'table-cell', 'дописать', tr), { 'data-column': 'triggerLetter' });
-                setAttributes(createElement('td', 'table-cell', 'что делать с сылкой', tr), { 'data-column': 'linkPayment' });
+                const linkWrap = createElement('td', 'table-cell', null, tr);
+                setAttributes(linkWrap, { 'data-column': 'linkPayment' });
+                const link = createElement('a', 'table-cell-link', null, linkWrap);
+                link.href = this.data.orders[key].paymentLink;
+                setAttributes(link, { 'target': '_blank' });
+                link.addEventListener('click', (event) => { event.stopPropagation(); });
                 setAttributes(createElement('td', 'table-cell', this.data.orders[key].paymentStatus, tr), { 'data-column': 'statusPayment' });
                 setAttributes(createElement('td', 'table-cell', this.data.orders[key].shipmentStatus, tr), { 'data-column': 'statusShipment' });
                 setAttributes(createElement('td', 'table-cell', this.data.orders[key].deliveryStatus, tr), { 'data-column': 'statusDelivery' });
@@ -495,7 +502,6 @@ var Components;
                     this.onclickTableRow(event);
                 };
             }
-            // навешать онклик на строки (труе фолс?)
         }
         sortOnDate() {
             console.log('sort on date');
@@ -522,15 +528,154 @@ var Components;
             }
         }
         sendDataOnclickRow(tr) {
-            tr.classList.remove('load');
             const orderId = tr.getAttribute('data-order-id');
             fetch(`${appDomain}/order/${orderId}`)
                 .then(async (response) => {
+                tr.classList.remove('load');
                 let result = await response.json();
                 this.subTable.redraw(tr, result[orderId], orderId);
             });
         }
     }
     Components.Table = Table;
+})(Components || (Components = {}));
+var Components;
+(function (Components) {
+    class Manager {
+        static managerWindow;
+        static windowOk;
+        constructor() {
+        }
+        open(id) {
+            fetch(`${appDomain}/manager/${id}`)
+                .then(async (response) => {
+                let result = await response.json();
+                const title = 'Связаться с менеджером';
+                const action = './test.php';
+                const form = Manager.getContent(result, action);
+                Manager.managerWindow = Components.Window.create(title, form);
+            });
+        }
+        static getContent(data, action) {
+            const form = document.createElement('form');
+            form.className = 'manager';
+            form.action = action;
+            createElement('div', 'manager-head', `${data.name} ${data.surname} (${data.position})`, form);
+            const infoWrap = createElement('div', 'manager-info', null, form);
+            const imgWrap = createElement('div', null, null, infoWrap);
+            const img = createElement('img', null, null, imgWrap);
+            img.src = data.image;
+            const info = createElement('div', 'manager-info-text', null, infoWrap);
+            const row1 = createElement('div', null, null, info);
+            const row2 = createElement('div', null, null, info);
+            const row3 = createElement('div', null, null, info);
+            createElement('div', null, 'email:', row1);
+            createElement('div', null, data.email, row1);
+            createElement('div', null, 'Телефон:', row2);
+            createElement('div', null, data.phone, row2);
+            createElement('div', null, 'whats app:', row3);
+            createElement('div', null, data.whats_app, row3);
+            createElement('div', null, 'Сообщение на email:', form);
+            const textareaWrap = createElement('div', null, null, form);
+            const textarea = createElement('textarea', null, null, textareaWrap);
+            setAttributes(textarea, { 'name': 'message' });
+            Manager.createBtnSend(form);
+            return form;
+        }
+        static createBtnSend(form) {
+            const button = createElement('button', 'btn accent', 'Отправить', form);
+            setAttributes(button, { 'type': 'submit' });
+            button.onclick = () => {
+                Base.Request.sendForm(form, 'POST', () => { Manager.sendOk(); });
+                return false;
+            };
+        }
+        static sendOk() {
+            Manager.managerWindow.close();
+            const messageOk = document.createElement('div');
+            messageOk.textContent = 'Отправлено';
+            messageOk.className = 'send-ok';
+            Manager.windowOk = Components.Window.create(null, messageOk);
+        }
+    }
+    Components.Manager = Manager;
+})(Components || (Components = {}));
+var Components;
+(function (Components) {
+    /**
+     * Менеджер работы с окнами
+     */
+    class Window {
+        static windows = {};
+        static iter = 0;
+        static windowsHTML = null;
+        static content = null;
+        // public static showMessage(text: string): Instance {
+        //     return Window.create(null, text);
+        // }
+        static create(title = null, content) {
+            document.querySelector('body').style.overflow = 'hidden';
+            if (!Window.windowsHTML) {
+                Window.windowsHTML = document.createElement('div');
+                this.windowsHTML.className = 'windows';
+                document.querySelector('main').append(Window.windowsHTML);
+            }
+            this.content = content;
+            this.content.classList.add('active');
+            let id = ++Window.iter;
+            let wind = new Instance(id, title, this.content);
+            Window.windows[id] = wind;
+            return wind;
+        }
+        static remove(id) {
+            delete Window.windows[id];
+        }
+    }
+    Components.Window = Window;
+    /**
+     * Работа с окнами
+     */
+    class Instance {
+        id;
+        instance;
+        constructor(id, title, content) {
+            this.id = id;
+            this.instance = document.createElement('div');
+            let space = document.createElement('div');
+            let window = document.createElement('div');
+            let header = document.createElement('div');
+            let titleHTML = document.createElement('div');
+            let closeHTML = document.createElement('div');
+            let container = document.createElement('div');
+            this.instance.className = 'instance';
+            space.className = 'space';
+            window.className = 'window';
+            titleHTML.className = 'title';
+            closeHTML.className = 'close';
+            (title !== null) ? header.className = 'head' : header.className = 'head_null_title';
+            (title !== null) ? container.className = 'container' : container.className = 'container_null_title';
+            this.instance.append(space);
+            this.instance.append(window);
+            window.append(header);
+            if (title !== null) {
+                header.append(titleHTML);
+                titleHTML.append(title);
+            }
+            header.append(closeHTML);
+            window.append(container);
+            container.append(content);
+            space.addEventListener('click', this.close.bind(this));
+            closeHTML.addEventListener('click', this.close.bind(this));
+            Window.windowsHTML.append(this.instance);
+        }
+        close() {
+            this.instance.remove();
+            this.remove();
+        }
+        remove() {
+            Window.remove(this.id);
+        }
+    }
+    Components.Instance = Instance;
 })(Components || (Components = {}));
 //# sourceMappingURL=main.js.map

@@ -135,14 +135,14 @@ namespace Components {
         //         })
         //         .catch(response => { console.log('request failed: ' + `${appDomain}/document`); console.log(response); });
         //
-            var xhr = new XMLHttpRequest();
+            const xhr = new XMLHttpRequest();
             xhr.open("POST", `${appDomain}/document`);
             xhr.responseType = "arraybuffer";
 
             xhr.onload = function () {
                 if (this.status === 200) {
-                    var blob = new Blob([xhr.response], {type: "application/pdf"});
-                    var objectUrl = URL.createObjectURL(blob);
+                    const blob = new Blob([xhr.response], {type: "application/pdf"});
+                    const objectUrl = URL.createObjectURL(blob);
                     window.open(objectUrl);
                 }
             };

@@ -9,6 +9,8 @@
 @import "select";
 @import "loader";
 @import "pagination";
+@import "popup";
+@import "manager";
 
 * {
     box-sizing: border-box;
@@ -109,4 +111,8 @@ input {
         outline: none;
         border: 1px solid $colorBtnAccent;
     }
+}
+
+.send-ok {
+    padding: 0 64px;
 }
