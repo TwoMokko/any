@@ -25,14 +25,14 @@ function createElement(tagName: string, className: string|null, textContent: str
 function setAttributes(element: HTMLElement, attr: object): void {
     for (const name in attr) {
     element.setAttribute(name, attr[name]);
-}
+    }
 }
 
-function setEmailFromCookie(input: HTMLInputElement): void {
-    // TODO: заменить email
-    document.cookie = "user=oleksyuk@camozzi.ru";
-    input.value = getCookie('user');
-}
+// function setEmailFromCookie(input: HTMLInputElement): void {
+//     // TODO: заменить email
+//     document.cookie = "user=oleksyuk@camozzi.ru";
+//     input.value = getCookie('user');
+// }
 
 function getCookie(name: string): string {
     let matches = document.cookie.match(new RegExp(

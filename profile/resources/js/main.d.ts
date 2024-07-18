@@ -3,7 +3,7 @@ declare namespace Components {
         private doFilter;
         private doReset;
         private callSend;
-        constructor(container: HTMLElement, func: Function);
+        constructor(container: HTMLElement, func: Function, filterManager: FilterManager);
         private init;
         private addEvents;
     }
@@ -41,10 +41,9 @@ declare const appDomain = "https://localhost:8000/api";
 declare namespace Components {
     class FilterManager {
         private sendData;
-        private select;
-        private filterBtn;
+        private filterState;
+        private filter;
         private table;
-        private manager;
         private pagination;
         constructor();
         private redrawTable;
@@ -55,14 +54,49 @@ declare namespace Components {
 declare function showNavHeader(btn: HTMLElement): void;
 declare function createElement(tagName: string, className: string | null, textContent: string | null, container: HTMLElement | null): any;
 declare function setAttributes(element: HTMLElement, attr: object): void;
-declare function setEmailFromCookie(input: HTMLInputElement): void;
 declare function getCookie(name: string): string;
 declare namespace Components {
+    class Manager {
+        static managerWindow: Instance;
+        static windowOk: Instance;
+        constructor();
+        static open(id: number): void;
+        static getContent(data: any, action: string): HTMLElement;
+        static createBtnSend(form: HTMLFormElement): void;
+        static sendOk(): void;
+    }
+}
+declare namespace Components {
     class Pagination {
+        private wrap;
         constructor(container: HTMLElement);
         private init;
+        redraw(limit: number): void;
         show(): void;
         hide(): void;
+    }
+}
+declare namespace Components {
+    /**
+     * Менеджер работы с окнами
+     */
+    class Window {
+        private static windows;
+        private static iter;
+        static windowsHTML: Element;
+        static content: Element;
+        static create(title: string | null, content: Element): Instance;
+        static remove(id: number): void;
+    }
+    /**
+     * Работа с окнами
+     */
+    class Instance {
+        private readonly id;
+        private readonly instance;
+        constructor(id: number, title: string | null, content: Element | string);
+        close(): void;
+        private remove;
     }
 }
 type TypeResponseError = {
@@ -121,51 +155,27 @@ declare namespace Components {
 }
 declare namespace Components {
     class Table {
-        private data;
         private subTable;
-        private readonly container;
+        private readonly tableWrap;
+        private wrap;
         private tbody;
         private tr;
         private readonly callbackManager;
-        constructor(container: HTMLElement, data: tableData, callbackManager: Function);
+        constructor(container: HTMLElement, callbackManager: Function);
         private init;
-        redraw(): void;
+        redraw(data: tableData): void;
         private sortOnDate;
         private onclickTableRow;
         private sendDataOnclickRow;
     }
 }
 declare namespace Components {
-    class Manager {
-        static managerWindow: Instance;
-        static windowOk: Instance;
-        constructor();
-        open(id: number): void;
-        static getContent(data: any, action: string): HTMLElement;
-        static createBtnSend(form: HTMLFormElement): void;
-        static sendOk(): void;
-    }
-}
-declare namespace Components {
-    /**
-     * Менеджер работы с окнами
-     */
-    class Window {
-        private static windows;
-        private static iter;
-        static windowsHTML: Element;
-        static content: Element;
-        static create(title: string | null, content: Element): Instance;
-        static remove(id: number): void;
-    }
-    /**
-     * Работа с окнами
-     */
-    class Instance {
-        private readonly id;
-        private readonly instance;
-        constructor(id: number, title: string | null, content: Element | string);
-        close(): void;
-        private remove;
+    class Filter {
+        private select;
+        private filterBtn;
+        constructor(container: HTMLElement, func: Function, filterManager: FilterManager);
+        private createElements;
+        getData(): any;
+        resetInputs(): void;
     }
 }

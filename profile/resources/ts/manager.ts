@@ -6,7 +6,7 @@ namespace Components {
 
         }
 
-        public open(id: number): void {
+        public static open(id: number): void {
             fetch(`${appDomain}/manager/${id}`)
                 .then(async response => {
                     let result = await response.json();

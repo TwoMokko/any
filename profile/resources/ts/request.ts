@@ -51,19 +51,33 @@ namespace Base {
         public static sendForm(form: HTMLFormElement, method: string, func?: Function): void {
             let url = form.getAttribute('action');
             let formData = new FormData(form);
-            // console.log(formData);
 
             Request.send(formData, url, method, func);
-
         }
 
-        public static sendData(data: { [key: string]: string|boolean|number }, url: string, method: string, func?: Function): void {
-            let formData = new FormData();
-            for (const key in data) {
-                formData.append(key, data[key].toString());
-            }
+        // public static sendData(data: { [key: string]: string|boolean|number }, url: string, method: string, func?: Function): void {
+        //     console.log(data);
+        //     let formData = new FormData();
+        //     for (const key in data) {
+        //         console.log({key});
+        //         console.log(data[key]);
+        //         formData.append(key, data[key].toString());
+        //         console.log('this', formData.get(key));
+        //     }
+        //
+        //     Request.send(formData, url, method, func);
+        // }
 
-            Request.send(formData, url, method, func);
+        public static sendData(data: { [key: string]: string|boolean|number }, url: string, method: string, func?: Function): void {
+            fetch(url, {
+                method: method,
+                body: JSON.stringify(data)
+            })
+                .then(async response => {
+                    let json = await response.json();
+                    func(json);
+                })
+                // .catch(response => { console.log('request failed: ' + url); console.log(response); });
         }
     }
 }

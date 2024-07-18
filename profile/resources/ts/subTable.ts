@@ -109,7 +109,7 @@ namespace Components {
 
         private downloadFile(container: HTMLElement, filename: string): void {
             const anchor = createElement('a', 'hide', null, container);
-            anchor.href = this.getFile(filename);
+            // anchor.href = this.getFile(filename);
             anchor.download = filename;
             anchor.click();
         }

@@ -1,26 +1,28 @@
 namespace Components {
     export class Table {
-        private data                        : tableData;
-
         private subTable                    : SubTable;
 
-        private readonly container          : HTMLElement;
+        private readonly tableWrap          : HTMLElement;
+        private wrap                        : HTMLElement;
         private tbody                       : HTMLElement;
         private tr                          : HTMLTableRowElement;
 
         private readonly callbackManager    : Function;
-        constructor(container: HTMLElement, data: tableData, callbackManager: Function) {
-            this.data                       = data;
-            this.container                  = container;
+        constructor(container: HTMLElement, callbackManager: Function) {
+            this.wrap                       = createElement('div', 'table-wrap', null, container);
+            const tableInfo                 = createElement('div', 'table-info', null, this.wrap);
+            createElement('div', null, 'Настроить колонки таблицы', tableInfo);
+            createElement('div', null, 'Выбрано столбцов: 0', tableInfo);
+
+            this.tableWrap                  = createElement('div', 'table', null, this.wrap);
             this.subTable                   = new SubTable();
             this.callbackManager            = callbackManager;
 
             this.init();
-            this.redraw();
         }
 
         private init(): void {
-            const table = createElement('table', null, null, this.container);
+            const table = createElement('table', null, null, this.tableWrap);
             const tHead = createElement('thead', 'table-head', null, table);
             const trTop = createElement('tr', 'table-headrow', null, tHead);
             const trBot = createElement('tr', null, null, tHead);
@@ -49,40 +51,40 @@ namespace Components {
             this.tbody = createElement('tbody', null, null, table);
         }
 
-        public redraw(): void {
+        public redraw(data: tableData): void {
             // очистить таблицу
             this.tbody.innerHTML = '';
 
             // наполнить таблицу,создав новые элементы
-            for (const key in this.data.orders) {
+            for (const key in data.orders) {
                 const tr = createElement('tr', 'table-row', null, this.tbody);
                 setAttributes(tr, { 'data-order-id': key });
 
-                setAttributes(createElement('td', 'table-cell', `${this.data.orders[key].invoiceId}`, tr), { 'data-column': 'invoiceId' });
-                setAttributes(createElement('td', 'table-cell', `${this.data.orders[key].positions}`, tr), { 'data-column': 'position' });
-                setAttributes(createElement('td', 'table-cell', this.data.orders[key].orderAmount, tr), { 'data-column': 'priceAll' });
+                setAttributes(createElement('td', 'table-cell', `${data.orders[key].invoiceId}`, tr), { 'data-column': 'invoiceId' });
+                setAttributes(createElement('td', 'table-cell', `${data.orders[key].positions}`, tr), { 'data-column': 'position' });
+                setAttributes(createElement('td', 'table-cell', data.orders[key].orderAmount, tr), { 'data-column': 'priceAll' });
 
-                const anchorWrap = createElement('td', 'table-cell table-cell-manager', `${this.data.orders[key].manager.name} ${this.data.orders[key].manager.surname}`, tr);
+                const anchorWrap = createElement('td', 'table-cell table-cell-manager', `${data.orders[key].manager.name} ${data.orders[key].manager.surname}`, tr);
                 setAttributes(anchorWrap, { 'data-column': 'manager' });
-                anchorWrap.addEventListener('click', (event: Event) => { event.stopPropagation(); this.callbackManager(this.data.orders[key].manager.id); })
+                anchorWrap.addEventListener('click', (event: Event) => { event.stopPropagation(); this.callbackManager(data.orders[key].manager.id); })
 
                 setAttributes(createElement('td', 'table-cell', 'дописать', tr), { 'data-column': 'triggerLetter' });
 
                 const linkWrap = createElement('td', 'table-cell', null, tr);
                 setAttributes(linkWrap, { 'data-column': 'linkPayment' });
                 const link = createElement('a', 'table-cell-link', null, linkWrap);
-                link.href = this.data.orders[key].paymentLink;
+                data.orders[key].paymentLink ? link.href = data.orders[key].paymentLink : console.log('что-то с ссылкой сделать');
                 setAttributes(link, { 'target': '_blank' });
                 link.addEventListener('click', (event: Event) => { event.stopPropagation(); });
 
-                setAttributes(createElement('td', 'table-cell', this.data.orders[key].paymentStatus, tr), { 'data-column': 'statusPayment' });
-                setAttributes(createElement('td', 'table-cell', this.data.orders[key].shipmentStatus, tr), { 'data-column': 'statusShipment' });
-                setAttributes(createElement('td', 'table-cell', this.data.orders[key].deliveryStatus, tr), { 'data-column': 'statusDelivery' });
+                setAttributes(createElement('td', 'table-cell', data.orders[key].paymentStatus, tr), { 'data-column': 'statusPayment' });
+                setAttributes(createElement('td', 'table-cell', data.orders[key].shipmentStatus, tr), { 'data-column': 'statusShipment' });
+                setAttributes(createElement('td', 'table-cell', data.orders[key].deliveryStatus, tr), { 'data-column': 'statusDelivery' });
 
-                const orderDate = this.data.orders[key].orderDate ? this.data.orders[key].orderDate.date.split(' ', 2)[0] : '';
-                const paymentDate = this.data.orders[key].paymentDate ? this.data.orders[key].paymentDate.date.split(' ', 2)[0] : '';
-                const shipmentDate = this.data.orders[key].shipmentDate ? this.data.orders[key].shipmentDate.date.split(' ', 2)[0] : '';
-                const deliveryDate = this.data.orders[key].deliveryDate ? this.data.orders[key].deliveryDate.date.split(' ', 2)[0] : '';
+                const orderDate = data.orders[key].orderDate ? data.orders[key].orderDate.date.split(' ', 2)[0] : '';
+                const paymentDate = data.orders[key].paymentDate ? data.orders[key].paymentDate.date.split(' ', 2)[0] : '';
+                const shipmentDate = data.orders[key].shipmentDate ? data.orders[key].shipmentDate.date.split(' ', 2)[0] : '';
+                const deliveryDate = data.orders[key].deliveryDate ? data.orders[key].deliveryDate.date.split(' ', 2)[0] : '';
 
                 setAttributes(createElement('td', 'table-cell', orderDate, tr), { 'data-column': 'dateOrder' });
                 setAttributes(createElement('td', 'table-cell', paymentDate, tr), { 'data-column': 'datePayment' });

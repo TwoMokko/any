@@ -32,34 +32,63 @@ const appDomain = 'https://localhost:8000/api';
 
 namespace Components {
     export class FilterManager {
-        private sendData            : any;
+        private sendData        : any;
 
-        private select          : Select;
-        private filterBtn       : FilterButtons;
+        private filterState     : boolean = false;
+
+        private filter          : Filter;
+
         private table           : Table;
-        private manager         : Manager;
         private pagination      : Pagination;
         constructor() {
-            this.select = new Components.Select(document.querySelector('[name="delivery_status"]'));
-            this.filterBtn = new FilterButtons(document.querySelector('form.filter'), () => { this.redrawTable(); });
-            this.manager = new Manager();
+            this.filter         = new Filter(document.querySelector('.with-nav'), this.redrawTable, this);
+            new Manager();
+
+            this.table          = new Table(document.querySelector('.with-nav'), Manager.open);
+            this.pagination     = new Pagination(document.querySelector('main'));
 
             this.updateData();
+            // TODO: вынести запросы в request
+            // Base.Request.sendData(this.sendData, `${appDomain}/table`, 'POST', this.afterSend )
             this.send(this.sendData);
         }
-        private redrawTable(): void {
-            console.log('redraw table');
-        }
-
-        private updateData(): void {
-            // TODO: данные собирать, переписать это
-            this. sendData = {
-                'email': 'oleksyuk@camozzi.ru',
-                'page': 1
+        private redrawTable(btn: string, filterManager: FilterManager): void {
+            console.log(btn);
+            console.log(filterManager.filterState);
+            switch (btn) {
+                case 'doReset':
+                    if (!filterManager.filterState) {
+                        filterManager.filter.resetInputs();
+                        console.log('не отправлять запрос');
+                        return;
+                    }
+                    filterManager.filterState = false;
+                    filterManager.filter.resetInputs();
+                    filterManager.updateData();
+                    filterManager.send(filterManager.sendData);
+                    console.log('сбросить, отправив запрос');
+                    break;
+                case 'doFilter':
+                    filterManager.filterState = true;
+                    filterManager.updateData();
+                    filterManager.send(filterManager.sendData);
+                    console.log('тут запрос с новыми данными')
+                    break;
             }
         }
 
+        private updateData(): void {
+            this.sendData = this.filter.getData();
+        }
+
+        // public afterSend(result: tableData): void {
+        //     this.table.redraw(result);
+        //     this.pagination.redraw(result.limit);
+        // }
+
         private send(data: any): void {
+            console.log('send');
+            console.log(data);
             fetch(`${appDomain}/table`, {
                 method: 'POST',
                 headers: {
@@ -69,8 +98,8 @@ namespace Components {
             })
             .then(async response => {
                 let result = await response.json();
-                this.table = new Table(document.querySelector('.table'), result, this.manager.open);
-                this.pagination = new Pagination(document.querySelector('main'));
+                this.table.redraw(result);
+                this.pagination.redraw(result.limit);
             });
         }
     }

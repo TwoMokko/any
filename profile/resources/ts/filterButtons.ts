@@ -4,12 +4,12 @@ namespace Components {
         private doReset                   : HTMLElement;
 
         private callSend                : Function;
-        constructor(container: HTMLElement, func: Function) {
+        constructor(container: HTMLElement, func: Function, filterManager: FilterManager) {
             const filterWrap = createElement('div', 'filter-buttons', null, container)
             this.callSend = func;
 
             this.init(filterWrap);
-            this.addEvents();
+            this.addEvents(filterManager);
         }
 
         private init(filterWrap: HTMLElement): void {
@@ -20,14 +20,13 @@ namespace Components {
 
         }
 
-        private addEvents(): void {
+        private addEvents(filterManager: FilterManager): void {
             this.doFilter.onclick = () => {
-                Base.Request.sendForm(this.doFilter.closest('form'), 'POST', () => { console.log('do filter') });
-                this.callSend();
+                this.callSend('doFilter', filterManager);
                 return false;
             };
             this.doReset.onclick = () => {
-                this.callSend();
+                this.callSend('doReset', filterManager);
                 return false;
             };
         }

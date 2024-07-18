@@ -5,25 +5,24 @@ var Components;
         doFilter;
         doReset;
         callSend;
-        constructor(container, func) {
+        constructor(container, func, filterManager) {
             const filterWrap = createElement('div', 'filter-buttons', null, container);
             this.callSend = func;
             this.init(filterWrap);
-            this.addEvents();
+            this.addEvents(filterManager);
         }
         init(filterWrap) {
             this.doFilter = createElement('button', 'btn accent', 'Фильтровать', filterWrap);
             this.doFilter.setAttribute('type', 'submit');
             this.doReset = createElement('button', 'btn secondary', 'Сбросить', filterWrap);
         }
-        addEvents() {
+        addEvents(filterManager) {
             this.doFilter.onclick = () => {
-                Base.Request.sendForm(this.doFilter.closest('form'), 'POST', () => { console.log('do filter'); });
-                this.callSend();
+                this.callSend('doFilter', filterManager);
                 return false;
             };
             this.doReset.onclick = () => {
-                this.callSend();
+                this.callSend('doReset', filterManager);
                 return false;
             };
         }
@@ -35,29 +34,54 @@ var Components;
 (function (Components) {
     class FilterManager {
         sendData;
-        select;
-        filterBtn;
+        filterState = false;
+        filter;
         table;
-        manager;
         pagination;
         constructor() {
-            this.select = new Components.Select(document.querySelector('[name="delivery_status"]'));
-            this.filterBtn = new Components.FilterButtons(document.querySelector('form.filter'), () => { this.redrawTable(); });
-            this.manager = new Components.Manager();
+            this.filter = new Components.Filter(document.querySelector('.with-nav'), this.redrawTable, this);
+            new Components.Manager();
+            this.table = new Components.Table(document.querySelector('.with-nav'), Components.Manager.open);
+            this.pagination = new Components.Pagination(document.querySelector('main'));
             this.updateData();
+            // TODO: вынести запросы в request
+            // Base.Request.sendData(this.sendData, `${appDomain}/table`, 'POST', this.afterSend )
             this.send(this.sendData);
         }
-        redrawTable() {
-            console.log('redraw table');
+        redrawTable(btn, filterManager) {
+            console.log(btn);
+            console.log(filterManager.filterState);
+            switch (btn) {
+                case 'doReset':
+                    if (!filterManager.filterState) {
+                        filterManager.filter.resetInputs();
+                        console.log('не отправлять запрос');
+                        return;
+                    }
+                    filterManager.filterState = false;
+                    filterManager.filter.resetInputs();
+                    filterManager.updateData();
+                    filterManager.send(filterManager.sendData);
+                    console.log('сбросить, отправив запрос');
+                    break;
+                case 'doFilter':
+                    filterManager.filterState = true;
+                    filterManager.updateData();
+                    filterManager.send(filterManager.sendData);
+                    console.log('тут запрос с новыми данными');
+                    break;
+            }
         }
         updateData() {
-            // TODO: данные собирать, переписать это
-            this.sendData = {
-                'email': 'oleksyuk@camozzi.ru',
-                'page': 1
-            };
+            this.sendData = this.filter.getData();
         }
+        // public afterSend(result: tableData): void {
+        //     this.table.redraw(result);
+        //     this.pagination.redraw(result.limit);
+        // }
         send(data) {
+            console.log('send');
+            console.log(data);
             fetch(`${appDomain}/table`, {
                 method: 'POST',
                 headers: {
@@ -67,8 +91,8 @@ var Components;
             })
                 .then(async (response) => {
                 let result = await response.json();
-                this.table = new Components.Table(document.querySelector('.table'), result, this.manager.open);
-                this.pagination = new Components.Pagination(document.querySelector('main'));
+                this.table.redraw(result);
+                this.pagination.redraw(result.limit);
             });
         }
     }
@@ -104,31 +128,178 @@ function setAttributes(element, attr) {
         element.setAttribute(name, attr[name]);
     }
 }
-function setEmailFromCookie(input) {
-    // TODO: заменить email
-    document.cookie = "user=oleksyuk@camozzi.ru";
-    input.value = getCookie('user');
-}
+// function setEmailFromCookie(input: HTMLInputElement): void {
+//     // TODO: заменить email
+//     document.cookie = "user=oleksyuk@camozzi.ru";
+//     input.value = getCookie('user');
+// }
 function getCookie(name) {
     let matches = document.cookie.match(new RegExp("(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"));
     return matches ? decodeURIComponent(matches[1]) : undefined;
 }
 var Components;
 (function (Components) {
+    class Manager {
+        static managerWindow;
+        static windowOk;
+        constructor() {
+        }
+        static open(id) {
+            fetch(`${appDomain}/manager/${id}`)
+                .then(async (response) => {
+                let result = await response.json();
+                const title = 'Связаться с менеджером';
+                const action = './test.php';
+                const form = Manager.getContent(result, action);
+                Manager.managerWindow = Components.Window.create(title, form);
+            });
+        }
+        static getContent(data, action) {
+            const form = document.createElement('form');
+            form.className = 'manager';
+            form.action = action;
+            createElement('div', 'manager-head', `${data.name} ${data.surname} (${data.position})`, form);
+            const infoWrap = createElement('div', 'manager-info', null, form);
+            const imgWrap = createElement('div', null, null, infoWrap);
+            const img = createElement('img', null, null, imgWrap);
+            img.src = data.image;
+            const info = createElement('div', 'manager-info-text', null, infoWrap);
+            const row1 = createElement('div', null, null, info);
+            const row2 = createElement('div', null, null, info);
+            const row3 = createElement('div', null, null, info);
+            createElement('div', null, 'email:', row1);
+            createElement('div', null, data.email, row1);
+            createElement('div', null, 'Телефон:', row2);
+            createElement('div', null, data.phone, row2);
+            createElement('div', null, 'whats app:', row3);
+            createElement('div', null, data.whats_app, row3);
+            createElement('div', null, 'Сообщение на email:', form);
+            const textareaWrap = createElement('div', null, null, form);
+            const textarea = createElement('textarea', null, null, textareaWrap);
+            setAttributes(textarea, { 'name': 'message' });
+            Manager.createBtnSend(form);
+            return form;
+        }
+        static createBtnSend(form) {
+            const button = createElement('button', 'btn accent', 'Отправить', form);
+            setAttributes(button, { 'type': 'submit' });
+            button.onclick = () => {
+                Base.Request.sendForm(form, 'POST', () => { Manager.sendOk(); });
+                return false;
+            };
+        }
+        static sendOk() {
+            Manager.managerWindow.close();
+            const messageOk = document.createElement('div');
+            messageOk.textContent = 'Отправлено';
+            messageOk.className = 'send-ok';
+            Manager.windowOk = Components.Window.create(null, messageOk);
+        }
+    }
+    Components.Manager = Manager;
+})(Components || (Components = {}));
+var Components;
+(function (Components) {
     class Pagination {
+        wrap;
         constructor(container) {
             this.init(container);
         }
         init(container) {
-            const wrap = createElement('div', 'pagination-wrap container', null, container);
-            createElement('div', 'pagination-number', '1', wrap);
+            this.wrap = createElement('div', 'pagination-wrap container hide', null, container);
+            createElement('div', 'pagination-number', '1', this.wrap);
+        }
+        redraw(limit) {
+            console.log(limit);
+            limit > 1 ? this.show() : this.hide();
         }
         show() {
+            this.wrap.classList.remove('hide');
         }
         hide() {
+            this.wrap.classList.add('hide');
         }
     }
     Components.Pagination = Pagination;
+})(Components || (Components = {}));
+var Components;
+(function (Components) {
+    /**
+     * Менеджер работы с окнами
+     */
+    class Window {
+        static windows = {};
+        static iter = 0;
+        static windowsHTML = null;
+        static content = null;
+        // public static showMessage(text: string): Instance {
+        //     return Window.create(null, text);
+        // }
+        static create(title = null, content) {
+            document.querySelector('body').style.overflow = 'hidden';
+            if (!Window.windowsHTML) {
+                Window.windowsHTML = document.createElement('div');
+                this.windowsHTML.className = 'windows';
+                document.querySelector('main').append(Window.windowsHTML);
+            }
+            this.content = content;
+            this.content.classList.add('active');
+            let id = ++Window.iter;
+            let wind = new Instance(id, title, this.content);
+            Window.windows[id] = wind;
+            return wind;
+        }
+        static remove(id) {
+            document.querySelector('body').style.overflow = 'revert';
+            delete Window.windows[id];
+        }
+    }
+    Components.Window = Window;
+    /**
+     * Работа с окнами
+     */
+    class Instance {
+        id;
+        instance;
+        constructor(id, title, content) {
+            this.id = id;
+            this.instance = document.createElement('div');
+            let space = document.createElement('div');
+            let window = document.createElement('div');
+            let header = document.createElement('div');
+            let titleHTML = document.createElement('div');
+            let closeHTML = document.createElement('div');
+            let container = document.createElement('div');
+            this.instance.className = 'instance';
+            space.className = 'space';
+            window.className = 'window';
+            titleHTML.className = 'title';
+            closeHTML.className = 'close';
+            (title !== null) ? header.className = 'head' : header.className = 'head_null_title';
+            (title !== null) ? container.className = 'container' : container.className = 'container_null_title';
+            this.instance.append(space);
+            this.instance.append(window);
+            window.append(header);
+            if (title !== null) {
+                header.append(titleHTML);
+                titleHTML.append(title);
+            }
+            header.append(closeHTML);
+            window.append(container);
+            container.append(content);
+            space.addEventListener('click', this.close.bind(this));
+            closeHTML.addEventListener('click', this.close.bind(this));
+            Window.windowsHTML.append(this.instance);
+        }
+        close() {
+            this.instance.remove();
+            this.remove();
+        }
+        remove() {
+            Window.remove(this.id);
+        }
+    }
+    Components.Instance = Instance;
 })(Components || (Components = {}));
 var Base;
 (function (Base) {
@@ -180,15 +351,30 @@ var Base;
         static sendForm(form, method, func) {
             let url = form.getAttribute('action');
             let formData = new FormData(form);
-            // console.log(formData);
             Request.send(formData, url, method, func);
         }
+        // public static sendData(data: { [key: string]: string|boolean|number }, url: string, method: string, func?: Function): void {
+        //     console.log(data);
+        //     let formData = new FormData();
+        //     for (const key in data) {
+        //         console.log({key});
+        //         console.log(data[key]);
+        //         formData.append(key, data[key].toString());
+        //         console.log('this', formData.get(key));
+        //     }
+        //
+        //     Request.send(formData, url, method, func);
+        // }
         static sendData(data, url, method, func) {
-            let formData = new FormData();
-            for (const key in data) {
-                formData.append(key, data[key].toString());
-            }
-            Request.send(formData, url, method, func);
+            fetch(url, {
+                method: method,
+                body: JSON.stringify(data)
+            })
+                .then(async (response) => {
+                let json = await response.json();
+                func(json);
+            });
+            // .catch(response => { console.log('request failed: ' + url); console.log(response); });
         }
     }
     Base.Request = Request;
@@ -382,7 +568,7 @@ var Components;
         }
         downloadFile(container, filename) {
             const anchor = createElement('a', 'hide', null, container);
-            anchor.href = this.getFile(filename);
+            // anchor.href = this.getFile(filename);
             anchor.download = filename;
             anchor.click();
         }
@@ -424,22 +610,24 @@ var Components;
 var Components;
 (function (Components) {
     class Table {
-        data;
         subTable;
-        container;
+        tableWrap;
+        wrap;
         tbody;
         tr;
         callbackManager;
-        constructor(container, data, callbackManager) {
-            this.data = data;
-            this.container = container;
+        constructor(container, callbackManager) {
+            this.wrap = createElement('div', 'table-wrap', null, container);
+            const tableInfo = createElement('div', 'table-info', null, this.wrap);
+            createElement('div', null, 'Настроить колонки таблицы', tableInfo);
+            createElement('div', null, 'Выбрано столбцов: 0', tableInfo);
+            this.tableWrap = createElement('div', 'table', null, this.wrap);
             this.subTable = new Components.SubTable();
             this.callbackManager = callbackManager;
             this.init();
-            this.redraw();
         }
         init() {
-            const table = createElement('table', null, null, this.container);
+            const table = createElement('table', null, null, this.tableWrap);
             const tHead = createElement('thead', 'table-head', null, table);
             const trTop = createElement('tr', 'table-headrow', null, tHead);
             const trBot = createElement('tr', null, null, tHead);
@@ -462,33 +650,33 @@ var Components;
             setAttributes(createElement('th', 'table-headcell sort', 'Доставки', trBot), { 'data-colunm': 'dateDelivery' });
             this.tbody = createElement('tbody', null, null, table);
         }
-        redraw() {
+        redraw(data) {
             // очистить таблицу
             this.tbody.innerHTML = '';
             // наполнить таблицу,создав новые элементы
-            for (const key in this.data.orders) {
+            for (const key in data.orders) {
                 const tr = createElement('tr', 'table-row', null, this.tbody);
                 setAttributes(tr, { 'data-order-id': key });
-                setAttributes(createElement('td', 'table-cell', `${this.data.orders[key].invoiceId}`, tr), { 'data-column': 'invoiceId' });
-                setAttributes(createElement('td', 'table-cell', `${this.data.orders[key].positions}`, tr), { 'data-column': 'position' });
-                setAttributes(createElement('td', 'table-cell', this.data.orders[key].orderAmount, tr), { 'data-column': 'priceAll' });
-                const anchorWrap = createElement('td', 'table-cell table-cell-manager', `${this.data.orders[key].manager.name} ${this.data.orders[key].manager.surname}`, tr);
+                setAttributes(createElement('td', 'table-cell', `${data.orders[key].invoiceId}`, tr), { 'data-column': 'invoiceId' });
+                setAttributes(createElement('td', 'table-cell', `${data.orders[key].positions}`, tr), { 'data-column': 'position' });
+                setAttributes(createElement('td', 'table-cell', data.orders[key].orderAmount, tr), { 'data-column': 'priceAll' });
+                const anchorWrap = createElement('td', 'table-cell table-cell-manager', `${data.orders[key].manager.name} ${data.orders[key].manager.surname}`, tr);
                 setAttributes(anchorWrap, { 'data-column': 'manager' });
-                anchorWrap.addEventListener('click', (event) => { event.stopPropagation(); this.callbackManager(this.data.orders[key].manager.id); });
+                anchorWrap.addEventListener('click', (event) => { event.stopPropagation(); this.callbackManager(data.orders[key].manager.id); });
                 setAttributes(createElement('td', 'table-cell', 'дописать', tr), { 'data-column': 'triggerLetter' });
                 const linkWrap = createElement('td', 'table-cell', null, tr);
                 setAttributes(linkWrap, { 'data-column': 'linkPayment' });
                 const link = createElement('a', 'table-cell-link', null, linkWrap);
-                link.href = this.data.orders[key].paymentLink;
+                data.orders[key].paymentLink ? link.href = data.orders[key].paymentLink : console.log('что-то с ссылкой сделать');
                 setAttributes(link, { 'target': '_blank' });
                 link.addEventListener('click', (event) => { event.stopPropagation(); });
-                setAttributes(createElement('td', 'table-cell', this.data.orders[key].paymentStatus, tr), { 'data-column': 'statusPayment' });
-                setAttributes(createElement('td', 'table-cell', this.data.orders[key].shipmentStatus, tr), { 'data-column': 'statusShipment' });
-                setAttributes(createElement('td', 'table-cell', this.data.orders[key].deliveryStatus, tr), { 'data-column': 'statusDelivery' });
-                const orderDate = this.data.orders[key].orderDate ? this.data.orders[key].orderDate.date.split(' ', 2)[0] : '';
-                const paymentDate = this.data.orders[key].paymentDate ? this.data.orders[key].paymentDate.date.split(' ', 2)[0] : '';
-                const shipmentDate = this.data.orders[key].shipmentDate ? this.data.orders[key].shipmentDate.date.split(' ', 2)[0] : '';
-                const deliveryDate = this.data.orders[key].deliveryDate ? this.data.orders[key].deliveryDate.date.split(' ', 2)[0] : '';
+                setAttributes(createElement('td', 'table-cell', data.orders[key].paymentStatus, tr), { 'data-column': 'statusPayment' });
+                setAttributes(createElement('td', 'table-cell', data.orders[key].shipmentStatus, tr), { 'data-column': 'statusShipment' });
+                setAttributes(createElement('td', 'table-cell', data.orders[key].deliveryStatus, tr), { 'data-column': 'statusDelivery' });
+                const orderDate = data.orders[key].orderDate ? data.orders[key].orderDate.date.split(' ', 2)[0] : '';
+                const paymentDate = data.orders[key].paymentDate ? data.orders[key].paymentDate.date.split(' ', 2)[0] : '';
+                const shipmentDate = data.orders[key].shipmentDate ? data.orders[key].shipmentDate.date.split(' ', 2)[0] : '';
+                const deliveryDate = data.orders[key].deliveryDate ? data.orders[key].deliveryDate.date.split(' ', 2)[0] : '';
                 setAttributes(createElement('td', 'table-cell', orderDate, tr), { 'data-column': 'dateOrder' });
                 setAttributes(createElement('td', 'table-cell', paymentDate, tr), { 'data-column': 'datePayment' });
                 setAttributes(createElement('td', 'table-cell', shipmentDate, tr), { 'data-column': 'dateShipment' });
@@ -541,141 +729,145 @@ var Components;
 })(Components || (Components = {}));
 var Components;
 (function (Components) {
-    class Manager {
-        static managerWindow;
-        static windowOk;
-        constructor() {
+    class Filter {
+        select;
+        filterBtn;
+        constructor(container, func, filterManager) {
+            const filterWrap = createElement('form', 'filter', null, container);
+            this.createElements(filterWrap);
+            //
+            this.select = new Components.Select(document.querySelector('[name="deliveryStatus"]'));
+            this.filterBtn = new Components.FilterButtons(filterWrap, func, filterManager);
         }
-        open(id) {
-            fetch(`${appDomain}/manager/${id}`)
-                .then(async (response) => {
-                let result = await response.json();
-                const title = 'Связаться с менеджером';
-                const action = './test.php';
-                const form = Manager.getContent(result, action);
-                Manager.managerWindow = Components.Window.create(title, form);
-            });
+        createElements(container) {
+            const dataForInput = [
+                {
+                    header: 'Поиск по номеру КП',
+                    inputName: 'invoiceId',
+                },
+                {
+                    header: 'Поиск по трек-номеру доставки',
+                    inputName: 'shipmentNumber',
+                },
+                {
+                    header: 'Поиск по номеру ТН',
+                    inputName: 'factureNumber',
+                }
+            ];
+            const dataForInputs = [
+                {
+                    header: 'Дата заказа',
+                    className: 'input-wrap calendar',
+                    inputName1: 'orderDateStart',
+                    inputName2: 'orderDateEnd',
+                    placeholder1: 'С',
+                    placeholder2: 'По',
+                    type: 'date'
+                },
+                {
+                    header: 'Дата доставки',
+                    className: 'input-wrap calendar',
+                    inputName1: 'orderAmountStart',
+                    inputName2: 'orderAmountEnd',
+                    placeholder1: 'С',
+                    placeholder2: 'По',
+                    type: 'date'
+                },
+                {
+                    header: 'Цена заказа (цена в валюте заказа)',
+                    className: 'input-wrap',
+                    inputName1: 'deliveryDateStart',
+                    inputName2: 'deliveryDateEnd',
+                    placeholder1: 'От',
+                    placeholder2: 'До',
+                    value: 0,
+                    type: 'number'
+                },
+            ];
+            for (const key in dataForInput) {
+                const wrap = createElement('div', 'input-wrap', null, container);
+                createElement('div', null, dataForInput[key].header, wrap);
+                const inputWrap = createElement('div', null, null, wrap);
+                const input = createElement('input', null, null, inputWrap);
+                setAttributes(input, { 'type': 'text', 'name': dataForInput[key].inputName });
+            }
+            for (const key in dataForInputs) {
+                const wrap = createElement('div', dataForInputs[key].className, null, container);
+                createElement('div', null, dataForInputs[key].header, wrap);
+                const inputWrap = createElement('div', null, null, wrap);
+                const input1 = createElement('input', null, null, inputWrap);
+                setAttributes(input1, { 'type': dataForInputs[key].type, 'name': dataForInputs[key].inputName1, 'placeholder': dataForInputs[key].placeholder1 });
+                const input2 = createElement('input', null, null, inputWrap);
+                setAttributes(input2, { 'type': dataForInputs[key].type, 'name': dataForInputs[key].inputName2, 'placeholder': dataForInputs[key].placeholder2 });
+                if (dataForInputs[key].value) {
+                    setAttributes(input1, { 'value': dataForInputs[key].value });
+                    setAttributes(input2, { 'value': dataForInputs[key].value });
+                }
+            }
+            const wrap = createElement('div', 'input-wrap select', null, container);
+            createElement('div', null, 'Поиск по статусу доставки', wrap);
+            const selectWrap = createElement('div', null, null, wrap);
+            const select = createElement('select', 'hide', null, selectWrap);
+            setAttributes(select, { 'name': 'deliveryStatus' });
+            setAttributes(createElement('option', null, 'выберите', select), { 'value': '' });
+            setAttributes(createElement('option', null, 'неизвестный статус', select), { 'value': '1' });
+            setAttributes(createElement('option', null, 'не отправлен', select), { 'value': '2' });
+            setAttributes(createElement('option', null, 'груз принят', select), { 'value': '3' });
+            setAttributes(createElement('option', null, 'в промежуточном пункте', select), { 'value': '4' });
+            setAttributes(createElement('option', null, 'отправлен с промежуточного пункта', select), { 'value': '5' });
+            setAttributes(createElement('option', null, 'в пути', select), { 'value': '6' });
         }
-        static getContent(data, action) {
-            const form = document.createElement('form');
-            form.className = 'manager';
-            form.action = action;
-            createElement('div', 'manager-head', `${data.name} ${data.surname} (${data.position})`, form);
-            const infoWrap = createElement('div', 'manager-info', null, form);
-            const imgWrap = createElement('div', null, null, infoWrap);
-            const img = createElement('img', null, null, imgWrap);
-            img.src = data.image;
-            const info = createElement('div', 'manager-info-text', null, infoWrap);
-            const row1 = createElement('div', null, null, info);
-            const row2 = createElement('div', null, null, info);
-            const row3 = createElement('div', null, null, info);
-            createElement('div', null, 'email:', row1);
-            createElement('div', null, data.email, row1);
-            createElement('div', null, 'Телефон:', row2);
-            createElement('div', null, data.phone, row2);
-            createElement('div', null, 'whats app:', row3);
-            createElement('div', null, data.whats_app, row3);
-            createElement('div', null, 'Сообщение на email:', form);
-            const textareaWrap = createElement('div', null, null, form);
-            const textarea = createElement('textarea', null, null, textareaWrap);
-            setAttributes(textarea, { 'name': 'message' });
-            Manager.createBtnSend(form);
-            return form;
-        }
-        static createBtnSend(form) {
-            const button = createElement('button', 'btn accent', 'Отправить', form);
-            setAttributes(button, { 'type': 'submit' });
-            button.onclick = () => {
-                Base.Request.sendForm(form, 'POST', () => { Manager.sendOk(); });
-                return false;
+        getData() {
+            // let data = {};
+            // data['email'] = 'aas@ms-service.su';
+            // data['page'] = 1;
+            // data['filters'] = {};
+            // TODO: page = Components.Pagination.getPade()
+            let data = {
+                "email": "aas@ms-service.su",
+                "page": 1,
+                "filters": {
+                    "invoiceId": "",
+                    "orderDate": ["", ""],
+                    "orderAmount": ["", ""],
+                    "shipmentNumber": "",
+                    "factureNumber": "",
+                    "deliveryStatus": "",
+                    "deliveryDate": ["", ""]
+                },
+                "sort": {
+                    "field": "",
+                    "order": ""
+                }
             };
+            data['filters']['invoiceId'] = document.getElementsByName('invoiceId')[0].value;
+            data['filters']['shipmentNumber'] = document.getElementsByName('shipmentNumber')[0].value;
+            data['filters']['factureNumber'] = document.getElementsByName('factureNumber')[0].value;
+            data['filters']['deliveryStatus'] = document.getElementsByName('deliveryStatus')[0].value;
+            data['filters']['orderDate'][0] = document.getElementsByName('orderDateStart')[0].value;
+            data['filters']['orderDate'][1] = document.getElementsByName('orderDateEnd')[0].value;
+            data['filters']['orderAmount'][0] = document.getElementsByName('orderAmountStart')[0].value;
+            data['filters']['orderAmount'][1] = document.getElementsByName('orderAmountEnd')[0].value;
+            data['filters']['deliveryDate'][0] = document.getElementsByName('deliveryDateStart')[0].value;
+            data['filters']['deliveryDate'][1] = document.getElementsByName('deliveryDateEnd')[0].value;
+            // data['sort'] = {};
+            console.log({ data });
+            // console.log({data});
+            return data;
         }
-        static sendOk() {
-            Manager.managerWindow.close();
-            const messageOk = document.createElement('div');
-            messageOk.textContent = 'Отправлено';
-            messageOk.className = 'send-ok';
-            Manager.windowOk = Components.Window.create(null, messageOk);
-        }
-    }
-    Components.Manager = Manager;
-})(Components || (Components = {}));
-var Components;
-(function (Components) {
-    /**
-     * Менеджер работы с окнами
-     */
-    class Window {
-        static windows = {};
-        static iter = 0;
-        static windowsHTML = null;
-        static content = null;
-        // public static showMessage(text: string): Instance {
-        //     return Window.create(null, text);
-        // }
-        static create(title = null, content) {
-            document.querySelector('body').style.overflow = 'hidden';
-            if (!Window.windowsHTML) {
-                Window.windowsHTML = document.createElement('div');
-                this.windowsHTML.className = 'windows';
-                document.querySelector('main').append(Window.windowsHTML);
-            }
-            this.content = content;
-            this.content.classList.add('active');
-            let id = ++Window.iter;
-            let wind = new Instance(id, title, this.content);
-            Window.windows[id] = wind;
-            return wind;
-        }
-        static remove(id) {
-            delete Window.windows[id];
+        resetInputs() {
+            document.getElementsByName('invoiceId')[0].value = '';
+            document.getElementsByName('shipmentNumber')[0].value = '';
+            document.getElementsByName('factureNumber')[0].value = '';
+            document.getElementsByName('deliveryStatus')[0].value = '';
+            document.getElementsByName('orderDateStart')[0].value = '';
+            document.getElementsByName('orderDateEnd')[0].value = '';
+            document.getElementsByName('orderAmountStart')[0].value = '';
+            document.getElementsByName('orderAmountEnd')[0].value = '';
+            document.getElementsByName('deliveryDateStart')[0].value = '';
+            document.getElementsByName('deliveryDateEnd')[0].value = '';
         }
     }
-    Components.Window = Window;
-    /**
-     * Работа с окнами
-     */
-    class Instance {
-        id;
-        instance;
-        constructor(id, title, content) {
-            this.id = id;
-            this.instance = document.createElement('div');
-            let space = document.createElement('div');
-            let window = document.createElement('div');
-            let header = document.createElement('div');
-            let titleHTML = document.createElement('div');
-            let closeHTML = document.createElement('div');
-            let container = document.createElement('div');
-            this.instance.className = 'instance';
-            space.className = 'space';
-            window.className = 'window';
-            titleHTML.className = 'title';
-            closeHTML.className = 'close';
-            (title !== null) ? header.className = 'head' : header.className = 'head_null_title';
-            (title !== null) ? container.className = 'container' : container.className = 'container_null_title';
-            this.instance.append(space);
-            this.instance.append(window);
-            window.append(header);
-            if (title !== null) {
-                header.append(titleHTML);
-                titleHTML.append(title);
-            }
-            header.append(closeHTML);
-            window.append(container);
-            container.append(content);
-            space.addEventListener('click', this.close.bind(this));
-            closeHTML.addEventListener('click', this.close.bind(this));
-            Window.windowsHTML.append(this.instance);
-        }
-        close() {
-            this.instance.remove();
-            this.remove();
-        }
-        remove() {
-            Window.remove(this.id);
-        }
-    }
-    Components.Instance = Instance;
+    Components.Filter = Filter;
 })(Components || (Components = {}));
 //# sourceMappingURL=main.js.map

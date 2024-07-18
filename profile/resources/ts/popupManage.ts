@@ -34,6 +34,7 @@ namespace Components {
         }
 
         public static remove(id: number): void {
+            document.querySelector('body').style.overflow = 'revert';
             delete Window.windows[id];
         }
 
