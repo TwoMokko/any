@@ -52,6 +52,7 @@ namespace Components {
         }
 
         public redraw(data: tableData): void {
+            // TODO: разнести эту кашу
             // очистить таблицу
             this.tbody.innerHTML = '';
 
@@ -64,18 +65,31 @@ namespace Components {
                 setAttributes(createElement('td', 'table-cell', `${data.orders[key].positions}`, tr), { 'data-column': 'position' });
                 setAttributes(createElement('td', 'table-cell', data.orders[key].orderAmount, tr), { 'data-column': 'priceAll' });
 
-                const anchorWrap = createElement('td', 'table-cell table-cell-manager', `${data.orders[key].manager.name} ${data.orders[key].manager.surname}`, tr);
+                const name = data.orders[key].manager.name ? data.orders[key].manager.name : '';
+                const surname = data.orders[key].manager.surname ? data.orders[key].manager.surname : '';
+                const anchorWrap = createElement('td', 'table-cell table-cell-manager', `${name} ${surname}`, tr);
                 setAttributes(anchorWrap, { 'data-column': 'manager' });
-                anchorWrap.addEventListener('click', (event: Event) => { event.stopPropagation(); this.callbackManager(data.orders[key].manager.id); })
+                if (data.orders[key].manager.id) {
+                    anchorWrap.addEventListener('click', (event: Event) => { event.stopPropagation(); this.callbackManager(data.orders[key].manager.id); })
+                }
+
 
                 setAttributes(createElement('td', 'table-cell', 'дописать', tr), { 'data-column': 'triggerLetter' });
 
                 const linkWrap = createElement('td', 'table-cell', null, tr);
                 setAttributes(linkWrap, { 'data-column': 'linkPayment' });
                 const link = createElement('a', 'table-cell-link', null, linkWrap);
-                data.orders[key].paymentLink ? link.href = data.orders[key].paymentLink : console.log('что-то с ссылкой сделать');
-                setAttributes(link, { 'target': '_blank' });
-                link.addEventListener('click', (event: Event) => { event.stopPropagation(); });
+
+                if (data.orders[key].paymentLink) {
+                    link.href = data.orders[key].paymentLink
+                    setAttributes(link, { 'target': '_blank' });
+                    link.addEventListener('click', (event: Event) => { event.stopPropagation(); });
+                } else {
+                    link.textContent = 'Отсутствует';
+                    link.classList.add('inactive');
+                    link.addEventListener('click', () => { return false; })
+                }
+
 
                 setAttributes(createElement('td', 'table-cell', data.orders[key].paymentStatus, tr), { 'data-column': 'statusPayment' });
                 setAttributes(createElement('td', 'table-cell', data.orders[key].shipmentStatus, tr), { 'data-column': 'statusShipment' });

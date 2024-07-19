@@ -5,6 +5,10 @@
     "eyes": "^0.1.8",
     "pdf-extract": "^1.0.11",
     "pdf-parse": "^1.1.1",
-    "pdf.js-extract": "^0.2.1"
+    "pdf.js-extract": "^0.2.1",
+    "stream-to-blob": "^2.0.1"
+  },
+  "devDependencies": {
+    "@types/stream-to-blob": "^2.0.0"
   }
 }

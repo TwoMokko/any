@@ -101,16 +101,6 @@ const optionsArray = [
     'meltingPoint',
     'plasticBodyColor',
 ]
-const connectionsArray = [
-    'тип подсоединения 1',
-    'тип подсоединения 2',
-    'тип подсоединения 3',
-    'тип подсоединения 4',
-    'размер подсоединения 1',
-    'размер подсоединения 2',
-    'размер подсоединения 3',
-    'размер подсоединения 4',
-]
 
 interface connections {
     connectionNo: number,
@@ -146,13 +136,15 @@ type optionsData = {
     zcrConnectionOption?: string,
     meltingPoint?: string,
     plasticBodyColor?: string,
-    connections?: connections[]
+    connections?: connections[],
+    physicalCharacteristics?: object
 }
 
 type elements = {
-    options: {},
+    options: object,
     connections: {
-        types: {},
-        sizes: {}
-    }
+        types: object,
+        sizes: object
+    },
+    physicalCharacteristics: object
 };

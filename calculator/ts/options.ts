@@ -9,7 +9,8 @@ namespace Components {
                                                 connections: {
                                                     types: {},
                                                     sizes: {}
-                                                }
+                                                },
+                                                physicalCharacteristics: {}
                                             };
 
         private table                       : Table;
@@ -17,6 +18,8 @@ namespace Components {
 
         constructor(wrap: HTMLElement) {
             /* TODO: разобраться с wrap */
+            // this.physicalCharacteristics    = new Characteristics();
+
             const tableWrap: HTMLElement    = document.querySelector('.table-wrap');
 
             this.table                      = new Table(tableWrap);
@@ -40,7 +43,9 @@ namespace Components {
 
                 let i = 0;
                 for (const key in options) {
-                    this.elems['options'][key] = new Select(wrap, options[key], key, result[i++]);
+                    if (key === 'type') { this.elems['options'][key] = new Select(document.querySelector('.option-type'), options[key], key, result[i++], true); }
+                    else { this.elems['options'][key] = new Select(wrap, options[key], key, result[i++]); }
+
                     this.elems['options'][key].on('change', async () => {
                         this.pagination.setPage(1);
                         await this.onChange()
@@ -93,18 +98,23 @@ namespace Components {
             let data: optionsData = {};
             for (const key in this.elems['options']) {
                 // if (key === exception) {
-                //     // delete data[key];
+                //     delete data[key];
                 //     continue;
                 // }
+                if (key === 'type') {
+                    const value = this.elems['options'][key].getValueMultiple();
+                    if (value.length > 0) data[key] = value;
+                    continue;
+                }
                 const value = this.elems['options'][key].getValue();
-                if (value !== '') data[key] = value;
+                if (value) data[key] = value;
             }
 
             /* TODO: переписать этот кошмар */
             data['connections'] = []
             for (let i = 0; i < 4 /* TODO: магическое число заменить */; i++) {
                 // if (key === exception) {
-                //     // delete data[key];
+                //     delete data[key];
                 //     continue;
                 // }
                 const type = this.elems['connections']['types'][i].getValue();
@@ -126,7 +136,6 @@ namespace Components {
             let i = 0;
             for (const key in options) {
                 // if (key === 'conn1' || key === 'conn2' || key === 'conn3' || key === 'conn4' || key === 'size1' || key === 'size2' || key === 'size3' || key === 'size4') continue;
-
                 this.elems['options'][key].redrawOptions(dataResp[i++]);
             }
         }

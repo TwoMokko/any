@@ -2,7 +2,8 @@ namespace Components {
     import Request = Base.Request;
 
     export class SubTable {
-        private orderId     : string = '';
+        private orderId: string = '';
+
         constructor() {
 
         }
@@ -78,7 +79,7 @@ namespace Components {
             }
         }
 
-        private createTotal(tBody: HTMLElement): void{
+        private createTotal(tBody: HTMLElement): void {
             // TODO высчитывать textContent
             const lastTr = createElement('tr', 'total', null, tBody);
             createElement('td', null, 'Итого:', lastTr);
@@ -99,7 +100,9 @@ namespace Components {
         private fillDocs(list: HTMLElement, data): void {
             for (const key in data) {
                 const anchor = createElement('a', null, null, list);
-                anchor.onclick = () => { this.downloadFile(list, data[key]); };
+                anchor.onclick = () => {
+                    this.downloadFile(list, data[key]);
+                };
                 let num = Number(key) + 1;
                 createElement('div', null, `${num}.`, anchor);
                 createElement('div', null, data[key], anchor);
@@ -109,7 +112,7 @@ namespace Components {
 
         private downloadFile(container: HTMLElement, filename: string): void {
             const anchor = createElement('a', 'hide', null, container);
-            // anchor.href = this.getFile(filename);
+            anchor.href = this.getFile(filename);
             anchor.download = filename;
             anchor.click();
         }
@@ -120,35 +123,44 @@ namespace Components {
                 filename: filename
             };
 
-        //     fetch(`${appDomain}/document`, {
-        //         method: 'POST',
-        //         headers: {
-        //             'Content-Type': 'application/json;charset=utf-8',
-        //         },
-        //         body: JSON.stringify(data)
-        //     })
-        //         .then(async response => {
-        //             let file = await new Blob([response], {type: "application/pdf"});
-        //             console.log(response)
-        //             return  window.URL.createObjectURL(file);
-        //
-        //         })
-        //         .catch(response => { console.log('request failed: ' + `${appDomain}/document`); console.log(response); });
-        //
-            const xhr = new XMLHttpRequest();
-            xhr.open("POST", `${appDomain}/document`);
-            xhr.responseType = "arraybuffer";
+            fetch(`${appDomain}/document`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json;charset=utf-8',
+                },
+                body: JSON.stringify(data)
+            })
+                .then(async response => {
+                    // let file = await new Blob([response], {type: "application/pdf"});
+                    console.log(response.body.getReader());
+                    const blob = new Blob()
+                    return window.URL.createObjectURL(blob);
+                })
+                .catch(response => {
+                        console.log('request failed: ' + `${appDomain}/document`, response.response);
+                        console.log(response);
+                        const blob = new Blob([response.response.body]);
+                        return window.URL.createObjectURL(blob);
+                    }
+                );
+            //
+            //     const xhr = new XMLHttpRequest();
+            //     xhr.open("POST", `${appDomain}/document`);
+            //     xhr.responseType = "arraybuffer";
+            //
+            //     xhr.onload = function () {
+            //         if (this.status === 200) {
+            //             console.log(xhr);
+            //             // const blob = new Blob([Buffer.from(xhr.response.body, 'binary')], {type: xhr.response.ContentType})
+            //             // // const blob = new Blob([xhr.response], {type: "application/pdf"});
+            //             // const objectUrl = URL.createObjectURL(blob);
+            //             // window.open(objectUrl);
+            //         }
+            //     };
+            //     xhr.send(JSON.stringify(data));
+            // }
 
-            xhr.onload = function () {
-                if (this.status === 200) {
-                    const blob = new Blob([xhr.response], {type: "application/pdf"});
-                    const objectUrl = URL.createObjectURL(blob);
-                    window.open(objectUrl);
-                }
-            };
-            xhr.send(JSON.stringify(data));
+
         }
-
-
     }
 }

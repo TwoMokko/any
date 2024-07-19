@@ -98,14 +98,19 @@
             }
         }
         &-link {
-            width: 80%;
-            height: 24px;
-            background-image: url("/profile/resources/img/link.svg");
-            background-size: contain;
-            background-repeat: no-repeat;
-            background-position: center;
-            &:hover {
+            &:not(.inactive) {
+                background-image: url("/profile/resources/img/link.svg");
+                width: 80%;
+                height: 24px;
+                background-size: contain;
+                background-repeat: no-repeat;
+                background-position: center;
+            }
+            &:hover:not(.inactive) {
                 background-image: url("/profile/resources/img/link-hover.svg");
+            }
+            &.inactive {
+                cursor: default;
             }
         }
     }

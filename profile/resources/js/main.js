@@ -1,6 +1,149 @@
 "use strict";
 var Components;
 (function (Components) {
+    class Filter {
+        select;
+        filterBtn;
+        constructor(container, func, filterManager) {
+            const filterWrap = createElement('form', 'filter', null, container);
+            this.createElements(filterWrap);
+            //
+            this.select = new Components.Select(document.querySelector('[name="deliveryStatus"]'));
+            this.filterBtn = new Components.FilterButtons(filterWrap, func, filterManager);
+        }
+        createElements(container) {
+            const dataForInput = [
+                {
+                    header: 'Поиск по номеру КП',
+                    inputName: 'invoiceId',
+                },
+                {
+                    header: 'Поиск по трек-номеру доставки',
+                    inputName: 'shipmentNumber',
+                },
+                {
+                    header: 'Поиск по номеру ТН',
+                    inputName: 'factureNumber',
+                }
+            ];
+            const dataForInputs = [
+                {
+                    header: 'Дата заказа',
+                    className: 'input-wrap calendar',
+                    inputName1: 'orderDateStart',
+                    inputName2: 'orderDateEnd',
+                    placeholder1: 'С',
+                    placeholder2: 'По',
+                    type: 'date'
+                },
+                {
+                    header: 'Дата доставки',
+                    className: 'input-wrap calendar',
+                    inputName1: 'orderAmountStart',
+                    inputName2: 'orderAmountEnd',
+                    placeholder1: 'С',
+                    placeholder2: 'По',
+                    type: 'date'
+                },
+                {
+                    header: 'Цена заказа (цена в валюте заказа)',
+                    className: 'input-wrap',
+                    inputName1: 'deliveryDateStart',
+                    inputName2: 'deliveryDateEnd',
+                    placeholder1: 'От',
+                    placeholder2: 'До',
+                    value: 0,
+                    type: 'number'
+                },
+            ];
+            for (const key in dataForInput) {
+                const wrap = createElement('div', 'input-wrap', null, container);
+                createElement('div', null, dataForInput[key].header, wrap);
+                const inputWrap = createElement('div', null, null, wrap);
+                const input = createElement('input', null, null, inputWrap);
+                setAttributes(input, { 'type': 'text', 'name': dataForInput[key].inputName });
+            }
+            for (const key in dataForInputs) {
+                const wrap = createElement('div', dataForInputs[key].className, null, container);
+                createElement('div', null, dataForInputs[key].header, wrap);
+                const inputWrap = createElement('div', null, null, wrap);
+                const input1 = createElement('input', null, null, inputWrap);
+                setAttributes(input1, { 'type': dataForInputs[key].type, 'name': dataForInputs[key].inputName1, 'placeholder': dataForInputs[key].placeholder1 });
+                const input2 = createElement('input', null, null, inputWrap);
+                setAttributes(input2, { 'type': dataForInputs[key].type, 'name': dataForInputs[key].inputName2, 'placeholder': dataForInputs[key].placeholder2 });
+                if (dataForInputs[key].value) {
+                    setAttributes(input1, { 'value': dataForInputs[key].value });
+                    setAttributes(input2, { 'value': dataForInputs[key].value });
+                }
+            }
+            const wrap = createElement('div', 'input-wrap select', null, container);
+            createElement('div', null, 'Поиск по статусу доставки', wrap);
+            const selectWrap = createElement('div', null, null, wrap);
+            const select = createElement('select', 'hide', null, selectWrap);
+            setAttributes(select, { 'name': 'deliveryStatus' });
+            setAttributes(createElement('option', null, 'выберите', select), { 'value': '' });
+            setAttributes(createElement('option', null, 'неизвестный статус', select), { 'value': '1' });
+            setAttributes(createElement('option', null, 'не отправлен', select), { 'value': '2' });
+            setAttributes(createElement('option', null, 'груз принят', select), { 'value': '3' });
+            setAttributes(createElement('option', null, 'в промежуточном пункте', select), { 'value': '4' });
+            setAttributes(createElement('option', null, 'отправлен с промежуточного пункта', select), { 'value': '5' });
+            setAttributes(createElement('option', null, 'в пути', select), { 'value': '6' });
+        }
+        getData() {
+            // let data = {};
+            // data['email'] = 'aas@ms-service.su';
+            // data['page'] = 1;
+            // data['filters'] = {};
+            // TODO: page = Components.Pagination.getPade()
+            let data = {
+                "email": "aas@ms-service.su",
+                "page": 1,
+                "filters": {
+                    "invoiceId": "",
+                    "orderDate": ["", ""],
+                    "orderAmount": ["", ""],
+                    "shipmentNumber": "",
+                    "factureNumber": "",
+                    "deliveryStatus": "",
+                    "deliveryDate": ["", ""]
+                },
+                "sort": {
+                    "field": "",
+                    "order": ""
+                }
+            };
+            data['filters']['invoiceId'] = document.getElementsByName('invoiceId')[0].value;
+            data['filters']['shipmentNumber'] = document.getElementsByName('shipmentNumber')[0].value;
+            data['filters']['factureNumber'] = document.getElementsByName('factureNumber')[0].value;
+            data['filters']['deliveryStatus'] = document.getElementsByName('deliveryStatus')[0].value;
+            data['filters']['orderDate'][0] = document.getElementsByName('orderDateStart')[0].value;
+            data['filters']['orderDate'][1] = document.getElementsByName('orderDateEnd')[0].value;
+            data['filters']['orderAmount'][0] = document.getElementsByName('orderAmountStart')[0].value;
+            data['filters']['orderAmount'][1] = document.getElementsByName('orderAmountEnd')[0].value;
+            data['filters']['deliveryDate'][0] = document.getElementsByName('deliveryDateStart')[0].value;
+            data['filters']['deliveryDate'][1] = document.getElementsByName('deliveryDateEnd')[0].value;
+            // data['sort'] = {};
+            console.log({ data });
+            // console.log({data});
+            return data;
+        }
+        resetInputs() {
+            document.getElementsByName('invoiceId')[0].value = '';
+            document.getElementsByName('shipmentNumber')[0].value = '';
+            document.getElementsByName('factureNumber')[0].value = '';
+            document.getElementsByName('deliveryStatus')[0].value = '';
+            document.getElementsByName('orderDateStart')[0].value = '';
+            document.getElementsByName('orderDateEnd')[0].value = '';
+            document.getElementsByName('orderAmountStart')[0].value = '';
+            document.getElementsByName('orderAmountEnd')[0].value = '';
+            document.getElementsByName('deliveryDateStart')[0].value = '';
+            document.getElementsByName('deliveryDateEnd')[0].value = '';
+        }
+    }
+    Components.Filter = Filter;
+})(Components || (Components = {}));
+var Components;
+(function (Components) {
     class FilterButtons {
         doFilter;
         doReset;
@@ -559,7 +702,9 @@ var Components;
         fillDocs(list, data) {
             for (const key in data) {
                 const anchor = createElement('a', null, null, list);
-                anchor.onclick = () => { this.downloadFile(list, data[key]); };
+                anchor.onclick = () => {
+                    this.downloadFile(list, data[key]);
+                };
                 let num = Number(key) + 1;
                 createElement('div', null, `${num}.`, anchor);
                 createElement('div', null, data[key], anchor);
@@ -568,7 +713,7 @@ var Components;
         }
         downloadFile(container, filename) {
             const anchor = createElement('a', 'hide', null, container);
-            // anchor.href = this.getFile(filename);
+            anchor.href = this.getFile(filename);
             anchor.download = filename;
             anchor.click();
         }
@@ -577,32 +722,41 @@ var Components;
                 orderId: this.orderId,
                 filename: filename
             };
-            //     fetch(`${appDomain}/document`, {
-            //         method: 'POST',
-            //         headers: {
-            //             'Content-Type': 'application/json;charset=utf-8',
-            //         },
-            //         body: JSON.stringify(data)
-            //     })
-            //         .then(async response => {
-            //             let file = await new Blob([response], {type: "application/pdf"});
-            //             console.log(response)
-            //             return  window.URL.createObjectURL(file);
+            fetch(`${appDomain}/document`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json;charset=utf-8',
+                },
+                body: JSON.stringify(data)
+            })
+                .then(async (response) => {
+                // let file = await new Blob([response], {type: "application/pdf"});
+                console.log(response.body.getReader());
+                const blob = new Blob();
+                return window.URL.createObjectURL(blob);
+            })
+                .catch(response => {
+                console.log('request failed: ' + `${appDomain}/document`, response.response);
+                console.log(response);
+                const blob = new Blob([response.response.body]);
+                return window.URL.createObjectURL(blob);
+            });
             //
-            //         })
-            //         .catch(response => { console.log('request failed: ' + `${appDomain}/document`); console.log(response); });
+            //     const xhr = new XMLHttpRequest();
+            //     xhr.open("POST", `${appDomain}/document`);
+            //     xhr.responseType = "arraybuffer";
             //
-            const xhr = new XMLHttpRequest();
-            xhr.open("POST", `${appDomain}/document`);
-            xhr.responseType = "arraybuffer";
-            xhr.onload = function () {
-                if (this.status === 200) {
-                    const blob = new Blob([xhr.response], { type: "application/pdf" });
-                    const objectUrl = URL.createObjectURL(blob);
-                    window.open(objectUrl);
-                }
-            };
-            xhr.send(JSON.stringify(data));
+            //     xhr.onload = function () {
+            //         if (this.status === 200) {
+            //             console.log(xhr);
+            //             // const blob = new Blob([Buffer.from(xhr.response.body, 'binary')], {type: xhr.response.ContentType})
+            //             // // const blob = new Blob([xhr.response], {type: "application/pdf"});
+            //             // const objectUrl = URL.createObjectURL(blob);
+            //             // window.open(objectUrl);
+            //         }
+            //     };
+            //     xhr.send(JSON.stringify(data));
+            // }
         }
     }
     Components.SubTable = SubTable;
@@ -651,6 +805,7 @@ var Components;
             this.tbody = createElement('tbody', null, null, table);
         }
         redraw(data) {
+            // TODO: разнести эту кашу
             // очистить таблицу
             this.tbody.innerHTML = '';
             // наполнить таблицу,создав новые элементы
@@ -660,16 +815,27 @@ var Components;
                 setAttributes(createElement('td', 'table-cell', `${data.orders[key].invoiceId}`, tr), { 'data-column': 'invoiceId' });
                 setAttributes(createElement('td', 'table-cell', `${data.orders[key].positions}`, tr), { 'data-column': 'position' });
                 setAttributes(createElement('td', 'table-cell', data.orders[key].orderAmount, tr), { 'data-column': 'priceAll' });
-                const anchorWrap = createElement('td', 'table-cell table-cell-manager', `${data.orders[key].manager.name} ${data.orders[key].manager.surname}`, tr);
+                const name = data.orders[key].manager.name ? data.orders[key].manager.name : '';
+                const surname = data.orders[key].manager.surname ? data.orders[key].manager.surname : '';
+                const anchorWrap = createElement('td', 'table-cell table-cell-manager', `${name} ${surname}`, tr);
                 setAttributes(anchorWrap, { 'data-column': 'manager' });
-                anchorWrap.addEventListener('click', (event) => { event.stopPropagation(); this.callbackManager(data.orders[key].manager.id); });
+                if (data.orders[key].manager.id) {
+                    anchorWrap.addEventListener('click', (event) => { event.stopPropagation(); this.callbackManager(data.orders[key].manager.id); });
+                }
                 setAttributes(createElement('td', 'table-cell', 'дописать', tr), { 'data-column': 'triggerLetter' });
                 const linkWrap = createElement('td', 'table-cell', null, tr);
                 setAttributes(linkWrap, { 'data-column': 'linkPayment' });
                 const link = createElement('a', 'table-cell-link', null, linkWrap);
-                data.orders[key].paymentLink ? link.href = data.orders[key].paymentLink : console.log('что-то с ссылкой сделать');
-                setAttributes(link, { 'target': '_blank' });
-                link.addEventListener('click', (event) => { event.stopPropagation(); });
+                if (data.orders[key].paymentLink) {
+                    link.href = data.orders[key].paymentLink;
+                    setAttributes(link, { 'target': '_blank' });
+                    link.addEventListener('click', (event) => { event.stopPropagation(); });
+                }
+                else {
+                    link.textContent = 'Отсутствует';
+                    link.classList.add('inactive');
+                    link.addEventListener('click', () => { return false; });
+                }
                 setAttributes(createElement('td', 'table-cell', data.orders[key].paymentStatus, tr), { 'data-column': 'statusPayment' });
                 setAttributes(createElement('td', 'table-cell', data.orders[key].shipmentStatus, tr), { 'data-column': 'statusShipment' });
                 setAttributes(createElement('td', 'table-cell', data.orders[key].deliveryStatus, tr), { 'data-column': 'statusDelivery' });
@@ -726,148 +892,5 @@ var Components;
         }
     }
     Components.Table = Table;
-})(Components || (Components = {}));
-var Components;
-(function (Components) {
-    class Filter {
-        select;
-        filterBtn;
-        constructor(container, func, filterManager) {
-            const filterWrap = createElement('form', 'filter', null, container);
-            this.createElements(filterWrap);
-            //
-            this.select = new Components.Select(document.querySelector('[name="deliveryStatus"]'));
-            this.filterBtn = new Components.FilterButtons(filterWrap, func, filterManager);
-        }
-        createElements(container) {
-            const dataForInput = [
-                {
-                    header: 'Поиск по номеру КП',
-                    inputName: 'invoiceId',
-                },
-                {
-                    header: 'Поиск по трек-номеру доставки',
-                    inputName: 'shipmentNumber',
-                },
-                {
-                    header: 'Поиск по номеру ТН',
-                    inputName: 'factureNumber',
-                }
-            ];
-            const dataForInputs = [
-                {
-                    header: 'Дата заказа',
-                    className: 'input-wrap calendar',
-                    inputName1: 'orderDateStart',
-                    inputName2: 'orderDateEnd',
-                    placeholder1: 'С',
-                    placeholder2: 'По',
-                    type: 'date'
-                },
-                {
-                    header: 'Дата доставки',
-                    className: 'input-wrap calendar',
-                    inputName1: 'orderAmountStart',
-                    inputName2: 'orderAmountEnd',
-                    placeholder1: 'С',
-                    placeholder2: 'По',
-                    type: 'date'
-                },
-                {
-                    header: 'Цена заказа (цена в валюте заказа)',
-                    className: 'input-wrap',
-                    inputName1: 'deliveryDateStart',
-                    inputName2: 'deliveryDateEnd',
-                    placeholder1: 'От',
-                    placeholder2: 'До',
-                    value: 0,
-                    type: 'number'
-                },
-            ];
-            for (const key in dataForInput) {
-                const wrap = createElement('div', 'input-wrap', null, container);
-                createElement('div', null, dataForInput[key].header, wrap);
-                const inputWrap = createElement('div', null, null, wrap);
-                const input = createElement('input', null, null, inputWrap);
-                setAttributes(input, { 'type': 'text', 'name': dataForInput[key].inputName });
-            }
-            for (const key in dataForInputs) {
-                const wrap = createElement('div', dataForInputs[key].className, null, container);
-                createElement('div', null, dataForInputs[key].header, wrap);
-                const inputWrap = createElement('div', null, null, wrap);
-                const input1 = createElement('input', null, null, inputWrap);
-                setAttributes(input1, { 'type': dataForInputs[key].type, 'name': dataForInputs[key].inputName1, 'placeholder': dataForInputs[key].placeholder1 });
-                const input2 = createElement('input', null, null, inputWrap);
-                setAttributes(input2, { 'type': dataForInputs[key].type, 'name': dataForInputs[key].inputName2, 'placeholder': dataForInputs[key].placeholder2 });
-                if (dataForInputs[key].value) {
-                    setAttributes(input1, { 'value': dataForInputs[key].value });
-                    setAttributes(input2, { 'value': dataForInputs[key].value });
-                }
-            }
-            const wrap = createElement('div', 'input-wrap select', null, container);
-            createElement('div', null, 'Поиск по статусу доставки', wrap);
-            const selectWrap = createElement('div', null, null, wrap);
-            const select = createElement('select', 'hide', null, selectWrap);
-            setAttributes(select, { 'name': 'deliveryStatus' });
-            setAttributes(createElement('option', null, 'выберите', select), { 'value': '' });
-            setAttributes(createElement('option', null, 'неизвестный статус', select), { 'value': '1' });
-            setAttributes(createElement('option', null, 'не отправлен', select), { 'value': '2' });
-            setAttributes(createElement('option', null, 'груз принят', select), { 'value': '3' });
-            setAttributes(createElement('option', null, 'в промежуточном пункте', select), { 'value': '4' });
-            setAttributes(createElement('option', null, 'отправлен с промежуточного пункта', select), { 'value': '5' });
-            setAttributes(createElement('option', null, 'в пути', select), { 'value': '6' });
-        }
-        getData() {
-            // let data = {};
-            // data['email'] = 'aas@ms-service.su';
-            // data['page'] = 1;
-            // data['filters'] = {};
-            // TODO: page = Components.Pagination.getPade()
-            let data = {
-                "email": "aas@ms-service.su",
-                "page": 1,
-                "filters": {
-                    "invoiceId": "",
-                    "orderDate": ["", ""],
-                    "orderAmount": ["", ""],
-                    "shipmentNumber": "",
-                    "factureNumber": "",
-                    "deliveryStatus": "",
-                    "deliveryDate": ["", ""]
-                },
-                "sort": {
-                    "field": "",
-                    "order": ""
-                }
-            };
-            data['filters']['invoiceId'] = document.getElementsByName('invoiceId')[0].value;
-            data['filters']['shipmentNumber'] = document.getElementsByName('shipmentNumber')[0].value;
-            data['filters']['factureNumber'] = document.getElementsByName('factureNumber')[0].value;
-            data['filters']['deliveryStatus'] = document.getElementsByName('deliveryStatus')[0].value;
-            data['filters']['orderDate'][0] = document.getElementsByName('orderDateStart')[0].value;
-            data['filters']['orderDate'][1] = document.getElementsByName('orderDateEnd')[0].value;
-            data['filters']['orderAmount'][0] = document.getElementsByName('orderAmountStart')[0].value;
-            data['filters']['orderAmount'][1] = document.getElementsByName('orderAmountEnd')[0].value;
-            data['filters']['deliveryDate'][0] = document.getElementsByName('deliveryDateStart')[0].value;
-            data['filters']['deliveryDate'][1] = document.getElementsByName('deliveryDateEnd')[0].value;
-            // data['sort'] = {};
-            console.log({ data });
-            // console.log({data});
-            return data;
-        }
-        resetInputs() {
-            document.getElementsByName('invoiceId')[0].value = '';
-            document.getElementsByName('shipmentNumber')[0].value = '';
-            document.getElementsByName('factureNumber')[0].value = '';
-            document.getElementsByName('deliveryStatus')[0].value = '';
-            document.getElementsByName('orderDateStart')[0].value = '';
-            document.getElementsByName('orderDateEnd')[0].value = '';
-            document.getElementsByName('orderAmountStart')[0].value = '';
-            document.getElementsByName('orderAmountEnd')[0].value = '';
-            document.getElementsByName('deliveryDateStart')[0].value = '';
-            document.getElementsByName('deliveryDateEnd')[0].value = '';
-        }
-    }
-    Components.Filter = Filter;
 })(Components || (Components = {}));
 //# sourceMappingURL=main.js.map

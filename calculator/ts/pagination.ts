@@ -49,9 +49,6 @@ namespace Components {
 
             this.current.textContent = this.page.toString();
 
-            console.log(this.page);
-            console.log(this.limitPage);
-
             this.first.classList.remove('not-active');
             this.previous.classList.remove('not-active');
             this.next.classList.remove('not-active');

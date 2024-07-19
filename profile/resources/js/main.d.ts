@@ -1,4 +1,14 @@
 declare namespace Components {
+    class Filter {
+        private select;
+        private filterBtn;
+        constructor(container: HTMLElement, func: Function, filterManager: FilterManager);
+        private createElements;
+        getData(): any;
+        resetInputs(): void;
+    }
+}
+declare namespace Components {
     class FilterButtons {
         private doFilter;
         private doReset;
@@ -167,15 +177,5 @@ declare namespace Components {
         private sortOnDate;
         private onclickTableRow;
         private sendDataOnclickRow;
-    }
-}
-declare namespace Components {
-    class Filter {
-        private select;
-        private filterBtn;
-        constructor(container: HTMLElement, func: Function, filterManager: FilterManager);
-        private createElements;
-        getData(): any;
-        resetInputs(): void;
     }
 }

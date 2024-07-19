@@ -284,16 +284,19 @@
 .table-cell-manager:hover {
   color: #1477A7;
 }
-.table-cell-link {
+.table-cell-link:not(.inactive) {
+  background-image: url("/profile/resources/img/link.svg");
   width: 80%;
   height: 24px;
-  background-image: url("/profile/resources/img/link.svg");
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
 }
-.table-cell-link:hover {
+.table-cell-link:hover:not(.inactive) {
   background-image: url("/profile/resources/img/link-hover.svg");
+}
+.table-cell-link.inactive {
+  cursor: default;
 }
 
 .table-secondary table {

@@ -3,14 +3,16 @@ namespace Components {
         public head                 : HTMLElement;
         public select               : HTMLSelectElement;
         public list                 : object = {};
-        constructor(wrap: HTMLElement, textContent: string, key: string, data: object) {
+        public dataMultiple         : any = [];
+        constructor(wrap: HTMLElement, textContent: string, key: string, data: object, type: boolean = false) {
             const selectWrap = createElement('div', 'option-group-select', null, wrap);
             this.head = createElement('div', null, textContent, selectWrap);
 
             this.select = createElement('select', null, null, selectWrap);
+            if (type) this.select.setAttribute('multiple', 'multiple');
             this.select.setAttribute('name', key);
 
-            this.createOptions(data);
+            this.createOptions(data).then();
         }
 
         private async createOptions(data) {
@@ -22,6 +24,24 @@ namespace Components {
 
         public getValue(): string {
             return this.select.value;
+        }
+        public getValueMultiple(): any {
+            return this.dataMultiple;
+        }
+        
+        private updateDataMultiple(select: HTMLSelectElement): void {
+            // TODO: разобраться с этим
+
+            // const selectedValues = Array.from(select.selectedOptions).map(option => option.value);
+            //
+            // const opts = select.options;
+            // const selected = Array.from(opts).filter(o => o.selected).map(o => o.value);
+
+            this.dataMultiple = [];
+            const options = select.options;
+            for (let opt of options) {
+                if (opt.selected && opt.value !== '')  this.dataMultiple.push(opt.value);
+            }
         }
 
         public async redrawOptions(dataResp): Promise<void> {
@@ -64,7 +84,11 @@ namespace Components {
         }
 
         public on(event: string, handler: Function) {
-            this.select.addEventListener(event, () => { handler(); });
+            this.select.addEventListener(event, (ev) => {
+                let select: HTMLSelectElement = ev.target as HTMLSelectElement;
+                if (select.hasAttribute('multiple')) this.updateDataMultiple(select);
+                handler();
+            });
         }
     }
 }

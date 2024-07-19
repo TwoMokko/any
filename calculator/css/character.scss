@@ -77,22 +77,37 @@ a {
 }
 .option {
     margin-bottom: 32px;
-    > div:nth-child(2) {
+    > div:nth-child(3) {
         display: flex;
         flex-direction: column;
         gap: 24px;
     }
-    &-group {
-        display: grid;
-        grid-template-columns: repeat(10, 1fr);
-        column-gap: 24px;
-        row-gap: 12px;
-        &-select {
-            > div:first-child {
-                margin-bottom: 8px;
-            }
+    &-type {
+        margin-bottom: 32px;
+        select {
+            height: 300px;
         }
     }
+    &-wrap {
+        > div {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            align-items: end;
+            margin-bottom: 24px;
+            gap: 24px;
+        }
+    }
+    //&-group {
+    //    display: grid;
+    //    grid-template-columns: repeat(10, 1fr);
+    //    column-gap: 24px;
+    //    row-gap: 12px;
+    //    &-select {
+    //        > div:first-child {
+    //            margin-bottom: 8px;
+    //        }
+    //    }
+    //}
 }
 
 input {

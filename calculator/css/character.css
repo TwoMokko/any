@@ -74,19 +74,23 @@ a {
 .option {
   margin-bottom: 32px;
 }
-.option > div:nth-child(2) {
+.option > div:nth-child(3) {
   display: flex;
   flex-direction: column;
   gap: 24px;
 }
-.option-group {
-  display: grid;
-  grid-template-columns: repeat(10, 1fr);
-  column-gap: 24px;
-  row-gap: 12px;
+.option-type {
+  margin-bottom: 32px;
 }
-.option-group-select > div:first-child {
-  margin-bottom: 8px;
+.option-type select {
+  height: 300px;
+}
+.option-wrap > div {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  align-items: end;
+  margin-bottom: 24px;
+  gap: 24px;
 }
 
 input {
