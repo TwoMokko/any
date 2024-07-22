@@ -13,12 +13,13 @@ namespace Components {
                                                 physicalCharacteristics: {}
                                             };
 
+        private physicalCharacteristics     : Characteristics;
         private table                       : Table;
         private pagination                  : Pagination;
 
         constructor(wrap: HTMLElement) {
             /* TODO: разобраться с wrap */
-            // this.physicalCharacteristics    = new Characteristics();
+            this.physicalCharacteristics    = new Characteristics(document.querySelector('.character-group'));
 
             const tableWrap: HTMLElement    = document.querySelector('.table-wrap');
 
@@ -128,6 +129,10 @@ namespace Components {
                     data['connections'].push(<connections>connectionsItem);
                 }
             }
+
+            if (this.physicalCharacteristics.getValues()) data['physicalCharacteristics'] = this.physicalCharacteristics.getValues();
+
+            console.log({data});
 
             this.data = data;
         }

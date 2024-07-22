@@ -4,7 +4,7 @@ declare namespace Components {
         private filterBtn;
         constructor(container: HTMLElement, func: Function, filterManager: FilterManager);
         private createElements;
-        getData(): any;
+        getData(numberPage: number): any;
         resetInputs(): void;
     }
 }
@@ -56,7 +56,7 @@ declare namespace Components {
         private table;
         private pagination;
         constructor();
-        private redrawTable;
+        private redrawTableFromFilterBtn;
         private updateData;
         private send;
     }
@@ -78,12 +78,23 @@ declare namespace Components {
 }
 declare namespace Components {
     class Pagination {
-        private wrap;
-        constructor(container: HTMLElement);
+        private limitPage;
+        private page;
+        private pagination;
+        private first;
+        private previous;
+        private current;
+        private next;
+        private last;
+        private callback;
+        constructor(container: HTMLElement, callback: Function);
         private init;
+        private setEvents;
         redraw(limit: number): void;
         show(): void;
         hide(): void;
+        setPage(number: number): void;
+        getPage(): number;
     }
 }
 declare namespace Components {
@@ -159,7 +170,6 @@ declare namespace Components {
         private createTotal;
         private createDocs;
         private fillDocs;
-        private downloadFile;
         private getFile;
     }
 }

@@ -20,7 +20,7 @@ namespace Components {
 
             const tBody: HTMLElement = this.createTable(expanded);
             this.fillTable(data, tBody);
-            this.createTotal(tBody);
+            this.createTotal(data, tBody);
 
 
             const invoiceDocs = createElement('div', 'invoice-docs', null, expanded);
@@ -69,7 +69,11 @@ namespace Components {
                 createElement('td', null, String(num), tr);
                 num++;
                 for (let key in data.items[item]) {
-                    const td = createElement('td', null, data.items[item][key], tr);
+                    if (key === 'price') {
+                        createElement('td', null, data.items[item][key].toFixed(2), tr);
+                        continue;
+                    }
+                    createElement('td', null, data.items[item][key], tr);
                 }
                 const lastTd = createElement('td', null, null, tr);
                 const anchor: HTMLAnchorElement = createElement('a', null, null, lastTd);
@@ -79,15 +83,43 @@ namespace Components {
             }
         }
 
-        private createTotal(tBody: HTMLElement): void {
+        private createTotal(data, tBody: HTMLElement): void {
             // TODO высчитывать textContent
+
+            console.log('data.items: ', data.items);
+            let count = '';
+            let price = 0;
+            let fullPrice = 0;
+            let shippedQuantity = '';
+
+            let countThing = 0;
+            let countMeter = 0;
+
+            let shippedQuantityThing = 0;
+            let shippedQuantityMeter = 0;
+            for (const item of data.items) {
+                price += item.price;
+                fullPrice += item.fullPrice;
+
+                const countArray = item.quantity.split(' ');
+                if (countArray[1] === 'шт') countThing += Number(countArray[0]);
+                if (countArray[1] === 'м') countMeter += Number(countArray[0]);
+
+                const shippedQuantityArray = item.quantity.split(' ');
+                if (shippedQuantityArray[1] === 'шт') shippedQuantityThing += Number(shippedQuantityArray[0]);
+                if (shippedQuantityArray[1] === 'м') shippedQuantityMeter += Number(shippedQuantityArray[0]);
+            }
+
+            count = (countThing ? `${countThing}  шт` : '') + (countMeter ? `${countMeter} м` : '');
+            shippedQuantity = (shippedQuantityThing ? `${shippedQuantityThing}  шт` : '') + (shippedQuantityMeter ? `${shippedQuantityMeter} м` : '');
+
             const lastTr = createElement('tr', 'total', null, tBody);
             createElement('td', null, 'Итого:', lastTr);
             createElement('td', null, null, lastTr);
-            createElement('td', null, '', lastTr);
-            createElement('td', null, '', lastTr);
-            createElement('td', null, '', lastTr);
-            createElement('td', null, '', lastTr);
+            createElement('td', null, count, lastTr);
+            createElement('td', null, price.toFixed(2).toString(), lastTr);
+            createElement('td', null, fullPrice.toFixed(2).toString(), lastTr);
+            createElement('td', null, shippedQuantity, lastTr);
             createElement('td', null, null, lastTr);
         }
 
@@ -101,20 +133,13 @@ namespace Components {
             for (const key in data) {
                 const anchor = createElement('a', null, null, list);
                 anchor.onclick = () => {
-                    this.downloadFile(list, data[key]);
+                    this.getFile(data[key]);
                 };
                 let num = Number(key) + 1;
                 createElement('div', null, `${num}.`, anchor);
                 createElement('div', null, data[key], anchor);
                 createElement('img', null, null, createElement('div', null, null, anchor)).src = 'resources/img/download.svg';
             }
-        }
-
-        private downloadFile(container: HTMLElement, filename: string): void {
-            const anchor = createElement('a', 'hide', null, container);
-            anchor.href = this.getFile(filename);
-            anchor.download = filename;
-            anchor.click();
         }
 
         private getFile(filename: string) {
@@ -124,43 +149,24 @@ namespace Components {
             };
 
             fetch(`${appDomain}/document`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json;charset=utf-8',
-                },
-                body: JSON.stringify(data)
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json;charset=utf-8',
+                    },
+                    body: JSON.stringify(data)
             })
-                .then(async response => {
-                    // let file = await new Blob([response], {type: "application/pdf"});
-                    console.log(response.body.getReader());
-                    const blob = new Blob()
-                    return window.URL.createObjectURL(blob);
+                .then(response => response.blob())
+                .then(blob => {
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.style.display = 'none';
+                    a.href = url;
+                    a.download = filename;
+                    document.body.appendChild(a);
+                    a.click();
+                    window.URL.revokeObjectURL(url);
                 })
-                .catch(response => {
-                        console.log('request failed: ' + `${appDomain}/document`, response.response);
-                        console.log(response);
-                        const blob = new Blob([response.response.body]);
-                        return window.URL.createObjectURL(blob);
-                    }
-                );
-            //
-            //     const xhr = new XMLHttpRequest();
-            //     xhr.open("POST", `${appDomain}/document`);
-            //     xhr.responseType = "arraybuffer";
-            //
-            //     xhr.onload = function () {
-            //         if (this.status === 200) {
-            //             console.log(xhr);
-            //             // const blob = new Blob([Buffer.from(xhr.response.body, 'binary')], {type: xhr.response.ContentType})
-            //             // // const blob = new Blob([xhr.response], {type: "application/pdf"});
-            //             // const objectUrl = URL.createObjectURL(blob);
-            //             // window.open(objectUrl);
-            //         }
-            //     };
-            //     xhr.send(JSON.stringify(data));
-            // }
-
-
+                .catch(err => console.error('Error:', err));
         }
     }
 }

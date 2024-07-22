@@ -89,7 +89,7 @@ var Components;
             setAttributes(createElement('option', null, 'отправлен с промежуточного пункта', select), { 'value': '5' });
             setAttributes(createElement('option', null, 'в пути', select), { 'value': '6' });
         }
-        getData() {
+        getData(numberPage) {
             // let data = {};
             // data['email'] = 'aas@ms-service.su';
             // data['page'] = 1;
@@ -97,7 +97,7 @@ var Components;
             // TODO: page = Components.Pagination.getPade()
             let data = {
                 "email": "aas@ms-service.su",
-                "page": 1,
+                "page": numberPage,
                 "filters": {
                     "invoiceId": "",
                     "orderDate": ["", ""],
@@ -173,6 +173,7 @@ var Components;
     Components.FilterButtons = FilterButtons;
 })(Components || (Components = {}));
 const appDomain = 'https://localhost:8000/api';
+// const appDomain = 'https://profile.fluid-line.ru:8001/api';
 var Components;
 (function (Components) {
     class FilterManager {
@@ -182,18 +183,20 @@ var Components;
         table;
         pagination;
         constructor() {
-            this.filter = new Components.Filter(document.querySelector('.with-nav'), this.redrawTable, this);
+            this.filter = new Components.Filter(document.querySelector('.with-nav'), this.redrawTableFromFilterBtn, this);
             new Components.Manager();
             this.table = new Components.Table(document.querySelector('.with-nav'), Components.Manager.open);
-            this.pagination = new Components.Pagination(document.querySelector('main'));
+            this.pagination = new Components.Pagination(document.querySelector('main'), () => {
+                this.updateData();
+                this.send(this.sendData);
+            });
             this.updateData();
             // TODO: вынести запросы в request
             // Base.Request.sendData(this.sendData, `${appDomain}/table`, 'POST', this.afterSend )
             this.send(this.sendData);
         }
-        redrawTable(btn, filterManager) {
-            console.log(btn);
-            console.log(filterManager.filterState);
+        redrawTableFromFilterBtn(btn, filterManager) {
+            filterManager.pagination.setPage(1);
             switch (btn) {
                 case 'doReset':
                     if (!filterManager.filterState) {
@@ -216,7 +219,7 @@ var Components;
             }
         }
         updateData() {
-            this.sendData = this.filter.getData();
+            this.sendData = this.filter.getData(this.pagination.getPage());
         }
         // public afterSend(result: tableData): void {
         //     this.table.redraw(result);
@@ -344,23 +347,72 @@ var Components;
 var Components;
 (function (Components) {
     class Pagination {
-        wrap;
-        constructor(container) {
+        // private wrap            : HTMLElement;
+        limitPage;
+        page;
+        pagination;
+        first;
+        previous;
+        current;
+        next;
+        last;
+        callback;
+        constructor(container, callback) {
+            this.callback = callback;
+            this.page = 1;
             this.init(container);
         }
         init(container) {
-            this.wrap = createElement('div', 'pagination-wrap container hide', null, container);
-            createElement('div', 'pagination-number', '1', this.wrap);
+            // this.wrap = createElement('div', 'pagination-wrap container hide', null, container);
+            // createElement('div', 'pagination-number', '1', this.wrap);
+            this.pagination = createElement('div', 'pagination-wrap container hide', null, container);
+            this.first = createElement('div', 'pagination-number', 'первая страница', this.pagination);
+            this.previous = createElement('div', 'pagination-number', '<-', this.pagination);
+            this.current = createElement('div', 'pagination-number', this.page.toString(), this.pagination);
+            this.next = createElement('div', 'pagination-number', '->', this.pagination);
+            this.last = createElement('div', 'pagination-number', 'последняя страница', this.pagination);
+            this.setEvents();
+        }
+        setEvents() {
+            // TODO: callback переписать аргументы, так быть не должно
+            this.first.addEventListener('click', () => { this.page = 1; this.callback(); });
+            this.previous.addEventListener('click', () => { this.page--; this.callback(); });
+            this.next.addEventListener('click', () => { this.page++; this.callback(); });
+            this.last.addEventListener('click', () => { this.page = this.limitPage; this.callback(); });
         }
         redraw(limit) {
             console.log(limit);
-            limit > 1 ? this.show() : this.hide();
+            this.limitPage = limit;
+            this.show();
+            if (this.limitPage === 0) {
+                this.hide();
+                return;
+            }
+            this.current.textContent = this.page.toString();
+            this.first.classList.remove('not-active');
+            this.previous.classList.remove('not-active');
+            this.next.classList.remove('not-active');
+            this.last.classList.remove('not-active');
+            if (this.page === 1) {
+                this.first.classList.add('not-active');
+                this.previous.classList.add('not-active');
+            }
+            if (this.page === this.limitPage) {
+                this.next.classList.add('not-active');
+                this.last.classList.add('not-active');
+            }
         }
         show() {
-            this.wrap.classList.remove('hide');
+            this.pagination.classList.remove('hide');
         }
         hide() {
-            this.wrap.classList.add('hide');
+            this.pagination.classList.add('hide');
+        }
+        setPage(number) {
+            this.page = number;
+        }
+        getPage() {
+            return this.page;
         }
     }
     Components.Pagination = Pagination;
@@ -635,7 +687,7 @@ var Components;
             const expanded = createElement('div', 'expanded', null, td);
             const tBody = this.createTable(expanded);
             this.fillTable(data, tBody);
-            this.createTotal(tBody);
+            this.createTotal(data, tBody);
             const invoiceDocs = createElement('div', 'invoice-docs', null, expanded);
             // const btnWrap = createElement('div', null, null, invoiceDocs);
             // createElement('div', null, 'Документы по заказу', btnWrap);
@@ -674,7 +726,11 @@ var Components;
                 createElement('td', null, String(num), tr);
                 num++;
                 for (let key in data.items[item]) {
-                    const td = createElement('td', null, data.items[item][key], tr);
+                    if (key === 'price') {
+                        createElement('td', null, data.items[item][key].toFixed(2), tr);
+                        continue;
+                    }
+                    createElement('td', null, data.items[item][key], tr);
                 }
                 const lastTd = createElement('td', null, null, tr);
                 const anchor = createElement('a', null, null, lastTd);
@@ -683,15 +739,40 @@ var Components;
                 img.src = 'resources/img/download.svg';
             }
         }
-        createTotal(tBody) {
+        createTotal(data, tBody) {
             // TODO высчитывать textContent
+            console.log('data.items: ', data.items);
+            let count = '';
+            let price = 0;
+            let fullPrice = 0;
+            let shippedQuantity = '';
+            let countThing = 0;
+            let countMeter = 0;
+            let shippedQuantityThing = 0;
+            let shippedQuantityMeter = 0;
+            for (const item of data.items) {
+                price += item.price;
+                fullPrice += item.fullPrice;
+                const countArray = item.quantity.split(' ');
+                if (countArray[1] === 'шт')
+                    countThing += Number(countArray[0]);
+                if (countArray[1] === 'м')
+                    countMeter += Number(countArray[0]);
+                const shippedQuantityArray = item.quantity.split(' ');
+                if (shippedQuantityArray[1] === 'шт')
+                    shippedQuantityThing += Number(shippedQuantityArray[0]);
+                if (shippedQuantityArray[1] === 'м')
+                    shippedQuantityMeter += Number(shippedQuantityArray[0]);
+            }
+            count = (countThing ? `${countThing}  шт` : '') + (countMeter ? `${countMeter} м` : '');
+            shippedQuantity = (shippedQuantityThing ? `${shippedQuantityThing}  шт` : '') + (shippedQuantityMeter ? `${shippedQuantityMeter} м` : '');
             const lastTr = createElement('tr', 'total', null, tBody);
             createElement('td', null, 'Итого:', lastTr);
             createElement('td', null, null, lastTr);
-            createElement('td', null, '', lastTr);
-            createElement('td', null, '', lastTr);
-            createElement('td', null, '', lastTr);
-            createElement('td', null, '', lastTr);
+            createElement('td', null, count, lastTr);
+            createElement('td', null, price.toFixed(2).toString(), lastTr);
+            createElement('td', null, fullPrice.toFixed(2).toString(), lastTr);
+            createElement('td', null, shippedQuantity, lastTr);
             createElement('td', null, null, lastTr);
         }
         createDocs(invoiceDocs, header) {
@@ -703,19 +784,13 @@ var Components;
             for (const key in data) {
                 const anchor = createElement('a', null, null, list);
                 anchor.onclick = () => {
-                    this.downloadFile(list, data[key]);
+                    this.getFile(data[key]);
                 };
                 let num = Number(key) + 1;
                 createElement('div', null, `${num}.`, anchor);
                 createElement('div', null, data[key], anchor);
                 createElement('img', null, null, createElement('div', null, null, anchor)).src = 'resources/img/download.svg';
             }
-        }
-        downloadFile(container, filename) {
-            const anchor = createElement('a', 'hide', null, container);
-            anchor.href = this.getFile(filename);
-            anchor.download = filename;
-            anchor.click();
         }
         getFile(filename) {
             const data = {
@@ -729,34 +804,18 @@ var Components;
                 },
                 body: JSON.stringify(data)
             })
-                .then(async (response) => {
-                // let file = await new Blob([response], {type: "application/pdf"});
-                console.log(response.body.getReader());
-                const blob = new Blob();
-                return window.URL.createObjectURL(blob);
+                .then(response => response.blob())
+                .then(blob => {
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.style.display = 'none';
+                a.href = url;
+                a.download = filename;
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(url);
             })
-                .catch(response => {
-                console.log('request failed: ' + `${appDomain}/document`, response.response);
-                console.log(response);
-                const blob = new Blob([response.response.body]);
-                return window.URL.createObjectURL(blob);
-            });
-            //
-            //     const xhr = new XMLHttpRequest();
-            //     xhr.open("POST", `${appDomain}/document`);
-            //     xhr.responseType = "arraybuffer";
-            //
-            //     xhr.onload = function () {
-            //         if (this.status === 200) {
-            //             console.log(xhr);
-            //             // const blob = new Blob([Buffer.from(xhr.response.body, 'binary')], {type: xhr.response.ContentType})
-            //             // // const blob = new Blob([xhr.response], {type: "application/pdf"});
-            //             // const objectUrl = URL.createObjectURL(blob);
-            //             // window.open(objectUrl);
-            //         }
-            //     };
-            //     xhr.send(JSON.stringify(data));
-            // }
+                .catch(err => console.error('Error:', err));
         }
     }
     Components.SubTable = SubTable;

@@ -495,6 +495,9 @@
 /* Colors */
 /* Sizes */
 .pagination-wrap {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
   margin-bottom: 48px;
   text-align: center;
 }
@@ -507,6 +510,11 @@
 }
 .pagination-number:hover {
   background-color: #D1D1D1;
+}
+.pagination-number.not-active {
+  pointer-events: none;
+  cursor: default;
+  opacity: 0.5;
 }
 
 /* Colors */

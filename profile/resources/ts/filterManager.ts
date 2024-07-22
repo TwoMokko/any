@@ -29,6 +29,7 @@ type dateForTable = {
 }
 
 const appDomain = 'https://localhost:8000/api';
+// const appDomain = 'https://profile.fluid-line.ru:8001/api';
 
 namespace Components {
     export class FilterManager {
@@ -41,20 +42,22 @@ namespace Components {
         private table           : Table;
         private pagination      : Pagination;
         constructor() {
-            this.filter         = new Filter(document.querySelector('.with-nav'), this.redrawTable, this);
+            this.filter         = new Filter(document.querySelector('.with-nav'), this.redrawTableFromFilterBtn, this);
             new Manager();
 
             this.table          = new Table(document.querySelector('.with-nav'), Manager.open);
-            this.pagination     = new Pagination(document.querySelector('main'));
+            this.pagination     = new Pagination(document.querySelector('main'), () => {
+                this.updateData();
+                this.send(this.sendData);
+            });
 
             this.updateData();
             // TODO: вынести запросы в request
             // Base.Request.sendData(this.sendData, `${appDomain}/table`, 'POST', this.afterSend )
             this.send(this.sendData);
         }
-        private redrawTable(btn: string, filterManager: FilterManager): void {
-            console.log(btn);
-            console.log(filterManager.filterState);
+        private redrawTableFromFilterBtn(btn: string, filterManager: FilterManager): void {
+            filterManager.pagination.setPage(1);
             switch (btn) {
                 case 'doReset':
                     if (!filterManager.filterState) {
@@ -78,7 +81,7 @@ namespace Components {
         }
 
         private updateData(): void {
-            this.sendData = this.filter.getData();
+            this.sendData = this.filter.getData(this.pagination.getPage());
         }
 
         // public afterSend(result: tableData): void {

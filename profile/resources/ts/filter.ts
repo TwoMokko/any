@@ -96,7 +96,7 @@ namespace Components {
             setAttributes(createElement('option', null, 'в пути', select), { 'value': '6' });
         }
 
-        public getData(): any {
+        public getData(numberPage: number): any {
             // let data = {};
             // data['email'] = 'aas@ms-service.su';
             // data['page'] = 1;
@@ -105,7 +105,7 @@ namespace Components {
             // TODO: page = Components.Pagination.getPade()
             let data = {
                 "email": "aas@ms-service.su",
-                "page": 1,
+                "page": numberPage,
                 "filters": {
                     "invoiceId": "",
                     "orderDate": [ "", "" ],
@@ -121,16 +121,16 @@ namespace Components {
                 }
             }
 
-            data['filters']['invoiceId'] = document.getElementsByName('invoiceId')[0].value;
-            data['filters']['shipmentNumber'] = document.getElementsByName('shipmentNumber')[0].value;
-            data['filters']['factureNumber'] = document.getElementsByName('factureNumber')[0].value;
-            data['filters']['deliveryStatus'] = document.getElementsByName('deliveryStatus')[0].value;
-            data['filters']['orderDate'][0] = document.getElementsByName('orderDateStart')[0].value;
-            data['filters']['orderDate'][1] = document.getElementsByName('orderDateEnd')[0].value;
-            data['filters']['orderAmount'][0] = document.getElementsByName('orderAmountStart')[0].value;
-            data['filters']['orderAmount'][1] = document.getElementsByName('orderAmountEnd')[0].value;
-            data['filters']['deliveryDate'][0] = document.getElementsByName('deliveryDateStart')[0].value;
-            data['filters']['deliveryDate'][1] = document.getElementsByName('deliveryDateEnd')[0].value;
+            data['filters']['invoiceId'] = (<HTMLInputElement>document.getElementsByName('invoiceId')[0]).value;
+            data['filters']['shipmentNumber'] = (<HTMLInputElement>document.getElementsByName('shipmentNumber')[0]).value;
+            data['filters']['factureNumber'] = (<HTMLInputElement>document.getElementsByName('factureNumber')[0]).value;
+            data['filters']['deliveryStatus'] = (<HTMLInputElement>document.getElementsByName('deliveryStatus')[0]).value;
+            data['filters']['orderDate'][0] = (<HTMLInputElement>document.getElementsByName('orderDateStart')[0]).value;
+            data['filters']['orderDate'][1] = (<HTMLInputElement>document.getElementsByName('orderDateEnd')[0]).value;
+            data['filters']['orderAmount'][0] = (<HTMLInputElement>document.getElementsByName('orderAmountStart')[0]).value;
+            data['filters']['orderAmount'][1] = (<HTMLInputElement>document.getElementsByName('orderAmountEnd')[0]).value;
+            data['filters']['deliveryDate'][0] = (<HTMLInputElement>document.getElementsByName('deliveryDateStart')[0]).value;
+            data['filters']['deliveryDate'][1] = (<HTMLInputElement>document.getElementsByName('deliveryDateEnd')[0]).value;
 
             // data['sort'] = {};
 
@@ -143,16 +143,16 @@ namespace Components {
         }
 
         public resetInputs(): void {
-            document.getElementsByName('invoiceId')[0].value = '';
-            document.getElementsByName('shipmentNumber')[0].value = '';
-            document.getElementsByName('factureNumber')[0].value = '';
-            document.getElementsByName('deliveryStatus')[0].value = '';
-            document.getElementsByName('orderDateStart')[0].value = '';
-            document.getElementsByName('orderDateEnd')[0].value = '';
-            document.getElementsByName('orderAmountStart')[0].value = '';
-            document.getElementsByName('orderAmountEnd')[0].value = '';
-            document.getElementsByName('deliveryDateStart')[0].value = '';
-            document.getElementsByName('deliveryDateEnd')[0].value = '';
+            (<HTMLInputElement>document.getElementsByName('invoiceId')[0]).value = '';
+            (<HTMLInputElement>document.getElementsByName('shipmentNumber')[0]).value = '';
+            (<HTMLInputElement>document.getElementsByName('factureNumber')[0]).value = '';
+            (<HTMLInputElement>document.getElementsByName('deliveryStatus')[0]).value = '';
+            (<HTMLInputElement>document.getElementsByName('orderDateStart')[0]).value = '';
+            (<HTMLInputElement>document.getElementsByName('orderDateEnd')[0]).value = '';
+            (<HTMLInputElement>document.getElementsByName('orderAmountStart')[0]).value = '';
+            (<HTMLInputElement>document.getElementsByName('orderAmountEnd')[0]).value = '';
+            (<HTMLInputElement>document.getElementsByName('deliveryDateStart')[0]).value = '';
+            (<HTMLInputElement>document.getElementsByName('deliveryDateEnd')[0]).value = '';
         }
     }
 }
