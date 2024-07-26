@@ -61,6 +61,39 @@
                 bottom: 0;
             }
         }
+
+        &.sort {
+            position: relative;
+            &::after {
+                content: "";
+                display: block;
+                position: absolute;
+                height: 5px;
+                width: 9px;
+                rotate: 180deg;
+                background-image: url(../img/arrow-solid.svg);
+                background-size: cover;
+                opacity: 0.3;
+                right: 6px;
+                top: calc(50% - 3px);
+                transition: all 0.3s;
+            }
+            &.asc {
+                &::after {
+                    content: "";
+                    transition: all 0.3s;
+                    opacity: 1;
+                }
+            }
+            &.desc {
+                &::after {
+                    content: "";
+                    rotate: 180deg;
+                    transition: all 0.3s;
+                    opacity: 1;
+                }
+            }
+        }
     }
 
     &-row {

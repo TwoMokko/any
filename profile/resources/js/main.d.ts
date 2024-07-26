@@ -47,7 +47,7 @@ type dateForTable = {
     timezone_type: number;
     timezone: string;
 };
-declare const appDomain = "https://localhost:8000/api";
+declare const appDomain = "https://profileapi.fluid-line.ru/api";
 declare namespace Components {
     class FilterManager {
         private sendData;

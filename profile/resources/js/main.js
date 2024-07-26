@@ -172,8 +172,8 @@ var Components;
     }
     Components.FilterButtons = FilterButtons;
 })(Components || (Components = {}));
-const appDomain = 'https://localhost:8000/api';
-// const appDomain = 'https://profile.fluid-line.ru:8001/api';
+// const appDomain = 'https://localhost:8000/api';
+const appDomain = 'https://profileapi.fluid-line.ru/api';
 var Components;
 (function (Components) {
     class FilterManager {

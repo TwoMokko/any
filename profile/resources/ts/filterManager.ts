@@ -28,8 +28,8 @@ type dateForTable = {
     timezone: string
 }
 
-const appDomain = 'https://localhost:8000/api';
-// const appDomain = 'https://profile.fluid-line.ru:8001/api';
+// const appDomain = 'https://localhost:8000/api';
+const appDomain = 'https://profileapi.fluid-line.ru/api';
 
 namespace Components {
     export class FilterManager {
